@@ -96,9 +96,9 @@ for each in codeframe.index:
 gl.STCode = '002234'
 print('\n开始处理code='+gl.STCode+'.............')
 pro_1by1()
-'''    
+   
 #数据代码范围，遍历
-for i in range(300257, 300500):     
+for i in range(300001, 300517):     
     if   i < 10:    code = '00000'+'%d'%i
     elif i < 100:   code = '0000' +'%d'%i
     elif i < 1000:  code = '000'  +'%d'%i
@@ -110,8 +110,34 @@ for i in range(300257, 300500):
     gl.STCode = code
     print('\n开始处理code='+gl.STCode+'.............')
     pro_1by1()
-''' 
-for i in range(600965, 600968):     
+    
+for i in range(2001, 2799):     
+    if   i < 10:    code = '00000'+'%d'%i
+    elif i < 100:   code = '0000' +'%d'%i
+    elif i < 1000:  code = '000'  +'%d'%i
+    elif i < 10000: code = '00'   +'%d'%i
+    elif i < 100000:code = '0'    +'%d'%i
+    elif i < 700000:code = '%d'%i
+    else :code = '000000'
+
+    gl.STCode = code
+    print('\n开始处理code='+gl.STCode+'.............')
+    pro_1by1()
+
+for i in range(1, 1000):     
+    if   i < 10:    code = '00000'+'%d'%i
+    elif i < 100:   code = '0000' +'%d'%i
+    elif i < 1000:  code = '000'  +'%d'%i
+    elif i < 10000: code = '00'   +'%d'%i
+    elif i < 100000:code = '0'    +'%d'%i
+    elif i < 700000:code = '%d'%i
+    else :code = '000000'
+    
+    gl.STCode = code
+    print('\n开始处理code='+gl.STCode+'.............')
+    pro_1by1()
+ 
+for i in range(600001, 604000):     
     if   i < 10:    code = '00000'+'%d'%i
     elif i < 100:   code = '0000' +'%d'%i
     elif i < 1000:  code = '000'  +'%d'%i

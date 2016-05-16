@@ -160,8 +160,8 @@ def sub_grpview_mng(code):
                 right = lenk-pos
                 if right > 50:
                     right = 50
-                print(left)
-                print(right)
+                #print(left)
+                #print(right)
                 for j in range(left, right):
                     submap[tmpmap[d+j][0]] = tmpmap[d+j][1]
                 
