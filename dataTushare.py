@@ -5,7 +5,7 @@ from ruleAnalyse import mdl_ruleAnalyse
 from mainView import mdl_mainview
 
 import tushare as ts
-import os
+#import os
 import collections
 import time
 #from pandas import Series,DataFrame
@@ -22,9 +22,16 @@ DatasrcMap = collections.OrderedDict()
 
 '''通过tushare接口获取数据'''
 def get_data():
-    gl.DatasrcMap.clear()
+    global DatasrcMap
+    DatasrcMap.clear()
     
-    dataframe = ts.get_h_data(gl.STCode, start=startDate, end=endDate)  
+    try:
+        dataframe = ts.get_h_data(gl.STCode, start=startDate, end=endDate, retry_count=10)  
+    except Exception as e:
+        print(e)
+        time.sleep(30) #网络异常，等待30s
+        return -1
+        
     if dataframe is None:
         return -1
         
@@ -39,30 +46,11 @@ def get_data():
         收 = float(dataframe[day:day+1]['close'])
         量 = float(dataframe[day:day+1]['volume']) 
         金额 = float(dataframe[day:day+1]['amount'])                                     
-        gl.DatasrcMap[day] = [date,开,高,低,收,量,金额]
+        DatasrcMap[day] = [date,开,高,低,收,量,金额]
         day = day + 1
     #endof 'for' 
-    #print(gl.DatasrcMap)
     return 1
 #endof 'def'
-
-
-'''设置获取数据的参数'''
-def mode_selc():
-    global startDate,endDate
-    
-    endDate = time.strftime('%Y-%m-%d',time.localtime(time.time()))
-    startyear = int(endDate[0:4]) - 1 
-    startmonth = int(endDate[6:7]) + 1
-    if startmonth >= 13:
-        startmonth = startmonth % 12
-        startyear = startyear + 1
-    if startmonth < 10:
-        startDate = '%i'%startyear + '-0%i'%startmonth + '-01'
-    else:
-        startDate = '%i'%startyear + '-%i'%startmonth + '-01'    
-#endof 'def'
-
 
 def pro_1by1():
     #1
@@ -77,6 +65,24 @@ def pro_1by1():
     #endof 'if'
 #endof 'def'
 
+
+'''设置获取数据的参数'''
+def mode_selc():
+    global startDate,endDate
+    
+    endDate = time.strftime('%Y-%m-%d',time.localtime(time.time()))
+    startyear = int(endDate[0:4]) - 2 
+    startmonth = int(endDate[6:7]) + 1
+    if startmonth >= 13:
+        startmonth = startmonth % 12
+        startyear = startyear + 1
+    if startmonth < 10:
+        startDate = '%i'%startyear + '-0%i'%startmonth + '-01'
+    else:
+        startDate = '%i'%startyear + '-%i'%startmonth + '-01'    
+#endof 'def'
+
+
 #main()
 mode_selc()
 '''
@@ -86,9 +92,13 @@ for each in codeframe.index:
     i = int(each)
     gl.STCode = codeframe[i:i+1]['code']
     print('开始处理code='+gl.STCode+'.............')   
-    
-    #数据代码范围，遍历'''
-for i in range(300000, 300500):     
+'''    
+gl.STCode = '002234'
+print('\n开始处理code='+gl.STCode+'.............')
+pro_1by1()
+'''    
+#数据代码范围，遍历
+for i in range(300257, 300500):     
     if   i < 10:    code = '00000'+'%d'%i
     elif i < 100:   code = '0000' +'%d'%i
     elif i < 1000:  code = '000'  +'%d'%i
@@ -100,8 +110,8 @@ for i in range(300000, 300500):
     gl.STCode = code
     print('\n开始处理code='+gl.STCode+'.............')
     pro_1by1()
-    
-for i in range(600000, 601000):     
+''' 
+for i in range(600965, 600968):     
     if   i < 10:    code = '00000'+'%d'%i
     elif i < 100:   code = '0000' +'%d'%i
     elif i < 1000:  code = '000'  +'%d'%i

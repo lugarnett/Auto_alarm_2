@@ -8,11 +8,9 @@ import collections
 datamap = collections.OrderedDict()
 
 def Avg_proc(code):
- 
-    day = 0
-    for each in datamap:
-        day = day + 1
-        
+    global datamap
+
+    day = len(datamap)
     if day <= 60:
         return
         
@@ -55,9 +53,10 @@ def Avg_proc(code):
 
 def mdl_calcAvrg(DatasrcMap):
     global datamap
-    
-    datamap = gl.DatasrcMap   
+
+    datamap = DatasrcMap   
     code = gl.STCode
     Avg_proc(code)
     print("2:均值处理完毕！")
+    datamap.clear()
 #endof 'def'

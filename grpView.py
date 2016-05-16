@@ -31,11 +31,14 @@ submap = collections.OrderedDict()
 均30list=[]
 均60list=[]
 
-
+cnt_rule_pic = 0
 xstep = 0.5
 offset = (xstep - 0.1) / 2
 
-def sub_view(submap):
+def sub_view(submap, code):
+    global 日期list,总手list,金额list,换手list,\
+            均5list,均10list,均20list,均30list,均60list
+    global cnt_rule_pic
      
     日期list.clear()
     总手list.clear()
@@ -62,20 +65,23 @@ def sub_view(submap):
     xpos = np.arange(0, len(日期list)*xstep, xstep)
     xoffset= xpos + offset
     
-    fig, ax = plt.subplots(figsize = (8, 4))   
+    #####fig, ax = plt.subplots()   
+    gl.Fig_Cnt = gl.Fig_Cnt 
+    fig = plt.figure(gl.Fig_Cnt)                      # Create a `figure' instance
+    ax = fig.add_subplot(111)   
     # 设置图的底边距
-    plt.subplots_adjust(bottom = 0.25)
+    fig.subplots_adjust(bottom = 0.25)
     #plt.subplots_adjust(right = 0.5)
     #plt.subplots_adjust(left = 0.05)
     #plt.subplots_adjust(top = 10)
     #plt.grid() #开启网格
     ax.set_xticks(xpos)
     ax.set_xticklabels(日期list, rotation=90, fontsize=8)
-    plt.plot(xoffset, 均5list,  '.-', alpha = 0.5, color ='y')
-    plt.plot(xoffset, 均10list, '-', alpha = 0.5, color ='yellowgreen')
-    plt.plot(xoffset, 均20list, '-', alpha = 0.5, color ='lightskyblue')
-    plt.plot(xoffset, 均30list, '-', alpha = 0.5, color ='c')
-    plt.plot(xoffset, 均60list, '-', alpha = 0.5, color ='m')
+    ax.plot(xoffset, 均5list,  '.-', alpha = 0.5, color ='y')
+    ax.plot(xoffset, 均10list, '-', alpha = 0.5, color ='yellowgreen')
+    ax.plot(xoffset, 均20list, '-', alpha = 0.5, color ='lightskyblue')
+    ax.plot(xoffset, 均30list, '-', alpha = 0.5, color ='c')
+    ax.plot(xoffset, 均60list, '-', alpha = 0.5, color ='m')
     
     i = 0
     for (d, x) in submap.items():
@@ -103,14 +109,26 @@ def sub_view(submap):
                 squal_x = [xpos[i], xpos[i], xpos[i] + xstep*10, xpos[i] + xstep*10, xpos[i]]
                 squal_y = [开盘, 开盘*1.2, 开盘*1.2, 开盘, 开盘]
                 ruleID = d2[4:5]
-                plt.plot(squal_x, squal_y, '-', alpha = 0.3, color = 'r')
+                ax.plot(squal_x, squal_y, '-', alpha = 0.3, color = 'r')
                 #写文字
-                ax.text(xpos[i], 开盘*1.2, d2+' '+x2, alpha = 0.3, color = 'r', fontsize = 8)
+                ax.text(xpos[i], 开盘*1.2, d2+' '+x2, alpha = 0.3, color = 'r', fontsize = 1)
                 #ruleID
                 ax.text(xpos[i]+(int(ruleID)-1)*0.7, 开盘*1.15, '('+ruleID+')', color = 'g', fontsize = 8)
             #end of "for"
         #end of "if"       
         i = i + 1
+    #endof 'for'
+            
+    if os.path.exists(path_view_rst+code) <= 0:    #判断目标是否存在
+        os.mkdir(path_view_rst+code)
+    cnt_rule_pic = cnt_rule_pic + 1
+    fig.savefig(path_view_rst+code+'\\' +code+'_告警_%d_'%cnt_rule_pic+日期+'.png', dpi = 100)
+        
+    fig.clear()
+    ax.clear()
+    del fig
+    del ax
+    #plt.show() 
 #end of "def"
 
 
@@ -123,7 +141,7 @@ def rules_group_find(tmpmap, d):
 
 
 def sub_grpview_mng(code):
-    global tmpmap, submap
+    global tmpmap, submap, cnt_rule_pic
     
     lenk = len(tmpmap)
     left = -20
@@ -142,18 +160,13 @@ def sub_grpview_mng(code):
                 right = lenk-pos
                 if right > 50:
                     right = 50
-                #print(left)
-                #print(right)
+                print(left)
+                print(right)
                 for j in range(left, right):
                     submap[tmpmap[d+j][0]] = tmpmap[d+j][1]
                 
-                sub_view(submap)
-        
-                if os.path.exists(path_view_rst+code) <= 0:    #判断目标是否存在
-                    os.mkdir(path_view_rst+code)
-                cnt_rule_pic = cnt_rule_pic + 1
-                plt.savefig(path_view_rst+code+'\\' +code+'_告警_%d_'%cnt_rule_pic+日期+'.png', dpi = 100)
-                #plt.show()                
+                sub_view(submap, code)
+               
                 submap.clear()
             #endof 'if'    
         #endof 'if'
@@ -179,6 +192,7 @@ def mdl_grpview(viewfileoutmap):
     #end of "for"
     #显示满足规则的子图
     sub_grpview_mng(code)
+    tmpmap.clear()
     #按照最佳组合、或者一天同时出现多种入了满足时，星号标记
     ##############################mdl_view_ring()
     print("6:grp画图完毕！")

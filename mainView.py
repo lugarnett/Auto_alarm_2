@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import collections  
-from pylab import *
+#from pylab import *
 
 mpl.rcParams['font.sans-serif'] = ['SimHei']
 mpl.rcParams['axes.unicode_minus'] = False
@@ -34,10 +34,12 @@ viewfileoutmap = collections.OrderedDict()
 均60list=[]
 
 def read_rule_n_rst(rule_rst_file):
+    global viewfileoutmap
 
     #读取rule分析结果
     #以日期为key，存入map
     with open(gl.path_rule_rst + rule_rst_file, 'r') as f:
+        f.readline()
         for line in f.readlines():
             strlist = line.split('\t')  # 用tab分割字符串，并保存到列表
             if(strlist[0] in viewfileoutmap):   #日期存在                
@@ -54,23 +56,22 @@ xstep = 0.5
 offset = (xstep - 0.1) / 2
     
 def mdl_datafill(code):
-
+    global viewfileoutmap
+    
     viewfileoutmap.clear()
-    day = 0
 
     if not os.path.exists(gl.path_data_avg + code + "_avg.txt"):
         return -1
     #读取基本K线数据
     #key为日期
     with open(gl.path_data_avg + code + "_avg.txt", 'r') as f:
-        head = f.readline()
+        f.readline()
         for line in f.readlines():
             strlist = line.split('\t')  # 用tab分割字符串，并保存到列表
             viewfileoutmap[strlist[0]] = {'基K':[float(strlist[1]), float(strlist[2]), float(strlist[3]), float(strlist[4])], \
                                           'V':[float(strlist[5]), float(strlist[6]), float(strlist[7])], \
                                           '均':[float(strlist[8]), float(strlist[9]), float(strlist[10]), \
                                           float(strlist[11]), float(strlist[12])]}
-            day = day + 1
         #end of "for"
     #end of "with"
 
@@ -89,7 +90,9 @@ def mdl_datafill(code):
     return 1
 #end of "def"    
 
-def main_view():
+def main_view(code):
+    global 日期list,总手list,金额list,换手list,\
+            均5list,均10list,均20list,均30list,均60list
     日期list.clear()
     总手list.clear()
     金额list.clear()
@@ -114,22 +117,27 @@ def main_view():
         
     xpos = np.arange(0, len(日期list)*xstep, xstep)
     xoffset= xpos + offset
-    
-    fig, ax = plt.subplots()   
+
+    #####fig, ax = plt.subplots()   
+    gl.Fig_Cnt = gl.Fig_Cnt 
+    fig = plt.figure(gl.Fig_Cnt)                      # Create a `figure' instance
+    ax = fig.add_subplot(111) 
     # 设置图的底边距
-    plt.subplots_adjust(bottom = 0.25)
+    fig.subplots_adjust(bottom = 0.25)
+   
+    
     #plt.grid() #开启网格
     ax.set_xticks(xpos)
     ax.set_xticklabels(日期list, rotation=90, fontsize=10)
-    plt.plot(xoffset, 均5list,  '-', alpha = 0.2, color ='y')
-    plt.plot(xoffset, 均10list, '-', alpha = 0.2, color ='yellowgreen')
-    plt.plot(xoffset, 均20list, '-', alpha = 0.2, color ='lightskyblue')
-    plt.plot(xoffset, 均30list, '-', alpha = 0.2, color ='c')
-    plt.plot(xoffset, 均60list, '-', alpha = 0.2, color ='m')
+    ax.plot(xoffset, 均5list,  '-', alpha = 0.2, color ='y')
+    ax.plot(xoffset, 均10list, '-', alpha = 0.2, color ='yellowgreen')
+    ax.plot(xoffset, 均20list, '-', alpha = 0.2, color ='lightskyblue')
+    ax.plot(xoffset, 均30list, '-', alpha = 0.2, color ='c')
+    ax.plot(xoffset, 均60list, '-', alpha = 0.2, color ='m')
     
     i = 0
     for (d, x) in viewfileoutmap.items():
-        日期 = d
+        #日期 = d
         开 = x['基K'][0]
         最高 = x['基K'][1]
         最低 = x['基K'][2]
@@ -152,17 +160,27 @@ def main_view():
                 #画矩形
                 squal_x = [xpos[i], xpos[i], xpos[i] + xstep*10, xpos[i] + xstep*10, xpos[i]]
                 squal_y = [开, 开*1.2, 开*1.2, 开, 开]
-                plt.plot(squal_x, squal_y, '-', alpha = 0.3, color = 'r')
+                ax.plot(squal_x, squal_y, '-', alpha = 0.3, color = 'r')
                 #写文字
-                ax.text(xpos[i], 开*1.2, d2+' '+x2, alpha = 0.3, color = 'r', fontsize = 5)
+                ax.text(xpos[i], 开*1.2, d2+' '+x2, alpha = 0.3, color = 'r', fontsize = 3)
                 #ruleID
                 ruleID = d2[4:5]
                 ax.text(xpos[i]+(float(ruleID)-1)*0.7, 开*1.15, '('+ruleID+')', color = 'g', fontsize = 8)
             #end of "for"
-        #end of "if" 
+        #endof "if" 
         
         i = i + 1
-#end of "def"        
+    #endof ''for
+    if not os.path.exists(path_view_rst+code):    #判断目标是否存在
+        os.mkdir(path_view_rst+code)
+    fig.savefig(path_view_rst+code+'\\' +code+'.png',  dpi = 600)
+    
+    fig.clear()
+    ax.clear()
+    del fig
+    del ax
+    #plt.show()
+#endof "def"        
 
 
 #mdl
@@ -170,12 +188,8 @@ def mdl_mainview():
     code = gl.STCode
     flag = mdl_datafill(code)
     if flag == 1:
-        main_view()
+        main_view(code)
         
-        if not os.path.exists(path_view_rst+code):    #判断目标是否存在
-            os.mkdir(path_view_rst+code)
-        plt.savefig(path_view_rst+code+'\\' +code+'.png',  dpi = 600)
-        #plt.show()
         print("4:mainview画图完毕！")
         
         ##子图
