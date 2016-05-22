@@ -39,7 +39,7 @@ def Avg_proc(code):
             datamap[key].extend([float("%.2f"%avg5), float("%.2f"%avg10), float("%.2f"%avg20), float("%.2f"%avg30), float("%.2f"%avg60)])
     #endof "for"
             
-    head2 = "时间\t开盘\t最高\t最低\t收盘\t总手\t金额\t换手%\tavg5\tavg10\tavg20\tavg30\tavg60\n"
+    head2 = "时间\t开盘\t最高\t最低\t收盘\t成交量\t金额\t换手%\tavg5\tavg10\tavg20\tavg30\tavg60\n"
     with open(gl.path_data_avg + code + "_avg.txt", 'w') as out:
         out.write(head2)
         for key in datamap:

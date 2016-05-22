@@ -2,6 +2,12 @@
 import gl
 from ruleLib.rule1 import rule_1
 from ruleLib.rule2 import rule_2
+from ruleLib.rule3 import rule_3
+from ruleLib.rule4 import rule_4
+from ruleLib.rule5 import rule_5
+from ruleLib.rule6 import rule_6
+from ruleLib.rule7 import rule_7
+from ruleLib.rule8 import rule_8
 
 #import numpy as np
 #import matplotlib.pyplot as plt
@@ -64,6 +70,12 @@ def mdl_ruleget(code):
 def mdl_ruleanlys(code):
     rule_1(code, Anlyinmap)
     rule_2(code, Anlyinmap)
+    rule_3(code, Anlyinmap)
+    rule_4(code, Anlyinmap)
+    rule_5(code, Anlyinmap)
+    rule_6(code, Anlyinmap)
+    rule_7(code, Anlyinmap)
+    rule_8(code, Anlyinmap)
 #end of "def"
 
 
@@ -73,7 +85,6 @@ def mdl_ruleAnalyse():
     mdl_read(code)
     mdl_ruleget(code)
     mdl_ruleanlys(code)
-    print(code)
     print("3:rules∑÷ŒˆÕÍ±œ£°")
 #endof 'mdl'
 

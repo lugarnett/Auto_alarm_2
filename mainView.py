@@ -12,7 +12,7 @@ import collections
 
 mpl.rcParams['font.sans-serif'] = ['SimHei']
 mpl.rcParams['axes.unicode_minus'] = False
-
+linewidth = 0.2
 
 path_data_avg = "均值整理数据\\"
 path_rule_rst = "规则分析结果\\"
@@ -34,7 +34,7 @@ viewfileoutmap = collections.OrderedDict()
 均60list=[]
 
 def read_rule_n_rst(rule_rst_file):
-    global viewfileoutmap
+    global viewfileoutmap, linewidth
 
     #读取rule分析结果
     #以日期为key，存入map
@@ -92,7 +92,7 @@ def mdl_datafill(code):
 
 def main_view(code):
     global 日期list,总手list,金额list,换手list,\
-            均5list,均10list,均20list,均30list,均60list
+            均5list,均10list,均20list,均30list,均60list, linewidth
     日期list.clear()
     总手list.clear()
     金额list.clear()
@@ -129,11 +129,11 @@ def main_view(code):
     #plt.grid() #开启网格
     ax.set_xticks(xpos)
     ax.set_xticklabels(日期list, rotation=90, fontsize=10)
-    ax.plot(xoffset, 均5list,  '-', alpha = 0.2, color ='y')
-    ax.plot(xoffset, 均10list, '-', alpha = 0.2, color ='yellowgreen')
-    ax.plot(xoffset, 均20list, '-', alpha = 0.2, color ='lightskyblue')
-    ax.plot(xoffset, 均30list, '-', alpha = 0.2, color ='c')
-    ax.plot(xoffset, 均60list, '-', alpha = 0.2, color ='m')
+    ax.plot(xoffset, 均5list,  '-', alpha = 0.2, color ='y',linewidth=linewidth)
+    ax.plot(xoffset, 均10list, '-', alpha = 0.2, color ='yellowgreen',linewidth=linewidth)
+    ax.plot(xoffset, 均20list, '-', alpha = 0.2, color ='lightskyblue',linewidth=linewidth)
+    ax.plot(xoffset, 均30list, '-', alpha = 0.2, color ='c',linewidth=linewidth)
+    ax.plot(xoffset, 均60list, '-', alpha = 0.2, color ='m',linewidth=linewidth)
     
     i = 0
     for (d, x) in viewfileoutmap.items():
@@ -144,28 +144,30 @@ def main_view(code):
         收 = x['基K'][3]
         
         if 收 > 开:
-            ax.bar(xpos[i], 收-开, bottom = 开, width = .4, alpha = .5, facecolor ='r', edgecolor='r')
-            ax.bar(xoffset[i], 最高-最低, bottom = 最低, width = .015, alpha = .5, facecolor ='r', edgecolor='r')
+            ax.bar(xpos[i], 收-开, bottom = 开, width = .4, alpha = .5, facecolor ='r', edgecolor='r',linewidth=linewidth)
+            ax.bar(xoffset[i], 最高-最低, bottom = 最低, width = .015, alpha = .5, facecolor ='r', edgecolor='r',linewidth=linewidth)
         elif 开 > 收:
-            ax.bar(xpos[i], 开-收, bottom = 收, width = .4, alpha = .3, facecolor ='green', edgecolor='green')
-            ax.bar(xoffset[i], 最高-最低, bottom = 最低, width = .015, alpha = .3, facecolor ='green', edgecolor='green')
+            ax.bar(xpos[i], 开-收, bottom = 收, width = .4, alpha = .3, facecolor ='green', edgecolor='green',linewidth=linewidth)
+            ax.bar(xoffset[i], 最高-最低, bottom = 最低, width = .015, alpha = .3, facecolor ='green', edgecolor='green',linewidth=linewidth)
         else: #开==收:
-            ax.bar(xpos[i], 0.005, bottom = 开, width = .4, alpha = .5, facecolor ='r', edgecolor='r')
-            ax.bar(xoffset[i], 最高-最低, bottom = 最低, width = .015, alpha = .5, facecolor ='r', edgecolor='r') 
+            ax.bar(xpos[i], 0.005, bottom = 开, width = .4, alpha = .5, facecolor ='r', edgecolor='r',linewidth=linewidth)
+            ax.bar(xoffset[i], 最高-最低, bottom = 最低, width = .015, alpha = .5, facecolor ='r', edgecolor='r',linewidth=linewidth) 
         #end of "if"
         
         if  '分析结果' in x:
+            结果cnt = 0
             for (d2, x2) in x['分析结果'].items():
                 #print(日期, d2, x2)
                 #画矩形
                 squal_x = [xpos[i], xpos[i], xpos[i] + xstep*10, xpos[i] + xstep*10, xpos[i]]
                 squal_y = [开, 开*1.2, 开*1.2, 开, 开]
-                ax.plot(squal_x, squal_y, '-', alpha = 0.3, color = 'r')
+                ax.plot(squal_x, squal_y, '-', alpha = 0.3, color = 'r',linewidth=linewidth)
                 #写文字
-                ax.text(xpos[i], 开*1.2, d2+' '+x2, alpha = 0.3, color = 'r', fontsize = 3)
+                ax.text(xpos[i], 开*1.195+结果cnt*0.1, d2+' '+x2, alpha = 0.7, color = 'r', fontsize = 10)
                 #ruleID
                 ruleID = d2[4:5]
-                ax.text(xpos[i]+(float(ruleID)-1)*0.7, 开*1.15, '('+ruleID+')', color = 'g', fontsize = 8)
+                ax.text(xpos[i], 开*1.187-结果cnt*0.1, '('+ruleID+')', color = 'g', fontsize = 10)
+                结果cnt = 结果cnt + 1
             #end of "for"
         #endof "if" 
         
@@ -188,9 +190,8 @@ def mdl_mainview():
     code = gl.STCode
     flag = mdl_datafill(code)
     if flag == 1:
-        main_view(code)
-        
-        print("4:mainview画图完毕！")
+        #main_view(code)
+        #print("4:mainview画图完毕！")
         
         ##子图
         #mdl_subview(viewfileoutmap)

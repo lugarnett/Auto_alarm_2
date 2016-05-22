@@ -92,28 +92,30 @@ def sub_view(submap, code):
         收盘 = x['基K'][3]
         
         if 收盘 > 开盘:
-            ax.bar(xpos[i], 收盘-开盘, bottom = 开盘, width = .4, alpha = .5, facecolor ='r', edgecolor='r')
-            ax.bar(xoffset[i], 最高-最低, bottom = 最低, width = .015, alpha = .5, facecolor ='r', edgecolor='r')
+            ax.bar(xpos[i], 收盘-开盘, bottom = 开盘, width = .4, alpha = .5, facecolor ='r', edgecolor='r',linewidth=0.5)
+            ax.bar(xoffset[i], 最高-最低, bottom = 最低, width = .015, alpha = .5, facecolor ='r', edgecolor='r',linewidth=0.5)
         elif 开盘 > 收盘:
-            ax.bar(xpos[i], 开盘-收盘, bottom = 收盘, width = .4, alpha = .5, facecolor ='green', edgecolor='green')
-            ax.bar(xoffset[i], 最高-最低, bottom = 最低, width = .015, alpha = .5, facecolor ='green', edgecolor='green')
+            ax.bar(xpos[i], 开盘-收盘, bottom = 收盘, width = .4, alpha = .5, facecolor ='green', edgecolor='green',linewidth=0.5)
+            ax.bar(xoffset[i], 最高-最低, bottom = 最低, width = .015, alpha = .5, facecolor ='green', edgecolor='green',linewidth=0.5)
         else: #开盘==收盘:
-            ax.bar(xpos[i], 0.005, bottom = 开盘, width = .4, alpha = .5, facecolor ='r', edgecolor='r')
-            ax.bar(xoffset[i], 最高-最低, bottom = 最低, width = .015, alpha = .5, facecolor ='r', edgecolor='r') 
+            ax.bar(xpos[i], 0.005, bottom = 开盘, width = .4, alpha = .5, facecolor ='r', edgecolor='r',linewidth=0.5)
+            ax.bar(xoffset[i], 最高-最低, bottom = 最低, width = .015, alpha = .5, facecolor ='r', edgecolor='r',linewidth=0.5) 
         #end of "if"
 
         if  '分析结果' in x:
+            结果cnt = 0
             for (d2, x2) in x['分析结果'].items():
                 #print(日期, d2, x2)
                 #画矩形
                 squal_x = [xpos[i], xpos[i], xpos[i] + xstep*10, xpos[i] + xstep*10, xpos[i]]
                 squal_y = [开盘, 开盘*1.2, 开盘*1.2, 开盘, 开盘]
                 ruleID = d2[4:5]
-                ax.plot(squal_x, squal_y, '-', alpha = 0.3, color = 'r')
+                ax.plot(squal_x, squal_y, '-', alpha = 0.7, color = 'm', linewidth=0.2)
                 #写文字
-                ax.text(xpos[i], 开盘*1.2, d2+' '+x2, alpha = 0.3, color = 'r', fontsize = 1)
+                ax.text(xpos[i], 开盘*1.195+结果cnt*0.1, d2+' '+x2, alpha = 0.7, color = 'r', fontsize = 10)
                 #ruleID
-                ax.text(xpos[i]+(int(ruleID)-1)*0.7, 开盘*1.15, '('+ruleID+')', color = 'g', fontsize = 8)
+                ax.text(xpos[i], 开盘*1.187-结果cnt*0.1, '('+ruleID+')', color = 'g', fontsize = 10)
+                结果cnt = 结果cnt + 1
             #end of "for"
         #end of "if"       
         i = i + 1
@@ -122,8 +124,8 @@ def sub_view(submap, code):
     if os.path.exists(path_view_rst+code) <= 0:    #判断目标是否存在
         os.mkdir(path_view_rst+code)
     cnt_rule_pic = cnt_rule_pic + 1
-    fig.savefig(path_view_rst+code+'\\' +code+'_告警_%d_'%cnt_rule_pic+日期+'.png', dpi = 100)
-        
+    fig.savefig(path_view_rst+code+'\\' +code+'_告警_%d_'%cnt_rule_pic+日期+'.png', dpi = 200)
+
     fig.clear()
     ax.clear()
     del fig
@@ -135,8 +137,20 @@ def sub_view(submap, code):
 
 def rules_group_find(tmpmap, d):
     
-    flag = len(tmpmap[d][1]['分析结果'])
-    return flag      
+    flag = 0
+    cnt = len(tmpmap[d][1]['分析结果'])
+    if cnt>=2:
+        flag = 1
+    if 'rule1' in tmpmap[d][1]['分析结果']:
+        flag = 3
+    if 'rule1' in tmpmap[d][1]['分析结果']:
+        flag = 4
+    if 'rule1' in tmpmap[d][1]['分析结果']:
+        flag = 5
+    if 'rule1' in tmpmap[d][1]['分析结果']:
+        flag = 6    
+    
+    return flag, cnt    
 #endof 'def'
 
 
@@ -152,8 +166,8 @@ def sub_grpview_mng(code):
     for (d, x) in tmpmap.items():
         if '分析结果' in x[1]:
             日期 = x[0]
-            flag = rules_group_find(tmpmap, d)      #规则组合设计
-            if flag >= 2:
+            flag, cnt = rules_group_find(tmpmap, d)      #规则组合设计
+            if flag == 1:
                 left = -pos
                 if left < -20:
                     left = -20

@@ -103,6 +103,7 @@ def sub_view(submap, code):
         #end of "if"
 
         if  '分析结果' in x:
+            结果cnt = 0
             for (d2, x2) in x['分析结果'].items():
                 #print(日期, d2, x2)
                 #画矩形
@@ -111,9 +112,10 @@ def sub_view(submap, code):
                 ruleID = d2[4:5]
                 ax.plot(squal_x, squal_y, '-', alpha = 0.3, color = 'r')
                 #写文字
-                ax.text(xpos[i], 开盘*1.2, d2+' '+x2, alpha = 0.3, color = 'r', fontsize = 2)
+                ax.text(xpos[i], 开盘*1.195+结果cnt*0.1, d2+' '+x2, alpha = 0.3, color = 'r', fontsize = 10)
                 #ruleID
-                ax.text(xpos[i]+(int(ruleID)-1)*0.7, 开盘*1.15, '('+ruleID+')', color = 'g', fontsize = 8)
+                ax.text(xpos[i], 开盘*1.187-结果cnt*0.1, '('+ruleID+')', color = 'g', fontsize = 10)
+                结果cnt = 结果cnt + 1
             #end of "for"
         #end of "if"       
         i = i + 1

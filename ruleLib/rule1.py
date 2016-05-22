@@ -20,10 +20,14 @@ def rule_1(code, Anlyinmap):
         均20 = x['均'][2]
         均30 = x['均'][3]
         均60 = x['均'][4]
+        
+        #穿均线
+        #不是5%大跌
         if 高>=均5 and 高>=均10 and 高>=均20 and 高>=均30 and 高>=均60 and \
            低<=均5 and 低<=均10 and 低<=均20 and 低<=均30 and 低<=均60:
-            Anlyoutmap[x['date']] = ['rule1', '一阳穿五线'] 
-            cnt1 = cnt1 + 1
+               if not (开-收) > 0.05*收:
+                   Anlyoutmap[x['date']] = ['rule1', '一阳穿五线']
+                   cnt1 = cnt1 + 1
     #end of "for"
 
     if cnt1 > 0:

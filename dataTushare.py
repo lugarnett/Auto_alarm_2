@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import gl
+from codeGet import mdl_codeget
 from calcAvrg import mdl_calcAvrg
 from ruleAnalyse import mdl_ruleAnalyse
 from mainView import mdl_mainview
 
 import tushare as ts
-#import os
+import os
 import collections
 import time
 #from pandas import Series,DataFrame
@@ -71,8 +72,8 @@ def mode_selc():
     global startDate,endDate
     
     endDate = time.strftime('%Y-%m-%d',time.localtime(time.time()))
-    startyear = int(endDate[0:4]) - 2 
-    startmonth = int(endDate[6:7]) + 1
+    startyear = int(endDate[0:4]) - 1 
+    startmonth = int(endDate[6:7]) + 9
     if startmonth >= 13:
         startmonth = startmonth % 12
         startyear = startyear + 1
@@ -85,71 +86,34 @@ def mode_selc():
 
 #main()
 mode_selc()
-'''
-codeframe = ts.get_today_all()
-codeframe.sort_index(inplace=True)  #按date升序排列
-for each in codeframe.index:
-    i = int(each)
-    gl.STCode = codeframe[i:i+1]['code']
-    print('开始处理code='+gl.STCode+'.............')   
-'''    
-gl.STCode = '002234'
+
+if os.path.exists(gl.path_data_origin) <= 0:    #判断目标是否存在
+    os.mkdir(gl.path_data_origin)
+if os.path.exists(gl.path_data_avg) <= 0:    #判断目标是否存在
+    os.mkdir(gl.path_data_avg)
+if os.path.exists(gl.path_rule_rst) <= 0:    #判断目标是否存在
+    os.mkdir(gl.path_rule_rst)
+if os.path.exists(gl.path_view_rst) <= 0:    #判断目标是否存在
+    os.mkdir(gl.path_view_rst)
+        
+gl.STCode = '600460'
 print('\n开始处理code='+gl.STCode+'.............')
 pro_1by1()
-   
+
 #数据代码范围，遍历
-for i in range(300001, 300517):     
-    if   i < 10:    code = '00000'+'%d'%i
-    elif i < 100:   code = '0000' +'%d'%i
-    elif i < 1000:  code = '000'  +'%d'%i
-    elif i < 10000: code = '00'   +'%d'%i
-    elif i < 100000:code = '0'    +'%d'%i
-    elif i < 700000:code = '%d'%i
-    else :code = '000000'
-
-    gl.STCode = code
-    print('\n开始处理code='+gl.STCode+'.............')
-    pro_1by1()
+flag, CodeMap = mdl_codeget()
+if flag == 1:
+    no = 0
+    for (n,x) in CodeMap.items():
+        no = no + 1        
+        gl.STCode = x[0]
+        gl.STName = x[1]
+        print('\nNo%d -> '%no+gl.STCode+gl.STName+'.............')
+        pro_1by1()
     
-for i in range(2001, 2799):     
-    if   i < 10:    code = '00000'+'%d'%i
-    elif i < 100:   code = '0000' +'%d'%i
-    elif i < 1000:  code = '000'  +'%d'%i
-    elif i < 10000: code = '00'   +'%d'%i
-    elif i < 100000:code = '0'    +'%d'%i
-    elif i < 700000:code = '%d'%i
-    else :code = '000000'
-
-    gl.STCode = code
-    print('\n开始处理code='+gl.STCode+'.............')
-    pro_1by1()
-
-for i in range(1, 1000):     
-    if   i < 10:    code = '00000'+'%d'%i
-    elif i < 100:   code = '0000' +'%d'%i
-    elif i < 1000:  code = '000'  +'%d'%i
-    elif i < 10000: code = '00'   +'%d'%i
-    elif i < 100000:code = '0'    +'%d'%i
-    elif i < 700000:code = '%d'%i
-    else :code = '000000'
-    
-    gl.STCode = code
-    print('\n开始处理code='+gl.STCode+'.............')
-    pro_1by1()
- 
-for i in range(600001, 604000):     
-    if   i < 10:    code = '00000'+'%d'%i
-    elif i < 100:   code = '0000' +'%d'%i
-    elif i < 1000:  code = '000'  +'%d'%i
-    elif i < 10000: code = '00'   +'%d'%i
-    elif i < 100000:code = '0'    +'%d'%i
-    elif i < 700000:code = '%d'%i
-    else :code = '000000'
-    
-    gl.STCode = code
-    print('\n开始处理code='+gl.STCode+'.............')
-    pro_1by1()
- 
+    #endof 'for'
+    print('\n全部计算完毕!')
+#endof 'if'
 #endof 'main'
 
 
