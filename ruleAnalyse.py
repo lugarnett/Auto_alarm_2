@@ -8,6 +8,8 @@ from ruleLib.rule5 import rule_5
 from ruleLib.rule6 import rule_6
 from ruleLib.rule7 import rule_7
 from ruleLib.rule8 import rule_8
+from ruleLib.rule9 import rule_9
+from ruleLib.rule10 import rule_10
 
 #import numpy as np
 #import matplotlib.pyplot as plt
@@ -50,6 +52,7 @@ def mdl_read(code):
         Anlyinmap[i]['date'] = d
         i = i + 1
     #end of "for"
+    return 1
 #end of "def"
 
 
@@ -76,16 +79,22 @@ def mdl_ruleanlys(code):
     rule_6(code, Anlyinmap)
     rule_7(code, Anlyinmap)
     rule_8(code, Anlyinmap)
+    rule_9(code, Anlyinmap)
+    rule_10(code, Anlyinmap)
 #end of "def"
 
 
 #获取*.txt，并遍历
 def mdl_ruleAnalyse():
     code = gl.STCode
-    mdl_read(code)
-    mdl_ruleget(code)
-    mdl_ruleanlys(code)
-    print("3:rules分析完毕！")
+    flag = mdl_read(code)
+    if flag == 1:
+        mdl_ruleget(code)
+        mdl_ruleanlys(code)
+        print("3:rules分析完毕！")
+    else:
+        print("3:rules分析无数据。。。")
+
 #endof 'mdl'
 
 

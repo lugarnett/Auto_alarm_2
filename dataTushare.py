@@ -37,6 +37,7 @@ def get_data():
         return -1
         
     dataframe.sort_index(inplace=True)  #按date升序排列
+    dataframe = dataframe.tail(20+60)  #截取最近20天的数据
     #print(dataframe)
     day = 0
     for each in dataframe.index:
@@ -73,7 +74,7 @@ def mode_selc():
     
     endDate = time.strftime('%Y-%m-%d',time.localtime(time.time()))
     startyear = int(endDate[0:4]) - 1 
-    startmonth = int(endDate[6:7]) + 9
+    startmonth = int(endDate[6:7]) + 2
     if startmonth >= 13:
         startmonth = startmonth % 12
         startyear = startyear + 1
@@ -87,7 +88,7 @@ def mode_selc():
 #main()
 mode_selc()
 
-if os.path.exists(gl.path_data_origin) <= 0:    #判断目标是否存在
+if os.path.exists(gl.path_data_origin) <= 0: #判断目标是否存在
     os.mkdir(gl.path_data_origin)
 if os.path.exists(gl.path_data_avg) <= 0:    #判断目标是否存在
     os.mkdir(gl.path_data_avg)
@@ -96,7 +97,7 @@ if os.path.exists(gl.path_rule_rst) <= 0:    #判断目标是否存在
 if os.path.exists(gl.path_view_rst) <= 0:    #判断目标是否存在
     os.mkdir(gl.path_view_rst)
         
-gl.STCode = '600460'
+gl.STCode = '000981'
 print('\n开始处理code='+gl.STCode+'.............')
 pro_1by1()
 

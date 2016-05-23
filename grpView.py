@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import collections  
-from pylab import *
+#from pylab import *
 
 mpl.rcParams['font.sans-serif'] = ['SimHei']
 mpl.rcParams['axes.unicode_minus'] = False
@@ -104,17 +104,17 @@ def sub_view(submap, code):
 
         if  '分析结果' in x:
             结果cnt = 0
+            #画矩形
+            squal_x = [xpos[i], xpos[i], xpos[i] + xstep*10]
+            squal_y = [开盘, 开盘*1.2, 开盘*1.2]
+            ax.plot(squal_x, squal_y, '--', alpha = 0.7, color = 'm', linewidth=0.2)
             for (d2, x2) in x['分析结果'].items():
                 #print(日期, d2, x2)
-                #画矩形
-                squal_x = [xpos[i], xpos[i], xpos[i] + xstep*10, xpos[i] + xstep*10, xpos[i]]
-                squal_y = [开盘, 开盘*1.2, 开盘*1.2, 开盘, 开盘]
                 ruleID = d2[4:5]
-                ax.plot(squal_x, squal_y, '-', alpha = 0.7, color = 'm', linewidth=0.2)
                 #写文字
-                ax.text(xpos[i], 开盘*1.195+结果cnt*0.1, d2+' '+x2, alpha = 0.7, color = 'r', fontsize = 10)
+                ax.text(xpos[i], 开盘*1.193+结果cnt*0.1, d2+' '+x2, alpha = 0.7, color = 'r', fontsize = 8)
                 #ruleID
-                ax.text(xpos[i], 开盘*1.187-结果cnt*0.1, '('+ruleID+')', color = 'g', fontsize = 10)
+                ax.text(xpos[i], 开盘*1.187-结果cnt*0.1, '('+ruleID+')', color = 'g', fontsize = 8)
                 结果cnt = 结果cnt + 1
             #end of "for"
         #end of "if"       
@@ -141,14 +141,12 @@ def rules_group_find(tmpmap, d):
     cnt = len(tmpmap[d][1]['分析结果'])
     if cnt>=2:
         flag = 1
-    if 'rule1' in tmpmap[d][1]['分析结果']:
-        flag = 3
-    if 'rule1' in tmpmap[d][1]['分析结果']:
-        flag = 4
-    if 'rule1' in tmpmap[d][1]['分析结果']:
-        flag = 5
-    if 'rule1' in tmpmap[d][1]['分析结果']:
-        flag = 6    
+        
+    if  'rule1' in tmpmap[d][1]['分析结果'] or \
+        'rule7' in tmpmap[d][1]['分析结果'] or \
+        'rule8' in tmpmap[d][1]['分析结果'] or \
+        'rule9' in tmpmap[d][1]['分析结果']:
+            flag = 1    
     
     return flag, cnt    
 #endof 'def'
@@ -165,7 +163,7 @@ def sub_grpview_mng(code):
     pos = 0
     for (d, x) in tmpmap.items():
         if '分析结果' in x[1]:
-            日期 = x[0]
+            #日期 = x[0]
             flag, cnt = rules_group_find(tmpmap, d)      #规则组合设计
             if flag == 1:
                 left = -pos
@@ -178,6 +176,7 @@ def sub_grpview_mng(code):
                 #print(right)
                 for j in range(left, right):
                     submap[tmpmap[d+j][0]] = tmpmap[d+j][1]
+                #endof 'for'
                 
                 sub_view(submap, code)
                

@@ -1,36 +1,30 @@
 # -*- coding: utf-8 -*-
 import gl
-from calcAvrg import mdl_calcAvrg
-from ruleAnalyse import mdl_ruleAnalyse
-from mainView import mdl_mainview
-
 import tushare as ts
-#import os
 import collections
-import time
-#from pandas import Series,DataFrame
-#import pandas as pd
-
 
 #模块内全局变量
 CodeMap = collections.OrderedDict()
 
 '''通过tushare接口获取数据'''
-#mdl()
 def mdl_codeget():
     global CodeMap
     CodeMap.clear()
     
-    try:
-        dataframe = ts.get_today_all()  
-    except Exception as e:
-        print(e)
-        print('code获取失败！')
-        return -1, None
-        
+    #获取code，出错则重试10次
+    for i in range(10):
+        try:
+            dataframe = ts.get_today_all()  
+        except Exception as e:
+            print('\n'+e)
+            print('code获取失败！')
+            continue
+        #endof 'try'
+        break
+    #endof 'for'
     if dataframe is None:
         return -1, None
-        
+
     #获取code列表
     #dataframe.sort(['code'], inplace=True)
     n = 0

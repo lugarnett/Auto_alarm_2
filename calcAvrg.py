@@ -12,7 +12,7 @@ def Avg_proc(code):
 
     day = len(datamap)
     if day <= 60:
-        return
+        return -1
         
     #增加换手数据
     for key in datamap:
@@ -48,6 +48,7 @@ def Avg_proc(code):
                 out.write(tmpstr)
         #endof "for"
     #endof "with"
+    return 1
 #endof "Avg_proc()"
 
 
@@ -56,7 +57,10 @@ def mdl_calcAvrg(DatasrcMap):
 
     datamap = DatasrcMap   
     code = gl.STCode
-    Avg_proc(code)
-    print("2:均值处理完毕！")
+    flag = Avg_proc(code)
+    if flag == 1:
+        print("\n2:均值处理完毕！")
+    else:
+        print("\n2:均值处理失败。。。")
     datamap.clear()
 #endof 'def'
