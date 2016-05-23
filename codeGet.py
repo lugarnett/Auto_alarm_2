@@ -16,7 +16,7 @@ def mdl_codeget():
         try:
             dataframe = ts.get_today_all()  
         except Exception as e:
-            print('\n'+e)
+            print(e)
             print('code获取失败！')
             continue
         #endof 'try'

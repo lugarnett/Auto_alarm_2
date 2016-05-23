@@ -30,14 +30,14 @@ def get_data():
         dataframe = ts.get_h_data(gl.STCode, start=startDate, end=endDate, retry_count=10)  
     except Exception as e:
         print(e)
-        time.sleep(30) #网络异常，等待30s
+        time.sleep(1) #网络异常，等待30s
         return -1
         
     if dataframe is None:
         return -1
         
     dataframe.sort_index(inplace=True)  #按date升序排列
-    dataframe = dataframe.tail(20+60)  #截取最近20天的数据
+    dataframe = dataframe.tail(10+60)  #截取最近20天的数据
     #print(dataframe)
     day = 0
     for each in dataframe.index:
@@ -57,13 +57,16 @@ def get_data():
 def pro_1by1():
     #1
     flag = get_data()
-    if flag >= 1:
+    if flag == 1:
+        print("\n1:data获取成功！")
         #2
         mdl_calcAvrg(DatasrcMap)
         #3
         mdl_ruleAnalyse()
         #4
         mdl_mainview()
+    else:
+        print("\n1:data获取。。。。。。。。。。。。")
     #endof 'if'
 #endof 'def'
 
@@ -74,7 +77,7 @@ def mode_selc():
     
     endDate = time.strftime('%Y-%m-%d',time.localtime(time.time()))
     startyear = int(endDate[0:4]) - 1 
-    startmonth = int(endDate[6:7]) + 2
+    startmonth = int(endDate[6:7]) + 8
     if startmonth >= 13:
         startmonth = startmonth % 12
         startyear = startyear + 1

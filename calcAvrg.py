@@ -59,8 +59,8 @@ def mdl_calcAvrg(DatasrcMap):
     code = gl.STCode
     flag = Avg_proc(code)
     if flag == 1:
-        print("\n2:均值处理完毕！")
+        print("2:均值处理完毕！")
     else:
-        print("\n2:均值处理失败。。。")
+        print("2:均值处理失败。。。")
     datamap.clear()
 #endof 'def'
