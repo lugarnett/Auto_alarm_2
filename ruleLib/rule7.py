@@ -15,7 +15,7 @@ def rule_7(code, Anlyinmap):
     量 = 0
     
     长阳度 = 0.015
-    量增 = 1.4
+    量增 = 1.5
     cnt2 = 0
     Anlyoutmap.clear()
     for (d,x) in Anlyinmap.items():

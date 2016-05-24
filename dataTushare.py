@@ -27,17 +27,21 @@ def get_data():
     DatasrcMap.clear()
     
     try:
-        dataframe = ts.get_h_data(gl.STCode, start=startDate, end=endDate, retry_count=10)  
+        dataframe = ts.get_h_data(gl.STCode, start=startDate, end=endDate)  #, retry_count=10
     except Exception as e:
         print(e)
         time.sleep(1) #网络异常，等待30s
+        print('sleep')
         return -1
         
     if dataframe is None:
+        print('None!')
         return -1
-        
+    print("1.1")
     dataframe.sort_index(inplace=True)  #按date升序排列
+    print("1.2")
     dataframe = dataframe.tail(10+60)  #截取最近20天的数据
+    print("1.3")
     #print(dataframe)
     day = 0
     for each in dataframe.index:
@@ -66,7 +70,7 @@ def pro_1by1():
         #4
         mdl_mainview()
     else:
-        print("\n1:data获取。。。。。。。。。。。。")
+        print("\n1:data获取失败。。。。。。。。。。。。")
     #endof 'if'
 #endof 'def'
 

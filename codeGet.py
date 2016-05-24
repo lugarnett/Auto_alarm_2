@@ -44,7 +44,7 @@ def mdl_codeget():
         #end of "for"
     #end of "with"
     print('\n\ncode获取完成 -> 共%d'%len(CodeMap))
-    print(CodeMap)
+    #print(CodeMap)
     return 1, CodeMap
 #endof 'mdl'
 
