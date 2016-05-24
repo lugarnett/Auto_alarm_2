@@ -6,7 +6,7 @@ import os
 
 Anlyoutmap = collections.OrderedDict()  
 
-
+'''一阳穿五线,非-3%大跌'''
 def rule_1(code, Anlyinmap):
     cnt1 = 0
     收 = 1000
@@ -25,10 +25,10 @@ def rule_1(code, Anlyinmap):
         
         最低 = min(收pre,低)
         #穿均线
-        #不是5%大跌
+        #不是3%大跌
         if 高>=均5 and 高>=均10 and 高>=均20 and 高>=均30 and 高>=均60 and \
            最低<=均5 and 最低<=均10 and 最低<=均20 and 最低<=均30 and 最低<=均60:
-               if not (开-收) > 0.05*收:
+               if not (开-收) > 0.03*收:
                    Anlyoutmap[x['date']] = ['rule1', '一阳穿五线']
                    cnt1 = cnt1 + 1
     #end of "for"

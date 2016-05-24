@@ -43,7 +43,7 @@ def mdl_codeget():
             out.write(tmpstr)
         #end of "for"
     #end of "with"
-    print('\n\ncode获取完成！')
+    print('\n\ncode获取完成 -> 共%d'%len(CodeMap))
     print(CodeMap)
     return 1, CodeMap
 #endof 'mdl'

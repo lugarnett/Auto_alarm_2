@@ -17,6 +17,11 @@ path_data_avg = "均值整理数据\\"
 path_rule_rst = "规则分析结果\\"
 path_view_rst = "图片结果\\"
 
+def gettime():
+    return time.strftime("%Y%m%d_%H:%M",time.localtime(time.time()))
+def getdate(): 
+    return time.strftime('%Y%m%d',time.localtime(time.time()))
+    
 tmpmap = collections.OrderedDict()
 submap = collections.OrderedDict()
 
@@ -158,7 +163,7 @@ def sub_grpview_mng(code):
     lenk = len(tmpmap)
     left = -20
     right = 50
-        
+    mark = 0    
     cnt_rule_pic = 0
     pos = 0
     for (d, x) in tmpmap.items():
@@ -181,16 +186,17 @@ def sub_grpview_mng(code):
                 sub_view(submap, code)
                
                 submap.clear()
+                mark = 1
             #endof 'if'    
         #endof 'if'
         pos = pos + 1
-    #end of "for"   
+    #end of "for"
+    if mark == 1:
+        #'a':文件追加写入
+        with open(gl.path_view_rst + '导入code_' + getdate() + ".txt", 'a') as out:
+            out.write('\t' + code)
+    #endof "with"
 #enf of "def"
-
-
-#返回当前时间
-def gettime():
-    return time.strftime("%Y%2m2%d_%H:%M",time.localtime(time.time()))
 
 
 #mdl
