@@ -15,7 +15,7 @@ def rule_7(code, Anlyinmap):
     量 = 0
     
     长阳度 = 0.015
-    量增 = 1.5
+    量增 = 1.4
     cnt2 = 0
     Anlyoutmap.clear()
     for (d,x) in Anlyinmap.items():
@@ -43,7 +43,9 @@ def rule_7(code, Anlyinmap):
             量 > 量增*量pre1 and \
             量pre1 > 量增*量pre2:
                  
-                Anlyoutmap[x['date']] = ['rule7', '量价红三兵']
+                Anlyoutmap[xpre2['date']] = ['rule7', '量价红三兵']
+                Anlyoutmap[xpre1['date']] = ['rule0', '++']
+                Anlyoutmap[x['date']] = ['rule0', '++']
                 cnt2 = cnt2 + 1
             #endof 'if'
     #end of "for"

@@ -115,7 +115,7 @@ def sub_view(submap, code):
             ax.plot(squal_x, squal_y, '--', alpha = 0.7, color = 'm', linewidth=0.2)
             for (d2, x2) in x['分析结果'].items():
                 #print(日期, d2, x2)
-                ruleID = d2[4:5]
+                ruleID = d2[4:]
                 #写文字
                 ax.text(xpos[i], 开盘*1.193+结果cnt*0.1, d2+' '+x2, alpha = 0.7, color = 'r', fontsize = 8)
                 #ruleID
@@ -144,14 +144,11 @@ def rules_group_find(tmpmap, d):
     
     flag = 0
     cnt = len(tmpmap[d][1]['分析结果'])
-    if cnt>=2:
-        flag = 1
+    #if cnt>=2:
+    #    flag = 1
         
-    if  'rule1' in tmpmap[d][1]['分析结果'] or \
-        'rule7' in tmpmap[d][1]['分析结果'] or \
-        'rule8' in tmpmap[d][1]['分析结果'] or \
-        'rule9' in tmpmap[d][1]['分析结果']:
-            flag = 1    
+    if  'rule80' in tmpmap[d][1]['分析结果']:
+        flag = 1    
     
     return flag, cnt    
 #endof 'def'

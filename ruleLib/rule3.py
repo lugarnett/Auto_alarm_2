@@ -6,13 +6,13 @@ import os
 
 Anlyoutmap = collections.OrderedDict()  
 
-'''涨停且有2%下影或低开'''
+'''涨停且有1%下影或低开'''
 def rule_3(code, Anlyinmap):
     收pre = 0
     开 = 0
     收 = 0
     
-    低开度 = 0.02
+    低开度 = 0.01
     涨停度 = 1.098
     cnt = 0
     Anlyoutmap.clear()
@@ -25,9 +25,9 @@ def rule_3(code, Anlyinmap):
             高 = x['基K'][1]
             低 = x['基K'][2]
             收 = x['基K'][3]
-            if 收 >= round(涨停度*开, 2):
+            if 收 >= round(涨停度*收pre, 2):
                 if  (收pre-开) > 开*低开度 or (低-开) > 开*低开度:
-                    Anlyoutmap[x['date']] = ['rule3', '涨停且有2%下影或低开']
+                    Anlyoutmap[x['date']] = ['rule3', '涨停且有1%下影或低开']
                     cnt = cnt + 1
                 #endof 'if'
             #endof 'if'

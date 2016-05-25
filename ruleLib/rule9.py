@@ -44,7 +44,8 @@ def rule_9(code, Anlyinmap):
             #两天缩量
             if max(收,开)<min(收,开)*振幅 and max(收pre1,开pre1)<min(收pre1,开pre1)*振幅:
                 if 量 < v_avg*缩量度 and 量pre1 < v_avg*缩量度:
-                    Anlyoutmap[x['date']] = [rulen, '价跌时无量']
+                    Anlyoutmap[xpre1['date']] = [rulen, '价跌时无量']
+                    Anlyoutmap[x['date']] = ['rule0', '++']
                     cnt = cnt + 1
                 #endof 'if'
             #endof 'if'

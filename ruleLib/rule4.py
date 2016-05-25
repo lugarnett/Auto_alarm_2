@@ -20,13 +20,13 @@ def rule_4(code, Anlyinmap):
         if d <= 1:
             continue
         else:
-            收pre = min(开, 收)
+            收pre = 收
             开 = x['基K'][0]
             高 = x['基K'][1]
             低 = x['基K'][2]
             收 = x['基K'][3]
-            if (收-开) >= 开*长阳度:
-                if  (低-开) > 开*下影度:
+            if (收-min(收pre,开)) >= 开*长阳度 and 收 > 开:
+                if  (开-低) > 开*下影度:
                     Anlyoutmap[x['date']] = ['rule4', '下影40长阳40']
                     cnt = cnt + 1
                 #endof 'if'

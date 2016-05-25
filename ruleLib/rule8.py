@@ -14,7 +14,7 @@ def rule_8(code, Anlyinmap):
     收 = 0
     量 = 0
     
-    涨幅 = 1.09
+    涨幅 = 1.08
     量增 = 1.4
     cnt2 = 0
     Anlyoutmap.clear()
@@ -64,7 +64,9 @@ def rule_8(code, Anlyinmap):
                 收>均5 and 收>均10 and 收>均20 and 收>均30 and 收>均60:
                     if 收>(涨幅*收pre1) or 收pre1>(涨幅*收pre2):
                         if 量>量增*量pre1 or 量pre1>量增*量pre2:
-                            Anlyoutmap[x['date']] = ['rule8', '红三兵穿五线']
+                            Anlyoutmap[xpre2['date']] = ['rule8', '红三兵穿五线']
+                            Anlyoutmap[xpre1['date']] = ['rule0', '++']
+                            Anlyoutmap[x['date']] = ['rule0', '++']
                             cnt2 = cnt2 + 1
                         #endof 'if'
                     #endof 'if'

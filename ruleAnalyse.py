@@ -10,6 +10,7 @@ from ruleLib.rule7 import rule_7
 from ruleLib.rule8 import rule_8
 from ruleLib.rule9 import rule_9
 from ruleLib.rule10 import rule_10
+from ruleLib.rule80 import rule_80
 
 #import numpy as np
 #import matplotlib.pyplot as plt
@@ -81,6 +82,7 @@ def mdl_ruleanlys(code):
     rule_8(code, Anlyinmap)
     rule_9(code, Anlyinmap)
     rule_10(code, Anlyinmap)
+    rule_80(code, Anlyinmap)
 #end of "def"
 
 

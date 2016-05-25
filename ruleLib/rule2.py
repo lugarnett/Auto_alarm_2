@@ -6,14 +6,14 @@ import os
 
 Anlyoutmap = collections.OrderedDict()  
 
-
+'''低开长阳'''
 def rule_2(code, Anlyinmap):
     收pre = 0
     开 = 0
     收 = 0
     
     低开度 = 0.015
-    长阳度 = 0.08
+    长阳度 = 0.07
     cnt2 = 0
     Anlyoutmap.clear()
     for (d,x) in Anlyinmap.items():
