@@ -10,15 +10,36 @@ rulen = 'rule80'
 def rule_80(code, Anlyinmap):
     global rulen
     
-    振幅 = 0.03
+    振幅 = 0.0001
     cnt = 0
     Anlyoutmap.clear()
-    
+
     #遍历
     for (d,x) in Anlyinmap.items():
         if d <= 20:
             continue
         else:
+            xpre1 = Anlyinmap[d-1]
+            xpre2 = Anlyinmap[d-2]
+            xpre3 = Anlyinmap[d-3]
+            xpre4 = Anlyinmap[d-4]
+            xpre5 = Anlyinmap[d-5]
+            xpre6 = Anlyinmap[d-6]
+            xpre7 = Anlyinmap[d-7]
+            xpre8 = Anlyinmap[d-8]
+            xpre9 = Anlyinmap[d-9]
+            xpre10 = Anlyinmap[d-10]
+            xpre11 = Anlyinmap[d-11]
+            xpre12 = Anlyinmap[d-12]
+            xpre13 = Anlyinmap[d-13]
+            xpre14 = Anlyinmap[d-14]
+            xpre15 = Anlyinmap[d-15]
+            xpre16 = Anlyinmap[d-16]
+            xpre17 = Anlyinmap[d-17]
+            xpre18 = Anlyinmap[d-18]
+            xpre19 = Anlyinmap[d-19]
+
+            
             x1 = Anlyinmap[d-1]['均'][1]
             x2 = Anlyinmap[d-2]['均'][1]
             x3 = Anlyinmap[d-3]['均'][1]
@@ -64,25 +85,25 @@ def rule_80(code, Anlyinmap):
             x18 < 高 and x18  > 低 and \
             x19 < 高 and x19  > 低:
                 Anlyoutmap[x['date']] = [rulen, '10日均线走平']
-                Anlyoutmap[x1['date']] = ['rule0', '++']
-                Anlyoutmap[x2['date']] = ['rule0', '++']
-                Anlyoutmap[x3['date']] = ['rule0', '++']
-                Anlyoutmap[x4['date']] = ['rule0', '++']
-                Anlyoutmap[x5['date']] = ['rule0', '++']
-                Anlyoutmap[x6['date']] = ['rule0', '++']
-                Anlyoutmap[x7['date']] = ['rule0', '++']
-                Anlyoutmap[x8['date']] = ['rule0', '++']
-                Anlyoutmap[x9['date']] = ['rule0', '++']
-                Anlyoutmap[x10['date']] = ['rule0', '++']
-                Anlyoutmap[x11['date']] = ['rule0', '++']
-                Anlyoutmap[x12['date']] = ['rule0', '++']
-                Anlyoutmap[x13['date']] = ['rule0', '++']
-                Anlyoutmap[x14['date']] = ['rule0', '++']
-                Anlyoutmap[x15['date']] = ['rule0', '++']
-                Anlyoutmap[x16['date']] = ['rule0', '++']
-                Anlyoutmap[x17['date']] = ['rule0', '++']
-                Anlyoutmap[x18['date']] = ['rule0', '++']
-                Anlyoutmap[x19['date']] = ['rule0', '++']
+                Anlyoutmap[xpre1['date']] = ['rule0', '++']
+                Anlyoutmap[xpre2['date']] = ['rule0', '++']
+                Anlyoutmap[xpre3['date']] = ['rule0', '++']
+                Anlyoutmap[xpre4['date']] = ['rule0', '++']
+                Anlyoutmap[xpre5['date']] = ['rule0', '++']
+                Anlyoutmap[xpre6['date']] = ['rule0', '++']
+                Anlyoutmap[xpre7['date']] = ['rule0', '++']
+                Anlyoutmap[xpre8['date']] = ['rule0', '++']
+                Anlyoutmap[xpre9['date']] = ['rule0', '++']
+                Anlyoutmap[xpre10['date']] = ['rule0', '++']
+                Anlyoutmap[xpre11['date']] = ['rule0', '++']
+                Anlyoutmap[xpre12['date']] = ['rule0', '++']
+                Anlyoutmap[xpre13['date']] = ['rule0', '++']
+                Anlyoutmap[xpre14['date']] = ['rule0', '++']
+                Anlyoutmap[xpre15['date']] = ['rule0', '++']
+                Anlyoutmap[xpre16['date']] = ['rule0', '++']
+                Anlyoutmap[xpre17['date']] = ['rule0', '++']
+                Anlyoutmap[xpre18['date']] = ['rule0', '++']
+                Anlyoutmap[xpre19['date']] = ['rule0', '++']
                 cnt = cnt + 1
                 #endof 'if'
             #endof 'if'
