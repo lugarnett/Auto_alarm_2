@@ -116,11 +116,13 @@ def sub_view(submap, code):
             for (d2, x2) in x['分析结果'].items():
                 #print(日期, d2, x2)
                 ruleID = d2[4:]
-                #写文字
-                ax.text(xpos[i], 开盘*1.193+结果cnt*0.1, d2+' '+x2, alpha = 0.7, color = 'r', fontsize = 8)
-                #ruleID
-                ax.text(xpos[i], 开盘*1.187-结果cnt*0.1, '('+ruleID+')', color = 'g', fontsize = 8)
-                结果cnt = 结果cnt + 1
+                if not ruleID=='0':
+                    #写文字
+                    ax.text(xpos[i], 开盘*1.193+结果cnt*0.1, d2+' '+x2, alpha = 0.7, color = 'r', fontsize = 8)
+                    #ruleID
+                    ax.text(xpos[i], 开盘*1.187-结果cnt*0.1, '('+ruleID+')', color = 'g', fontsize = 8)
+                    结果cnt = 结果cnt + 1
+                #endof 'if'
             #end of "for"
         #end of "if"       
         i = i + 1

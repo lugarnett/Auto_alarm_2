@@ -10,7 +10,7 @@ rulen = 'rule80'
 def rule_80(code, Anlyinmap):
     global rulen
     
-    振幅 = 0.0001
+    振幅 = 0.017
     cnt = 0
     Anlyoutmap.clear()
 
@@ -63,7 +63,7 @@ def rule_80(code, Anlyinmap):
             高 = x['均'][1] * (1+振幅)
             低 = x['均'][1] * (1-振幅)
             
-            #20天10日均线振幅小于3%
+            #20天10日均线振幅小于1.7%
             #注意量堆，前期有涨停，不破涨停
             if x1 < 高 and x1  > 低 and \
             x2 < 高 and x2  > 低 and \
