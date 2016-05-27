@@ -103,8 +103,13 @@ if os.path.exists(gl.path_rule_rst) <= 0:    #判断目标是否存在
 if os.path.exists(gl.path_view_rst) <= 0:    #判断目标是否存在
     os.mkdir(gl.path_view_rst)
         
-
+gl.STCode = '600515'
+print('\n开始处理code='+gl.STCode+'.............')
+pro_1by1()
 gl.STCode = '002027'
+print('\n开始处理code='+gl.STCode+'.............')
+pro_1by1()
+gl.STCode = '002107'
 print('\n开始处理code='+gl.STCode+'.............')
 pro_1by1()
 
