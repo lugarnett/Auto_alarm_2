@@ -151,6 +151,8 @@ def rules_group_find(tmpmap, d):
         
     if  'rule80' in tmpmap[d][1]['分析结果']:
         flag = 1    
+    if  'rule81' in tmpmap[d][1]['分析结果']:
+        flag = 1   
     
     return flag, cnt    
 #endof 'def'
@@ -160,8 +162,8 @@ def sub_grpview_mng(code):
     global tmpmap, submap, cnt_rule_pic
     
     lenk = len(tmpmap)
-    left = -20
-    right = 50
+    左K = -50
+    右K = 50
     mark = 0    
     cnt_rule_pic = 0
     pos = 0
@@ -171,11 +173,11 @@ def sub_grpview_mng(code):
             flag, cnt = rules_group_find(tmpmap, d)      #规则组合设计
             if flag == 1:
                 left = -pos
-                if left < -20:
-                    left = -20
+                if left < 左K:
+                    left = 左K
                 right = lenk-pos
-                if right > 50:
-                    right = 50
+                if right > 右K:
+                    right = 右K
                 #print(left)
                 #print(right)
                 for j in range(left, right):
