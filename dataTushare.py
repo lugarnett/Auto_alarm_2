@@ -41,7 +41,7 @@ def get_data():
 
     print('\n0:tushare获取成功')
     dataframe.sort_index(inplace=True)  #按date升序排列
-    dataframe = dataframe.tail(50+60)  #截取最近10天的数据
+    dataframe = dataframe.tail(10+60)  #截取最近10天的数据
     #print(dataframe)
     day = 0
     for each in dataframe.index:
@@ -81,7 +81,7 @@ def mode_selc():
     
     endDate = time.strftime('%Y-%m-%d',time.localtime(time.time()))
     startyear = int(endDate[0:4]) - 1 
-    startmonth = int(endDate[6:7]) + 1
+    startmonth = int(endDate[6:7]) + 6
     if startmonth >= 13:
         startmonth = startmonth % 12
         startyear = startyear + 1
@@ -105,16 +105,9 @@ if os.path.exists(gl.path_view_rst) <= 0:    #判断目标是否存在
     os.mkdir(gl.path_view_rst)
         
 
-gl.STCode = '601390'
+'''gl.STCode = '002107'
 print('\n开始处理code='+gl.STCode+'.............')
-pro_1by1()
-gl.STCode = '002027'
-print('\n开始处理code='+gl.STCode+'.............')
-pro_1by1()
-
-gl.STCode = '002107'
-print('\n开始处理code='+gl.STCode+'.............')
-pro_1by1()
+pro_1by1()'''
 
 #数据代码范围，遍历
 flag, CodeMap = mdl_codeget()

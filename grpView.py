@@ -146,8 +146,8 @@ def rules_group_find(tmpmap, d):
     
     flag = 0
     cnt = len(tmpmap[d][1]['分析结果'])
-    #if cnt>=2:
-    #    flag = 1
+    if cnt>=2:
+        flag = 1
         
     if  'rule80' in tmpmap[d][1]['分析结果']:
         flag = 1    

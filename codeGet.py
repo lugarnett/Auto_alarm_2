@@ -12,15 +12,15 @@ def mdl_codeget():
     CodeMap.clear()
     
     #获取code，出错则重试10次
-    for i in range(10):
-        try:
-            dataframe = ts.get_today_all()  
-        except Exception as e:
-            print(e)
-            print('code获取失败！')
-            continue
-        #endof 'try'
-        break
+    #for i in range(10):
+    try:
+        dataframe = ts.get_today_all()  
+    except Exception as e:
+        print(e)
+        print('code获取失败！')
+        #continue
+    #endof 'try'
+        #break
     #endof 'for'
     if dataframe is None:
         return -1, None

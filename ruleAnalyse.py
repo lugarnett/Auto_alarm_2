@@ -73,7 +73,7 @@ def mdl_ruleget(code):
 
 '''进行数据分析'''
 def mdl_ruleanlys(code):
-    '''rule_1(code, Anlyinmap)
+    rule_1(code, Anlyinmap)
     rule_2(code, Anlyinmap)
     rule_3(code, Anlyinmap)
     rule_4(code, Anlyinmap)
@@ -83,7 +83,7 @@ def mdl_ruleanlys(code):
     rule_8(code, Anlyinmap)
     rule_9(code, Anlyinmap)
     rule_10(code, Anlyinmap)
-    rule_80(code, Anlyinmap)'''
+    rule_80(code, Anlyinmap)
     rule_81(code, Anlyinmap)
 #end of "def"
 
