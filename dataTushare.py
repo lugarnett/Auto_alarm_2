@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import gl
-from codeGet import mdl_codeget
+from codeGet import mdl_codeget_net
+from codeGet import mdl_codeget_file
 from calcAvrg import mdl_calcAvrg
 from ruleAnalyse import mdl_ruleAnalyse
 from mainView import mdl_mainview
@@ -108,20 +109,26 @@ if os.path.exists(gl.path_view_rst) <= 0:    #判断目标是否存在
 '''gl.STCode = '002107'
 print('\n开始处理code='+gl.STCode+'.............')
 pro_1by1()'''
-
+codeget_flag = 0
+codeget_pos = 1
 #数据代码范围，遍历
-flag, CodeMap = mdl_codeget()
+if codeget_flag == 0:
+    flag, CodeMap = mdl_codeget_net()
+else:
+    flag, CodeMap = mdl_codeget_file(codeget_pos)
+    
 if flag == 1:
-    no = 0
-    for (n,x) in CodeMap.items():
-        no = no + 1        
+    no = codeget_pos
+    for (n,x) in CodeMap.items():      
         gl.STCode = x[0]
         gl.STName = x[1]
-        print('\nNo%d -> '%no+gl.STCode+gl.STName+'.............')
+        print('\nNo%d -> '%no + gl.STCode+gl.STName + '.............')
         pro_1by1()
-    
+        no = no + 1      
     #endof 'for'
     print('\n全部计算完毕!')
+else:
+    print('\ncode获取失败............')
 #endof 'if'
 #endof 'main'
 
