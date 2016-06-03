@@ -11,8 +11,10 @@ from ruleLib.rule8 import rule_8
 from ruleLib.rule9 import rule_9
 from ruleLib.rule10 import rule_10
 from ruleLib.rule11 import rule_11
+from ruleLib.rule12 import rule_12
 from ruleLib.rule80 import rule_80
 from ruleLib.rule81 import rule_81
+from ruleLib.rule82 import rule_82
 
 #import numpy as np
 #import matplotlib.pyplot as plt
@@ -74,7 +76,7 @@ def mdl_ruleget(code):
 
 '''进行数据分析'''
 def mdl_ruleanlys(code):
-    rule_1(code, Anlyinmap)
+    '''rule_1(code, Anlyinmap)
     rule_2(code, Anlyinmap)
     rule_3(code, Anlyinmap)
     rule_4(code, Anlyinmap)
@@ -85,8 +87,13 @@ def mdl_ruleanlys(code):
     rule_9(code, Anlyinmap)
     rule_10(code, Anlyinmap)
     rule_11(code, Anlyinmap)
+    rule_12(code, Anlyinmap)
     rule_80(code, Anlyinmap)
-    rule_81(code, Anlyinmap)
+    rule_81(code, Anlyinmap)'''
+    rule_82(code, Anlyinmap, 30)
+    rule_82(code, Anlyinmap, 20)
+    rule_82(code, Anlyinmap, 10)
+    rule_82(code, Anlyinmap, 5)
 #end of "def"
 
 

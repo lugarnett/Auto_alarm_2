@@ -10,7 +10,7 @@ rulen = 'rule11'
 def rule_11(code, Anlyinmap):
     global Anlyoutmap
     
-    长阳度 = 1.2
+    长阳度 = 1.02
     
     cnt = 0
     Anlyoutmap.clear()
@@ -31,12 +31,12 @@ def rule_11(code, Anlyinmap):
             量pre3 = xpre3['V'][0]
             
             开pre2 = xpre2['基K'][0]
-            高pre2 = xpre3['基K'][1]
+            高pre2 = xpre2['基K'][1]
             收pre2 = xpre2['基K'][3]
             量pre2 = xpre2['V'][0]
             
             开pre1 = xpre1['基K'][0]
-            高pre1 = xpre3['基K'][1]
+            高pre1 = xpre1['基K'][1]
             收pre1 = xpre1['基K'][3]
             量pre1 = xpre1['V'][0]
             

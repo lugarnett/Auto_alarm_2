@@ -4,18 +4,15 @@ import collections
 #import os
 Anlyoutmap = collections.OrderedDict()  
 
-起始day = 0
-涨停day = 0
-最高day = 0
-缩量day = 0
-结束day = 0
-最高值 = 0
-涨停值 = 0
-放量均值 = 0
-缩量均值 = 0
+
+总跨度 = 30
+前段 = 10
+前段 = 20
+
+rulen = 'rule81'
 
 缩量比例 = 0.6
-rulen = 'rule81'
+
 
 '''
 #大中小斜口鸭头
@@ -29,7 +26,17 @@ rulen = 'rule81'
 '''
 def find_rule_81(d, Anlyinmap):
     global Anlyoutmap
-    global 起始day,涨停day,最高day,结束day,缩量day,放量均值,缩量均值,缩量比例
+    global 缩量比例
+
+    起始day = 0
+    涨停day = 0
+    最高day = 0
+    缩量day = 0
+    结束day = 0
+    最高值 = 0
+    涨停值 = 0
+    放量均值 = 0
+    缩量均值 = 0
 
     起始day = d - 29
     结束day = d

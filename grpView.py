@@ -149,9 +149,13 @@ def rules_group_find(tmpmap, d):
     if cnt>=2:
         flag = 1
         
+    if  'rule12' in tmpmap[d][1]['分析结果']:
+        flag = 1 
     if  'rule80' in tmpmap[d][1]['分析结果']:
         flag = 1    
     if  'rule81' in tmpmap[d][1]['分析结果']:
+        flag = 1   
+    if  'rule82' in tmpmap[d][1]['分析结果']:
         flag = 1   
     
     return flag, cnt    
@@ -194,7 +198,7 @@ def sub_grpview_mng(code):
     #end of "for"
     if mark == 1:
         #'a':文件追加写入
-        with open(gl.path_view_rst + '导入code_' + getdate() + ".txt", 'a') as out:
+        with open(gl.path_view_rst + '导入code_' + getdate() + ".sel", 'a') as out:
             out.write('\t' + code)
     #endof "with"
 #enf of "def"
