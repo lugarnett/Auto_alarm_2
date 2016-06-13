@@ -6,12 +6,13 @@ import collections
 Anlyoutmap = collections.OrderedDict()  
 rulen = 'rule12'
 
-'''长上影小阳线，第二天高开'''
+'''长上影小阳线，第二天高开，收阳1%'''
 def rule_12(code, Anlyinmap):
     global Anlyoutmap
     
     上影度 = 1.04
     高开度 = 1.01
+    长阳度 = 1.01
     
     cnt = 0
     Anlyoutmap.clear()
@@ -31,7 +32,7 @@ def rule_12(code, Anlyinmap):
             量 = x['V'][0]
             
             if (收pre1 > 开pre1) and (高pre1 > 上影度*收pre1) \
-            and (开 > 高开度*收pre1) :
+            and (开 > 高开度*收pre1) and (收 > 长阳度*开):
 
                 Anlyoutmap[x['date']] = [rulen, '上影小阳次日高开']
                 Anlyoutmap[xpre1['date']] = ['rule0', '++']

@@ -42,7 +42,7 @@ def get_data():
 
     print('\n0:tushare获取成功')
     dataframe.sort_index(inplace=True)  #按date升序排列
-    dataframe = dataframe.tail(30+60)  #截取最近10天的数据#@@@@@@@@@@@@@@@@@@@@@@
+    dataframe = dataframe.tail(10+60)  #截取最近10天的数据#@@@@@@@@@@@@@@@@@@@@@@
     #print(dataframe)
     day = 0
     for each in dataframe.index:
@@ -111,7 +111,7 @@ print('\n开始处理code='+gl.STCode+'.............')
 pro_1by1()
 
 codeget_flag = 1           #@@@@@@@@@@@@@@@@@@@@@@
-codeget_pos = 1            #@@@@@@@@@@@@@@@@@@@@@@
+codeget_pos = 643            #@@@@@@@@@@@@@@@@@@@@@@
 
 #数据代码范围，遍历
 if codeget_flag == 0:
