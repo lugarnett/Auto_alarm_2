@@ -16,6 +16,8 @@ from ruleLib.rule80 import rule_80
 from ruleLib.rule81 import rule_81
 from ruleLib.rule82 import rule_82
 
+from findLib.find1 import find_1
+
 #import numpy as np
 #import matplotlib.pyplot as plt
 #import matplotlib as mpl
