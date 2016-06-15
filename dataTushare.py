@@ -6,6 +6,9 @@ from calcAvrg import mdl_calcAvrg
 from ruleAnalyse import mdl_ruleAnalyse
 from mainView import mdl_mainview
 
+
+from dbLib.accLib import mdl_db_Forexample
+
 import tushare as ts
 import os
 import collections
@@ -94,6 +97,8 @@ def mode_selc():
 
 
 #main()
+mdl_db_Forexample()
+'''
 mode_selc()
 
 if os.path.exists(gl.path_data_origin) <= 0: #判断目标是否存在
@@ -105,13 +110,15 @@ if os.path.exists(gl.path_rule_rst) <= 0:    #判断目标是否存在
 if os.path.exists(gl.path_view_rst) <= 0:    #判断目标是否存在
     os.mkdir(gl.path_view_rst)
         
-
+'''
+'''
 gl.STCode = '002107'
 print('\n开始处理code='+gl.STCode+'.............')
 pro_1by1()
-
+'''
+'''
 codeget_flag = 1           #@@@@@@@@@@@@@@@@@@@@@@
-codeget_pos = 643            #@@@@@@@@@@@@@@@@@@@@@@
+codeget_pos = 1            #@@@@@@@@@@@@@@@@@@@@@@
 
 #数据代码范围，遍历
 if codeget_flag == 0:
@@ -134,7 +141,7 @@ else:
 #endof 'if'
 #endof 'main'
 
-
+'''
 
 
 
