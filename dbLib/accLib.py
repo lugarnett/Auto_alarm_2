@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import gl
+#import gl
 import os
 import tushare as ts
 import collections
@@ -64,6 +64,16 @@ class Access_Model:
         except (TypeError,ValueError) as e:
             conn.Close()
             return False  
+####增加表 
+    def db_tbl(self,sql):
+        try:
+            conn=self.db_conn()
+            conn.execute(sql);
+            conn.Close()
+            return True
+        except (TypeError,ValueError) as e:
+            conn.Close()
+            return False  
 ####修改记录
     def db_modi(self,sql):
         #sql="update addresslist set name='name' where id=2"
@@ -103,11 +113,24 @@ class Access_Model:
         
 ####示例
 def mdl_db_Forexample():
+
     try:
-        dataUrl =os.getcwd()+"\\opp.accdb"
+        dataUrl = os.getcwd()+"\\data.mdb"
         data = Access_Model(dataUrl)
-    
-        sql ="Select * FROM addresslist order by id asc" 
+        
+        表 = "100005"
+        字段1 = "aa"
+        字段2 = "bb"
+        
+        #sql = "Create TABLE [表]([字段1], [字段2], [字段3], [字段4] DATETIME, [字段5] TEXT(200), [字段6] TEXT(200))"
+        #sql = "Create TABLE [%s]([%s], [%s])"%(表,字段1,字段2)
+        sql = "Create TABLE [%s]([%s] INT, [类型] TEXT(200))"%(表,字段1)
+        if(data.db_tbl(sql)):
+            print("tbl新建完成！")
+        else:
+            print("tbl新建失败")
+            
+        sql = "Select * FROM addresslist order by id asc" 
         dataRecordSet =data.db_query(sql)
         print(data.db_recordcount(sql))
         #print(len(dataRecordSet))
@@ -116,17 +139,18 @@ def mdl_db_Forexample():
             print (a['department'])#department为字段名
         ###
             
-        sql="update addresslist set name='name' where id=2";
+        sql = "update addresslist set name='name' where id=2"
         if(data.db_modi(sql)):
             print("修改完成！")
         else:
             print("修改失败")
 
-        sql="delete * from addresslist where id=2"
+        sql = "delete * from addresslist where id=2"
         if(data.db_modi(sql)):
            print("删除成功！")
         else:
             print("删除失败")
+            
     except (TypeError,ValueError) as e: #将异常对象输出
         print("error:"+str(e))
 
