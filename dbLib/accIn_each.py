@@ -74,6 +74,7 @@ def tbl_make(code):
         sql = "Create TABLE [%s] ([date] DATE, \
         [开1] FLOAT,[高1] FLOAT,[低1] FLOAT,[收1] FLOAT, \
         [开0] FLOAT,[高0] FLOAT,[低0] FLOAT,[收0] FLOAT, \
+        [fma5] FLOAT,[fma10] FLOAT,[fma20] FLOAT,[fma30] FLOAT,[fma60] FLOAT,[fma120] FLOAT, \
         [ma5] FLOAT,[ma10] FLOAT,[ma20] FLOAT,[ma30] FLOAT,[ma60] FLOAT,[ma120] FLOAT, \
         [v_ma5] FLOAT,[v_ma10] FLOAT,[v_ma20] FLOAT,[v_ma30] FLOAT,[v_ma60] FLOAT, \
         [量] FLOAT,[换] FLOAT,[金额] FLOAT, \
@@ -122,17 +123,49 @@ def get_tushare_tblfill(code, startdate):
     if df0 is None or df1 is None:
         print('\nNone。。。。。。。。。。。。。。。。。。。。')
         return -1
-
     #print('\n0:tushare获取成功')
+    
+    '''排序1'''
+    df0.sort_index(inplace=True)  #按date升序排列
+    df1.sort_index(inplace=True)  #按date升序排列
+    
+    '''两个dataframe中不匹配的数据drop'''
+    #1)    
+    ##df1的类型是datetime，df0的类型是date_str 
+    for each in df0.index:
+        if each not in df1.index:
+            print("df0.drop(%s)"%each)            
+            df0.drop(each, inplace=True)
+        #end if
+    #end for
+    print("len(原始)'=%d ： 'len(复)'=%d"%(len(df0), len(df1)))
+    #2)
+    for each in df1.index:
+        if str(each.date()) not in df0.index:     
+            print("df1.drop(%s)"%str(each.date())) 
+            df1.drop(each, inplace=True)
+        #end if
+    #end for
+    print("len(原始)'=%d ： 'len(复)'=%d"%(len(df0), len(df1)))
+    #3)    
+    for each in df0.index:
+        if each not in df1.index:
+            print("df0.drop(%s)"%each)            
+            df0.drop(each, inplace=True)
+        #end if
+    #end for
+    print("len(原始)'=%d ： 'len(复)'=%d"%(len(df0), len(df1)))
+    
+    '''排序2'''
     df0.sort_index(inplace=True)  #按date升序排列
     df1.sort_index(inplace=True)  #按date升序排列
     #print(df0)
     #print(df1)
-
     if not (len(df0) == len(df1)):
-        print("两数据包不匹配")
-        print("len(原始)'=%d ： 'len(复)'=%d"%( len(df0), len(df1) ))
-        #return -1
+        print("两数据包不匹配...................................")
+        print("len(原始)'=%d ： 'len(复)'=%d"%(len(df0), len(df1)))
+        return -1
+    #end if    
     
     try:
         #数据按date，存入acc
@@ -141,6 +174,7 @@ def get_tushare_tblfill(code, startdate):
         n = 0
         for each in df1.index:
             date = df1.index[n]
+            #print(date)
             #复
             开1 = float(df1[df1.index==date]['open'])
             高1 = float(df1[df1.index==date]['high'])
@@ -151,9 +185,7 @@ def get_tushare_tblfill(code, startdate):
 
             #不复
             date2str = str(date.date())    ##df1的类型是datetime，df0的类型是date_str
-            #print(df0[df0.index==date])
-            开0 = float(df0[df0.index==date2str]['open'])
-            
+            开0 = float(df0[df0.index==date2str]['open']) 
             高0 = float(df0[df0.index==date2str]['high'])
             低0 = float(df0[df0.index==date2str]['low'])
             收0 = float(df0[df0.index==date2str]['close'])
@@ -165,24 +197,94 @@ def get_tushare_tblfill(code, startdate):
             price_change = float(df0[df0.index==date2str]['price_change']) 
             p_change = float(df0[df0.index==date2str]['p_change']) 
 
+            fma5 = 0.0
+            fma10 = 0.0
+            fma20 = 0.0
+            fma30 = 0.0
+            fma60 = 0.0
+            fma120 = 0.0
+            ma5 = 0.0
+            ma10 = 0.0
+            ma20 = 0.0
+            ma30 = 0.0
+            ma60 = 0.0
+            ma120 = 0.0
+            
+            if n >= 4:
+                for x in range(n-4, n+1):
+
+                    收1 = float(df1[x:x+1]['close'])                    
+                    fma5 = fma5 + 收1 / 5
+                    收0 = float(df0[x:x+1]['close'])
+                    ma5 = ma5 + 收0 / 5
+                #end for
+            #end if
+            if n >= 9:
+                for x in range(n-9, n+1):
+                    收1 = float(df1[x:x+1]['close'])
+                    fma10 = fma10 + 收1 / 10
+                    收0 = float(df0[x:x+1]['close'])
+                    ma10 = ma10 + 收0 / 10
+                #end for
+            #end if
+            if n >= 19:
+                for x in range(n-19, n+1):
+                    收1 = float(df1[x:x+1]['close'])
+                    fma20 = fma20 + 收1 / 20
+                    收0 = float(df0[x:x+1]['close'])
+                    ma20 = ma20 + 收0 / 20
+                #end for
+            #end if
+            if n >= 29:
+                for x in range(n-29, n+1):
+                    收1 = float(df1[x:x+1]['close'])
+                    fma30 = fma30 + 收1 / 30
+                    收0 = float(df0[x:x+1]['close'])
+                    ma30 = ma30 + 收0 / 30
+                #end for
+            #end if
+            if n >= 59:
+                for x in range(n-59, n+1):
+                    收1 = float(df1[x:x+1]['close'])
+                    fma60 = fma60 + 收1 / 60
+                    收0 = float(df0[x:x+1]['close'])
+                    ma60 = ma60 + 收0 / 60
+                #end for
+            #end if
+            '''if n >= 119:
+                for x in range(n-119, n+1):
+                    收1 = float(df1[x:x+1]['close'])
+                    fma120 = fma120 + 收1 / 120
+                    收0 = float(df0[x:x+1]['close'])
+                    ma120 = ma120 + 收0 / 120
+                #end for
+            #end if'''
+              
             n = n + 1
-            #acc操作
+            
+            '''acc操作'''
             sql = "INSERT INTO [%s] ([date], \
             [开1],[高1],[低1],[收1], \
             [开0],[高0],[低0],[收0], \
+            [fma5],[fma10],[fma20],[fma30],[fma60],[fma120], \
+            [ma5],[ma10],[ma20],[ma30],[ma60],[ma120], \
             [v_ma5],[v_ma10],[v_ma20], \
             [量],[换],[金额],[price_change],[p_change]) \
             VALUES ('%s', \
             '%f','%f','%f','%f', \
             '%f','%f','%f','%f', \
+            '%f','%f','%f','%f','%f','%f', \
+            '%f','%f','%f','%f','%f','%f', \
             '%f','%f','%f', \
             '%f','%f','%f','%f','%f')" \
             %(code, date2str, \
             开1, 高1, 低1, 收1, \
             开0, 高0, 低0, 收0, \
+            fma5, fma10, fma20, fma30, fma60, fma120, \
+            ma5, ma10, ma20, ma30, ma60, ma120, \
             v_ma5, v_ma10, v_ma20, \
             量, 换, 金额, price_change, p_change)        
-        
+
             conn.execute(sql);
         #endof 'for' 
         conn.Close()
@@ -251,7 +353,6 @@ def acc_make2():
 #endof 'mdl'
 print("\n当前运行模块 -> acc_make2...\n")
 acc_make2()
-
 
 
 
