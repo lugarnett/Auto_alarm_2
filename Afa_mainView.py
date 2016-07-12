@@ -36,6 +36,7 @@ viewfileoutmap = collections.OrderedDict()
 def read_rule_n_rst(rule_rst_file):
     global viewfileoutmap, linewidth
 
+    ret = -1
     #读取rule分析结果
     #以日期为key，存入map
     with open(gl.path_rule_rst + rule_rst_file, 'r') as f:
@@ -47,8 +48,11 @@ def read_rule_n_rst(rule_rst_file):
                     viewfileoutmap[strlist[0]]['分析结果'][strlist[1]] = strlist[2]
                 else:
                     viewfileoutmap[strlist[0]]['分析结果'] = {strlist[1]: strlist[2]}
+                #end if
+                ret = 1
         #end of "for"
     #end of "with"
+    return ret
 #end of "def"
 
 
@@ -57,24 +61,8 @@ offset = (xstep - 0.1) / 2
     
 def mdl_datafill(code):
     global viewfileoutmap
-    
-    viewfileoutmap.clear()
 
-    if not os.path.exists(gl.path_data_avg + code + "_avg.txt"):
-        return -1
-    #读取基本K线数据
-    #key为日期
-    with open(gl.path_data_avg + code + "_avg.txt", 'r') as f:
-        f.readline()
-        for line in f.readlines():
-            strlist = line.split('\t')  # 用tab分割字符串，并保存到列表
-            viewfileoutmap[strlist[0]] = {'基K':[float(strlist[1]), float(strlist[2]), float(strlist[3]), float(strlist[4])], \
-                                          'V':[float(strlist[5]), float(strlist[6]), float(strlist[7])], \
-                                          '均':[float(strlist[8]), float(strlist[9]), float(strlist[10]), \
-                                          float(strlist[11]), float(strlist[12])]}
-        #end of "for"
-    #end of "with"
-
+    ret = -1
     ##打开rule分析结果文件，数据按key并入viewfileoutmap
     ##研究标的的日期为key
     #read_rule_n_rst(code)
@@ -83,11 +71,11 @@ def mdl_datafill(code):
     files = os.listdir(gl.path_rule_rst)
     for file in files:
         if (code + "_rule") in file:
-            read_rule_n_rst(file)  
+            ret = read_rule_n_rst(file)  
     #end of "for"
             
     #print(viewfileoutmap)
-    return 1
+    return ret
 #end of "def"    
 
 def main_view(code):
@@ -186,7 +174,10 @@ def main_view(code):
 
 
 #mdl
-def mdl_mainview():
+def afa_mainview(Drawinmap):
+    global viewfileoutmap
+    
+    viewfileoutmap = Drawinmap
     code = gl.STCode
     flag = mdl_datafill(code)
     if flag == 1:
@@ -201,6 +192,7 @@ def mdl_mainview():
     else:
         print("无画图数据！")
     #endof 'if'
+    viewfileoutmap.clear()
 #endof 'def'
 
 

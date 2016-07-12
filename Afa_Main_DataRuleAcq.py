@@ -1,6 +1,8 @@
 # -*- coding: gbk -*-
 '''采用acc数据，完成快速分析'''
 import gl
+from Afa_mainView import afa_mainview
+
 from ruleLib.rule1 import rule_1
 from ruleLib.rule2 import rule_2
 from ruleLib.rule3 import rule_3
@@ -27,15 +29,14 @@ import collections
 import os
 import datetime
 
-Outmap = collections.OrderedDict()  
 Anlyinmap = collections.OrderedDict()  
+Drawinmap = collections.OrderedDict()  
 rules = []
 
 List_tbl = []
 dataUrl = os.getcwd()+"\\dbLib\\data.mdb"
 data = Access_Model(dataUrl)
-##
-Analyse_days = 20
+
 
 '''1)获取List_tbl'''
 def get_List_tbl():
@@ -61,10 +62,11 @@ def get_List_tbl():
         
 '''2.1)读取acc_tbl的交易数据'''
 def acc_tbl_read(code):
-    global Anlyinmap, Analyse_days
+    global Anlyinmap, Drawinmap
     
     #Outmap.clear()
     Anlyinmap.clear()
+    Drawinmap.clear()
 
     ##研究标的的日期为key
     try:
@@ -77,16 +79,14 @@ def acc_tbl_read(code):
         #end for
         
         '''根据分析数据条数，算出起止date'''
-        startdate = datetime.datetime.now()
-        #.strftime("%Y-%m-%d")  
-        #print(startdate)
-        #startdate = datetime.date(y, m, d)  #str -> datetime
-        startdate = startdate + datetime.timedelta(days = -20)  #减n天
-        startdate = (startdate.strftime("%Y-%m-%d"))
+        enddate = datetime.datetime.now()
+        startdate = enddate + datetime.timedelta(days = - gl.Analyse_days)  #减n天
+        startdate = startdate.strftime("%Y-%m-%d")
+        enddate = enddate.strftime("%Y-%m-%d")
         #print(startdate)
         
         if row > 0:
-            sql = "Select * FROM %s WHERE date>%s ORDER BY date"%(code, startdate) 
+            sql = "Select * FROM %s WHERE date BETWEEN #%s# and #%s# ORDER BY date"%(code,startdate,enddate) 
             dataRecordSet = data.db_query(sql)
             #Anlyinmap的key为i++序号
             i = 0
@@ -111,12 +111,18 @@ def acc_tbl_read(code):
                 
                 i = i + 1
                 ##分析天数够时，停止读取数据
-                if i >= Analyse_days:
+                if i >= gl.Analyse_days:
                     break
                 #end if
             #end for
             print("\n%s表获取成功！"%code)
             #print(Anlyinmap)
+            
+            #数据存入Drawinmap
+            for (i,x) in Anlyinmap.items():
+                Drawinmap[x['date']] = x
+            #end for
+            
             return 1
         else:
             print("\n%s表数据row=0。。。。。"%code)
@@ -170,14 +176,10 @@ def afa_ruleanlys(code):
 #end of "def"
 
 
-#遍历
+#main遍历
 def afa_proc_analyse():
-    global List_tbl
+    global List_tbl, Drawinmap
 
-    if os.path.exists(gl.path_data_origin) <= 0: #判断目标是否存在
-        os.mkdir(gl.path_data_origin)
-    if os.path.exists(gl.path_data_avg) <= 0:    #判断目标是否存在
-        os.mkdir(gl.path_data_avg)
     if os.path.exists(gl.path_rule_rst) <= 0:    #判断目标是否存在
         os.mkdir(gl.path_rule_rst)
     if os.path.exists(gl.path_view_rst) <= 0:    #判断目标是否存在
@@ -194,11 +196,14 @@ def afa_proc_analyse():
         if flag == 1:
             afa_ruleget(code)
             afa_ruleanlys(code)
+            afa_mainview(Drawinmap)
             print("3:rules分析完毕！")
         else:
             print("3:rules分析无数据。。。")    
     #end for
 #endof 'mdl'
 
-#acc_tbl_read('000001')
+#main
 afa_proc_analyse()
+
+

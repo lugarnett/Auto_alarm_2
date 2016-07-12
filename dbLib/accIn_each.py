@@ -9,8 +9,12 @@ import time
 import collections
 import json
 import win32com.client
-
 from accLib import Access_Model
+
+
+#默认的tushare取数起始日期
+MAXDATE = '2015-01-01'
+
 
 #模块内全局变量
 CodesNet = None
@@ -309,7 +313,7 @@ def tbl_fill(code):
 
         #1)确定数据时间段
         if row == 0:
-            maxdate = '2014-01-01'
+            maxdate = MAXDATE    #'2016-01-01'
         else:
             maxdate = get_tbl_date(code)
         #end if
