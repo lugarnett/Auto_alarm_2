@@ -10,10 +10,12 @@ import collections
 import json
 import win32com.client
 from accLib import Access_Model
+from accIn_repair import tbl_repair
 
 
 #默认的tushare取数起始日期
 MAXDATE = '2015-01-01'
+maxID = 0
 
 
 #模块内全局变量
@@ -66,7 +68,9 @@ def get_List_tbl():
             else:
                 List_tbl.append(tblname)
         #end for
+        print('TblAcc获取成功！')        
     except Exception as e:
+        print('TblAcc获取失败。。。。。。。。。。。。。。。。')
         print(e)
     #print(List_tbl)
 #endof 'mdl'
@@ -75,7 +79,8 @@ def get_List_tbl():
 def tbl_make(code):
     global data
     try:
-        sql = "Create TABLE [%s] ([date] DATE, \
+        sql = "Create TABLE [%s] (\
+        [ID] INT PRIMARY KEY, [date] DATE, \
         [开1] FLOAT,[高1] FLOAT,[低1] FLOAT,[收1] FLOAT, \
         [开0] FLOAT,[高0] FLOAT,[低0] FLOAT,[收0] FLOAT, \
         [fma5] FLOAT,[fma10] FLOAT,[fma20] FLOAT,[fma30] FLOAT,[fma60] FLOAT,[fma120] FLOAT, \
@@ -106,15 +111,36 @@ def get_tbl_date(code):
     return maxdate
 #endof 'mdl'
 
-'''3.2.2)获取tushare数据(复&不复合二为一)，并写入acc_tbl'''
-def get_tushare_tblfill(code, startdate):
 
+
+'''3.2.2)获取表里的最大ID'''
+def get_tbl_maxid(code):
+    global data
+    try:
+        sql = "SELECT MAX(ID) FROM %s"%code
+        dataRecordSet = data.db_query(sql)
+        for item in dataRecordSet:
+            a = eval("("+item+")")
+            maxid = int(a['Expr1000'])
+        #end for                    
+    except Exception as e:
+        print(e)
+        maxid = 1
+
+    return maxid
+#endof 'mdl'
+    
+'''3.2.3)获取tushare数据(复&不复合二为一)，并写入acc_tbl'''
+def get_tushare_tblfill(code, startdate):
+    global maxID
+    
     if startdate >= datetime.datetime.now().date():
         print("为最新日期数据，无需更新！")
         return -1   
     startDate = startdate.strftime("%Y-%m-%d")  
     endDate = datetime.datetime.now().strftime("%Y-%m-%d")  
     
+    print("tushare取数")
     try:
         df0 = ts.get_hist_data(code, start=startDate, end=endDate)  #不复, retry_count=10
         df1 = ts.get_h_data(code, start=startDate, end=endDate)     #复, retry_count=10
@@ -175,7 +201,7 @@ def get_tushare_tblfill(code, startdate):
         #数据按date，存入acc
         conn = data.db_conn()
         #dateframe1数据偶尔少1，故以dataframe1为基准
-        n = 0
+        n = 0 #dateframe的行数
         for each in df1.index:
             date = df1.index[n]
             #print(date)
@@ -214,9 +240,11 @@ def get_tushare_tblfill(code, startdate):
             ma60 = 0.0
             ma120 = 0.0
             
+            #if n == 4:
             if n >= 4:
                 for x in range(n-4, n+1):
-
+                    #print('x')
+                    #print()
                     收1 = float(df1[x:x+1]['close'])                    
                     fma5 = fma5 + 收1 / 5
                     收0 = float(df0[x:x+1]['close'])
@@ -265,23 +293,27 @@ def get_tushare_tblfill(code, startdate):
             #end if'''
               
             n = n + 1
+            maxID = maxID + 1
             
             '''acc操作'''
-            sql = "INSERT INTO [%s] ([date], \
+            sql = "INSERT INTO [%s] ( \
+            [ID],[date], \
             [开1],[高1],[低1],[收1], \
             [开0],[高0],[低0],[收0], \
             [fma5],[fma10],[fma20],[fma30],[fma60],[fma120], \
             [ma5],[ma10],[ma20],[ma30],[ma60],[ma120], \
             [v_ma5],[v_ma10],[v_ma20], \
             [量],[换],[金额],[price_change],[p_change]) \
-            VALUES ('%s', \
+            VALUES ( \
+            '%d','%s', \
             '%f','%f','%f','%f', \
             '%f','%f','%f','%f', \
             '%f','%f','%f','%f','%f','%f', \
             '%f','%f','%f','%f','%f','%f', \
             '%f','%f','%f', \
             '%f','%f','%f','%f','%f')" \
-            %(code, date2str, \
+            %(code, \
+            maxID, date2str, \
             开1, 高1, 低1, 收1, \
             开0, 高0, 低0, 收0, \
             fma5, fma10, fma20, fma30, fma60, fma120, \
@@ -302,7 +334,7 @@ def get_tushare_tblfill(code, startdate):
 
 '''3.2)填表'''
 def tbl_fill(code):
-    global data
+    global data, maxID
     try:
         sql = "SELECT COUNT(*) FROM %s"%code
         dataRecordSet = data.db_query(sql)
@@ -314,8 +346,12 @@ def tbl_fill(code):
         #1)确定数据时间段
         if row == 0:
             maxdate = MAXDATE    #'2016-01-01'
+            maxID = 0
         else:
+            #3.2.1)
             maxdate = get_tbl_date(code)
+            #3.2.2)
+            maxID = get_tbl_maxid(code)
         #end if
         y = int(maxdate[0:4])
         m = int(maxdate[5:7])
@@ -324,6 +360,7 @@ def tbl_fill(code):
         startdate = startdate + datetime.timedelta(days = 1)  #加1天
 
         #2)取时间段内数据，并填入表
+        #3.2.3)
         get_tushare_tblfill(code, startdate)
 
     except Exception as e:
@@ -343,15 +380,21 @@ def acc_make2():
     get_List_tbl()
 
     #3)比较，并读取数据，然后建表存储或追加存储
+    n = 0
     n_new = 0
+    sumn = len(List_code)
     for code in List_code:
         if code not in List_tbl:
             tbl_make(code)      #新建表和字段
             n_new = n_new + 1
-        #end if
+        #end if        
+        n = n + 1
+        print('\n开始处理%s (%d: %d) .............'%(code, sumn, n))
         tbl_fill(code)
+        #查找均值为0的，计算并存入
+        tbl_repair(code)
     #end for 
-    print("表fill完成，共'%d'，新增'%d'"%(len(List_code), n_new))
+    print("表fill完成，共'%d'，新增'%d'"%(sumn, n_new))
 
 
 #endof 'mdl'
