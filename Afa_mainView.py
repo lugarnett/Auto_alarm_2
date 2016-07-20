@@ -151,10 +151,10 @@ def main_view(code):
                 squal_y = [开, 开*1.2, 开*1.2, 开, 开]
                 ax.plot(squal_x, squal_y, '-', alpha = 0.3, color = 'r',linewidth=linewidth)
                 #写文字
-                ax.text(xpos[i], 开*1.195+结果cnt*0.1, d2+' '+x2, alpha = 0.7, color = 'r', fontsize = 10)
+                ax.text(xpos[i], 开*1.195+结果cnt*0.015*开, d2+' '+x2, alpha = 0.7, color = 'r', fontsize = 10)
                 #ruleID
                 ruleID = d2[4:5]
-                ax.text(xpos[i], 开*1.187-结果cnt*0.1, '('+ruleID+')', color = 'g', fontsize = 10)
+                ax.text(xpos[i], 开*1.187-结果cnt*0.015*开, '('+ruleID+')', color = 'g', fontsize = 10)
                 结果cnt = 结果cnt + 1
             #end of "for"
         #endof "if" 

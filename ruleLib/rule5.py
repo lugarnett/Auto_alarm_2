@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import gl
-
 import collections
-import os
 
 Anlyoutmap = collections.OrderedDict()  
 

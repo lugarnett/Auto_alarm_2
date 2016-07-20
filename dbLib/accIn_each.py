@@ -63,7 +63,7 @@ def get_List_tbl():
         for item in dataRecordSet:
             a = eval("("+item+")")
             tblname = a['Name']
-            if tblname.count('MSys') >= 1:
+            if tblname.count('MSys') >= 1 or tblname.count('Codes') >= 1:
                 continue
             else:
                 List_tbl.append(tblname)
@@ -125,7 +125,7 @@ def get_tbl_maxid(code):
         #end for                    
     except Exception as e:
         print(e)
-        maxid = 1
+        maxid = 0
 
     return maxid
 #endof 'mdl'
@@ -325,11 +325,11 @@ def get_tushare_tblfill(code, startdate):
         #endof 'for' 
         conn.Close()
         print("%s表更新完成!\n"%code)
-        return True
+        return 1
     except Exception as e:
         print(e)
         conn.Close()
-        return False  
+        return -1  
 #endof mdl
 
 '''3.2)填表'''
@@ -361,10 +361,11 @@ def tbl_fill(code):
 
         #2)取时间段内数据，并填入表
         #3.2.3)
-        get_tushare_tblfill(code, startdate)
+        ret = get_tushare_tblfill(code, startdate)
 
     except Exception as e:
         print(e)
+    return ret
 #endof 'mdl'
 
 '''第二步：获取codes_acc列表 & 存在的表each，比较，并读取数据，然后建表存储或追加存储'''
@@ -390,9 +391,10 @@ def acc_make2():
         #end if        
         n = n + 1
         print('\n开始处理%s (%d: %d) .............'%(code, sumn, n))
-        tbl_fill(code)
+        ret = tbl_fill(code)
         #查找均值为0的，计算并存入
-        tbl_repair(code)
+        if ret == 1:
+            tbl_repair(code, 'each_tbl')
     #end for 
     print("表fill完成，共'%d'，新增'%d'"%(sumn, n_new))
 

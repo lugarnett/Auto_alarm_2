@@ -16,7 +16,7 @@ data = Access_Model(dataUrl)
 ID_list = []
 
 
-'''1.1)找row'''
+'''1.1)找0rows'''
 def find_0_cnt(code, flag, m):
     global data
 
@@ -34,7 +34,7 @@ def find_0_cnt(code, flag, m):
     return row
 #endof 'mdl'
 
-'''1.2)找找0行的ID_list'''
+'''1.2)找0行的ID_list'''
 def find_ID_list(code, flag, m):
     global data, ID_list
     
@@ -55,10 +55,13 @@ def find_ID_list(code, flag, m):
 def ma_read_calc_update(code, flag, m, x):
     global data, ID_list
     
-    if flag.count('fma') < 1:
-        收 = '收0'
-    else:
+    
+    if flag.count('v_ma') >= 1:
+        收 = '量'
+    elif flag.count('fma') >= 1:
         收 = '收1'
+    else:
+        收 = '收0'
     #end if
 
     if x-m+1 < 0: #数据不够
@@ -84,11 +87,16 @@ def ma_read_calc_update(code, flag, m, x):
 #endof 'mdl'
     
 '''查找code表中均值为0的行，计算并更新'''
-def tbl_repair(code):
+def tbl_repair(code, mode):
     global ID_list
     
-    flag_list = ['ma5','fma5', 'ma10','fma10', 'ma20','fma20', 'ma30','fma30', 'ma60','fma60']
-    
+    if mode == 'each_tbl':
+        flag_list = ['ma5','fma5', 'ma10','fma10', 'ma20','fma20', 'ma30','fma30', 'ma60','fma60']
+    elif mode == 'today':
+        flag_list = ['ma5', 'ma10', 'ma20', 'ma30', 'ma60', 'v_ma5', 'v_ma10', 'v_ma20']
+    else:
+        return
+        
     for flag in flag_list:
         
         if flag.count('5') >= 1:
@@ -107,7 +115,7 @@ def tbl_repair(code):
             
         #1.1)是否有0
         row = find_0_cnt(code, flag, m)
-        print(row)
+        #print(flag +': ' + str(row)) ##################
         if row > 0:
             #1.2)找0行的ID_list
             find_ID_list(code, flag, m)

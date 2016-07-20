@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 import gl
-
 import collections
-import os
 
 Anlyoutmap = collections.OrderedDict()  
 
 '''红二三兵穿五线'''
 def rule_8(code, Anlyinmap):
-    收pre = 0
-    量pre = 0
+
     开 = 0
     收 = 0
     量 = 0

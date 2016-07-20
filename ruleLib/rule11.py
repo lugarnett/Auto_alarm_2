@@ -47,7 +47,8 @@ def rule_11(code, Anlyinmap):
             if (收 > 开*长阳度) and (收 > max(高pre3,高pre2,高pre1)) and (量 > max(量pre3,量pre2,量pre1)) \
             and (收pre3 < 开pre3 or 收pre3 < 收pre4) \
             and (收pre2 < 开pre2 or 收pre2 < 收pre3) \
-            and (收pre1 < 开pre1 or 收pre1 < 收pre2) :
+            and (收pre1 < 开pre1 or 收pre1 < 收pre2) \
+            and max(收pre3, 开pre3) > 开pre2 and max(收pre2, 开pre2) > 开pre1 and max(收pre1, 开pre1) > 开:#依次阶梯下跌
                 
                 Anlyoutmap[xpre3['date']] = ['rule0', '++']
                 Anlyoutmap[xpre2['date']] = ['rule0', '++']

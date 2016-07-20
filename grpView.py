@@ -118,9 +118,9 @@ def sub_view(submap, code):
                 ruleID = d2[4:]
                 if not ruleID=='0':
                     #写文字
-                    ax.text(xpos[i], 开盘*1.193+结果cnt*0.1, d2+' '+x2, alpha = 0.7, color = 'r', fontsize = 8)
+                    ax.text(xpos[i], 开盘*1.193+结果cnt*0.015*开盘, d2+' '+x2, alpha = 0.7, color = 'r', fontsize = 8)
                     #ruleID
-                    ax.text(xpos[i], 开盘*1.187-结果cnt*0.1, '('+ruleID+')', color = 'g', fontsize = 8)
+                    ax.text(xpos[i], 开盘*1.187-结果cnt*0.015*开盘, '('+ruleID+')', color = 'g', fontsize = 8)
                     结果cnt = 结果cnt + 1
                 #endof 'if'
             #end of "for"
@@ -148,7 +148,26 @@ def rules_group_find(tmpmap, d):
     cnt = len(tmpmap[d][1]['分析结果'])
     if cnt>=2:
         flag = 1
+    
+    ####基本
+    if  'rule5' in tmpmap[d][1]['分析结果']:
+        flag = 1 
+    if  'rule9' in tmpmap[d][1]['分析结果']:
+        flag = 1 
+    if  'rule12' in tmpmap[d][1]['分析结果']:
+        flag = 1 
+    if  'rule13' in tmpmap[d][1]['分析结果']:
+        flag = 1 
+    if  'rule14' in tmpmap[d][1]['分析结果']:
+        flag = 1 
         
+    if  'rule16' in tmpmap[d][1]['分析结果']:
+        flag = 1 
+    if  'rule17' in tmpmap[d][1]['分析结果']:
+        flag = 1 
+    if  'rule18' in tmpmap[d][1]['分析结果']:
+        flag = 1 
+    ####组合        
     if  'rule12' in tmpmap[d][1]['分析结果']:
         flag = 1 
     if  'rule80' in tmpmap[d][1]['分析结果']:
@@ -198,8 +217,14 @@ def sub_grpview_mng(code):
     #end of "for"
     if mark == 1:
         #'a':文件追加写入
+        if code[0:1] == '6':
+            flag = '\x07\x11'
+        elif code[0:1] == '0' or code[0:1] == '3':
+            flag = '\x07\x21'
+        else:
+            flag = '\x07\x24'
         with open(gl.path_view_rst + '导入code_' + getdate() + ".sel", 'a') as out:
-            out.write('\t' + code)
+            out.write(flag + code)
     #endof "with"
 #enf of "def"
 

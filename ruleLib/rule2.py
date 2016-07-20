@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 import gl
-
 import collections
-import os
 
 Anlyoutmap = collections.OrderedDict()  
 
-'''低开长阳'''
+'''低开长阳（板寸）'''
 def rule_2(code, Anlyinmap):
     收pre = 0
     开 = 0
@@ -14,6 +12,7 @@ def rule_2(code, Anlyinmap):
     
     低开度 = 0.015
     长阳度 = 0.07
+    板寸度 = 1.005
     cnt2 = 0
     Anlyoutmap.clear()
     for (d,x) in Anlyinmap.items():
@@ -25,7 +24,7 @@ def rule_2(code, Anlyinmap):
             高 = x['基K'][1]
             低 = x['基K'][2]
             收 = x['基K'][3]
-            if  (收pre-开) > 开*低开度 and (收-开) > 开*长阳度:# and 收 == 高:
+            if  (收pre-开) > 开*低开度 and (收-开) > 开*长阳度 and 高 <= 板寸度*收: # 板寸接近光头阳:
                 Anlyoutmap[x['date']] = ['rule2', '低开长阳']
                 cnt2 = cnt2 + 1
             #endof 'if'

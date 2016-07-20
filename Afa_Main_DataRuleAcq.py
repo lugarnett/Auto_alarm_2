@@ -1,6 +1,7 @@
 # -*- coding: gbk -*-
 '''采用acc数据，完成快速分析'''
 import gl
+import time
 from Afa_mainView import afa_mainview
 
 from ruleLib.rule1 import rule_1
@@ -15,11 +16,18 @@ from ruleLib.rule9 import rule_9
 from ruleLib.rule10 import rule_10
 from ruleLib.rule11 import rule_11
 from ruleLib.rule12 import rule_12
+from ruleLib.rule13 import rule_13
+from ruleLib.rule14 import rule_14
+
+from ruleLib.rule16 import rule_16
+from ruleLib.rule17 import rule_17
+from ruleLib.rule18 import rule_18
+
 from ruleLib.rule80 import rule_80
 from ruleLib.rule81 import rule_81
 from ruleLib.rule82 import rule_82
 
-from findLib.find1 import find_1
+#from findLib.find1 import find_1
 
 from dbLib.accLib import Access_Model
 #import numpy as np
@@ -37,6 +45,10 @@ List_tbl = []
 dataUrl = os.getcwd()+"\\dbLib\\data.mdb"
 data = Access_Model(dataUrl)
 
+def gettime():
+    return time.strftime("%Y%m%d_%H:%M",time.localtime(time.time()))
+def getdate(): 
+    return time.strftime('%Y%m%d',time.localtime(time.time()))
 
 '''1)获取List_tbl'''
 def get_List_tbl():
@@ -89,7 +101,7 @@ def acc_tbl_read(code):
             sql = "Select * FROM %s WHERE date BETWEEN #%s# and #%s# ORDER BY date"%(code,startdate,enddate) 
             dataRecordSet = data.db_query(sql)
             #Anlyinmap的key为i++序号
-            i = 0
+            i = 1
             for item in dataRecordSet:
                 a = eval("("+item+")")    #eval解析JSON数据
                 
@@ -115,7 +127,7 @@ def acc_tbl_read(code):
                     break
                 #end if
             #end for
-            print("\n%s表获取成功！"%code)
+            print("%s表获取成功！"%code)
             #print(Anlyinmap)
             
             #数据存入Drawinmap
@@ -125,12 +137,12 @@ def acc_tbl_read(code):
             
             return 1
         else:
-            print("\n%s表数据row=0。。。。。"%code)
+            print("%s表数据row=0。。。。。"%code)
             return -1
         #end if
     except Exception as e:
         print(e)
-        print("\n%s表获取失败。。。。。"%code)
+        print("%s表获取失败。。。。。"%code)
         return -1
 
 #end of "def"
@@ -151,28 +163,41 @@ def afa_ruleget(code):
 
 '''2.3)进行数据分析'''
 def afa_ruleanlys(code):
-    #print(Anlyinmap)
-    rule_1(code, Anlyinmap)
-    rule_2(code, Anlyinmap)
-    rule_3(code, Anlyinmap)
-    rule_4(code, Anlyinmap)
-    rule_5(code, Anlyinmap)
-    rule_6(code, Anlyinmap)
-    rule_7(code, Anlyinmap)
-    rule_8(code, Anlyinmap)
-    rule_9(code, Anlyinmap)
-    rule_10(code, Anlyinmap)
-    rule_11(code, Anlyinmap)
-    rule_12(code, Anlyinmap)
-    #rule_80(code, Anlyinmap)
-    #rule_81(code, Anlyinmap)
+    #基础策略
+    if 1:
+        rule_1(code, Anlyinmap)
+        rule_2(code, Anlyinmap)
+        rule_3(code, Anlyinmap)
+        #rule_4(code, Anlyinmap)
+        rule_5(code, Anlyinmap)
+        #rule_6(code, Anlyinmap)
+        rule_7(code, Anlyinmap)
+        rule_8(code, Anlyinmap)
+        rule_9(code, Anlyinmap)
+        rule_10(code, Anlyinmap)
+        #rule_11(code, Anlyinmap)
+        rule_12(code, Anlyinmap)
+        rule_13(code, Anlyinmap)
+        rule_14(code, Anlyinmap)
     
-    '''
-    rule_82(code, Anlyinmap, 30)
-    rule_82(code, Anlyinmap, 20)
-    rule_82(code, Anlyinmap, 10)
-    rule_82(code, Anlyinmap, 5)
-    '''
+        rule_16(code, Anlyinmap)
+        rule_17(code, Anlyinmap)
+        rule_18(code, Anlyinmap)
+    #end if
+
+    #组合策略
+    if 0:
+        rule_80(code, Anlyinmap)
+        rule_81(code, Anlyinmap)
+    #end if
+    
+    #老鸭头
+    if 0:
+        rule_82(code, Anlyinmap, 30)
+        rule_82(code, Anlyinmap, 20)
+        rule_82(code, Anlyinmap, 10)
+        rule_82(code, Anlyinmap, 5)
+    #end if
 #end of "def"
 
 
@@ -185,11 +210,19 @@ def afa_proc_analyse():
     if os.path.exists(gl.path_view_rst) <= 0:    #判断目标是否存在
         os.mkdir(gl.path_view_rst)
         
+    head = '\x00\x02'  #512
+    with open(gl.path_view_rst + '导入code_' + getdate() + ".sel", 'a') as out:
+        out.write(head)
+        
     #1)获取表名的list（不是codes列表，有可能数据不全）  
     get_List_tbl()
     
     #2遍历list，读取每个tbl的数据，并分析
+    sumn = len(List_tbl)
+    n = 0
     for code in List_tbl:
+        n = n + 1
+        print('\n开始处理%s (%d: %d) .............'%(code, sumn, n))
         gl.STCode = code
         #2.1)读取tbl数据，放入Anlyinmap      
         flag = acc_tbl_read(code)
