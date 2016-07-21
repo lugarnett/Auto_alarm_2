@@ -164,7 +164,7 @@ def afa_ruleget(code):
 '''2.3)进行数据分析'''
 def afa_ruleanlys(code):
     #基础策略
-    if 1:
+    if 0:
         rule_1(code, Anlyinmap)
         rule_2(code, Anlyinmap)
         rule_3(code, Anlyinmap)
@@ -187,16 +187,20 @@ def afa_ruleanlys(code):
 
     #组合策略
     if 0:
-        rule_80(code, Anlyinmap)
-        rule_81(code, Anlyinmap)
+        rule_80(code, Anlyinmap) #10日线走平（涨停平台整理）(36天)
+    #end if
+        
+    #旧法大鸭头
+    if 0:
+        rule_81(code, Anlyinmap) #旧法大鸭头(31天)
     #end if
     
-    #老鸭头
-    if 0:
+    #通用鸭头(时间窗口>=6天)
+    if 1:
         rule_82(code, Anlyinmap, 30)
         rule_82(code, Anlyinmap, 20)
         rule_82(code, Anlyinmap, 10)
-        rule_82(code, Anlyinmap, 5)
+        rule_82(code, Anlyinmap, 6)
     #end if
 #end of "def"
 

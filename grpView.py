@@ -167,9 +167,8 @@ def rules_group_find(tmpmap, d):
         flag = 1 
     if  'rule18' in tmpmap[d][1]['分析结果']:
         flag = 1 
+
     ####组合        
-    if  'rule12' in tmpmap[d][1]['分析结果']:
-        flag = 1 
     if  'rule80' in tmpmap[d][1]['分析结果']:
         flag = 1    
     if  'rule81' in tmpmap[d][1]['分析结果']:

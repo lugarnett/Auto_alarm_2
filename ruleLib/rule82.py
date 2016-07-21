@@ -8,7 +8,7 @@ Anlyoutmap = collections.OrderedDict()
 rulen = 'rule82'
 
 '''
-# 通用斜口鸭头
+# 通用型鸭头(时间窗口>=6天)
 (1)取时间窗口内的最高点，高点时和涨停时4线多头排列，最高值
 (2)往前8天找涨停，最低值
 (3)涨停后5天找放量均值
@@ -109,10 +109,10 @@ def find_rule_82(d, Anlyinmap, 时间窗口跨度):
     if f_sl == 0:   return 0 #无缩量/超最大量  
     #print('5:')
     
-    '''(6)涨停day+1~缩量day+1：close(low)\high值在箱体中'''#(low)
+    '''(6)涨停day+1~缩量day+1：low(close)\high值在箱体中'''#(low)
     f_return = 0  
     for i in range(涨停day+1,缩量day+1):
-        if Anlyinmap[i]['基K'][3] < 涨停值*0.99 or Anlyinmap[i]['基K'][1] > 最高值:
+        if Anlyinmap[i]['基K'][2] < 涨停值*0.98 or Anlyinmap[i]['基K'][1] > 最高值:
             f_return = 1
             break
         #endof 'if'
@@ -126,6 +126,7 @@ def find_rule_82(d, Anlyinmap, 时间窗口跨度):
 #endof 'def'       
     
 
+'''时间窗口 >= 6'''
 def rule_82(code, Anlyinmap, 时间窗口):
     global rulen, Anlyoutmap
     global 起始day,涨停day,最高day,缩量day,结束day,最高值,涨停值,放量均值,缩量均值,缩量比例
@@ -135,7 +136,7 @@ def rule_82(code, Anlyinmap, 时间窗口):
         
     #遍历
     for (d,x) in Anlyinmap.items():
-        if d < 30:
+        if d <= 时间窗口:
             continue
         else:
             if 1 == find_rule_82(d, Anlyinmap, 时间窗口):
@@ -147,10 +148,8 @@ def rule_82(code, Anlyinmap, 时间窗口):
                     Anlyoutmap[Anlyinmap[缩量day]['date']] = [rulen+'%d'%时间窗口, '大斜口鸭头']
                 elif 时间窗口 > 10:
                     Anlyoutmap[Anlyinmap[缩量day]['date']] = [rulen+'%d'%时间窗口, '中斜口鸭头']
-                elif 时间窗口 > 5:
-                    Anlyoutmap[Anlyinmap[缩量day]['date']] = [rulen+'%d'%时间窗口, '小斜口鸭头']
                 else:
-                    Anlyoutmap[Anlyinmap[缩量day]['date']] = [rulen+'%d'%时间窗口, '微斜口鸭头']
+                    Anlyoutmap[Anlyinmap[缩量day]['date']] = [rulen+'%d'%时间窗口, '小斜口鸭头']
                     
                 for i in range(1,2):
                     Anlyoutmap[Anlyinmap[缩量day-i]['date']] = ['rule0', '++']

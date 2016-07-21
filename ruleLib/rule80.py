@@ -174,7 +174,7 @@ def rule_80(code, Anlyinmap):
             
             '''（4）'''
             if flag1>=1 and flag2>=1 and flag3>=1:
-                Anlyoutmap[x['date']] = [rulen, '10日均线走平']
+                Anlyoutmap[x['date']] = [rulen, '10日均线走平（涨停平台整理）']
                 Anlyoutmap[xpre1['date']] = ['rule0', '++']
                 Anlyoutmap[xpre2['date']] = ['rule0', '++']
                 Anlyoutmap[xpre3['date']] = ['rule0', '++']

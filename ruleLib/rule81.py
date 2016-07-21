@@ -4,18 +4,16 @@ import collections
 #import os
 Anlyoutmap = collections.OrderedDict()  
 
-
+rulen = 'rule81'
 总跨度 = 30
 前段 = 10
 前段 = 20
-
-rulen = 'rule81'
-
 缩量比例 = 0.6
 
+缩量day = 0
 
 '''
-#大中小斜口鸭头
+#大中小斜口鸭头（旧法大鸭头）
 (1)取最高点，高点时和涨停时4线多头排列，最高值
 (2)往前10天找涨停，最低值
 (3)涨停后5天找放量均值
@@ -26,7 +24,7 @@ rulen = 'rule81'
 '''
 def find_rule_81(d, Anlyinmap):
     global Anlyoutmap
-    global 缩量比例
+    global 缩量比例, 缩量day
 
     起始day = 0
     涨停day = 0
@@ -129,12 +127,12 @@ def rule_81(code, Anlyinmap):
         
     #遍历
     for (d,x) in Anlyinmap.items():
-        if d < 30:
+        if d <= 30:
             continue
         else:
             if 1 == find_rule_81(d, Anlyinmap):
                 '''输出'''
-                Anlyoutmap[Anlyinmap[缩量day]['date']] = [rulen, '大中小斜口鸭头']
+                Anlyoutmap[Anlyinmap[缩量day]['date']] = [rulen, '旧法大鸭头']
                 for i in range(1,3):
                     Anlyoutmap[Anlyinmap[缩量day-i]['date']] = ['rule0', '++']
                 cnt = cnt + 1
