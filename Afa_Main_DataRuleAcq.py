@@ -18,10 +18,15 @@ from ruleLib.rule11 import rule_11
 from ruleLib.rule12 import rule_12
 from ruleLib.rule13 import rule_13
 from ruleLib.rule14 import rule_14
-
+from ruleLib.rule15 import rule_15
 from ruleLib.rule16 import rule_16
 from ruleLib.rule17 import rule_17
 from ruleLib.rule18 import rule_18
+
+from ruleLib.rule50 import rule_50
+#from ruleLib.rule51 import rule_51
+from ruleLib.rule52 import rule_52
+from ruleLib.rule53 import rule_53
 
 from ruleLib.rule80 import rule_80
 from ruleLib.rule81 import rule_81
@@ -179,12 +184,20 @@ def afa_ruleanlys(code):
         rule_12(code, Anlyinmap)
         rule_13(code, Anlyinmap)
         rule_14(code, Anlyinmap)
-    
+        rule_15(code, Anlyinmap)
         rule_16(code, Anlyinmap)
         rule_17(code, Anlyinmap)
         rule_18(code, Anlyinmap)
     #end if
 
+    #专用策略：空中加油
+    if 1:
+        #rule_50(code, Anlyinmap) #小空中加油（有三必有五）
+        #rule_51(code, Anlyinmap) #
+        rule_52(code, Anlyinmap) #大空中加油（涨停加上影加涨停）
+        rule_53(code, Anlyinmap) #大空中加油（双上影）
+    #end if
+        
     #组合策略
     if 0:
         rule_80(code, Anlyinmap) #10日线走平（涨停平台整理）(36天)
@@ -196,7 +209,7 @@ def afa_ruleanlys(code):
     #end if
     
     #通用鸭头(时间窗口>=6天)
-    if 1:
+    if 0:
         rule_82(code, Anlyinmap, 30)
         rule_82(code, Anlyinmap, 20)
         rule_82(code, Anlyinmap, 10)
@@ -217,6 +230,7 @@ def afa_proc_analyse():
     head = '\x00\x02'  #512
     with open(gl.path_view_rst + '导入code_' + getdate() + ".sel", 'a') as out:
         out.write(head)
+          
         
     #1)获取表名的list（不是codes列表，有可能数据不全）  
     get_List_tbl()
@@ -242,5 +256,3 @@ def afa_proc_analyse():
 
 #main
 afa_proc_analyse()
-
-

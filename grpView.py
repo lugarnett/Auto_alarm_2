@@ -110,8 +110,10 @@ def sub_view(submap, code):
         if  '分析结果' in x:
             结果cnt = 0
             #画矩形
-            squal_x = [xpos[i], xpos[i], xpos[i] + xstep*10]
-            squal_y = [开盘, 开盘*1.2, 开盘*1.2]
+            #squal_x = [xpos[i], xpos[i], xpos[i] + xstep*10]
+            #squal_y = [开盘, 开盘*1.2, 开盘*1.2]
+            squal_x = [xpos[i], xpos[i]]
+            squal_y = [开盘, 开盘*1.2]
             ax.plot(squal_x, squal_y, '--', alpha = 0.7, color = 'm', linewidth=0.2)
             for (d2, x2) in x['分析结果'].items():
                 #print(日期, d2, x2)
@@ -160,7 +162,8 @@ def rules_group_find(tmpmap, d):
         flag = 1 
     if  'rule14' in tmpmap[d][1]['分析结果']:
         flag = 1 
-        
+    if  'rule15' in tmpmap[d][1]['分析结果']:
+        flag = 1     
     if  'rule16' in tmpmap[d][1]['分析结果']:
         flag = 1 
     if  'rule17' in tmpmap[d][1]['分析结果']:
@@ -168,6 +171,16 @@ def rules_group_find(tmpmap, d):
     if  'rule18' in tmpmap[d][1]['分析结果']:
         flag = 1 
 
+    ####专用策略：空中加油        
+    if  'rule50' in tmpmap[d][1]['分析结果']:
+        flag = 1    
+    if  'rule51' in tmpmap[d][1]['分析结果']:
+        flag = 1   
+    if  'rule52' in tmpmap[d][1]['分析结果']:
+        flag = 1   
+    if  'rule53' in tmpmap[d][1]['分析结果']:
+        flag = 1   
+        
     ####组合        
     if  'rule80' in tmpmap[d][1]['分析结果']:
         flag = 1    

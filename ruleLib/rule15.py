@@ -4,16 +4,16 @@ import collections
 #import os
 
 Anlyoutmap = collections.OrderedDict()  
-rulen = 'rule14'
+rulen = 'rule15'
 
-'''涨停包长阴（上涨过程）'''
-def rule_14(code, Anlyinmap):
+'''跳空巨量中阴不回，第二天长阳（最好高开）'''
+def rule_15(code, Anlyinmap):
     global Anlyoutmap
     
-    长阴度 = 0.93
+    巨量度 = 1.3
+    中阴度 = 0.97
+    长阳度 = 1.07
     #光脚度 = 1.005
-    涨停度 = 1.098
-    开盘长阳度 = 1.12
     
     cnt = 0
     Anlyoutmap.clear()
@@ -24,7 +24,8 @@ def rule_14(code, Anlyinmap):
             xpre2 = Anlyinmap[d-2]
             xpre1 = Anlyinmap[d-1]
 
-            收pre2 = xpre2['基K'][3]
+            高pre2 = xpre2['基K'][1]
+            量pre2 = xpre2['V'][0]
             
             开pre1 = xpre1['基K'][0]
             高pre1 = xpre1['基K'][1]
@@ -34,14 +35,16 @@ def rule_14(code, Anlyinmap):
             
             开 = x['基K'][0]
             高 = x['基K'][1]
+            低 = x['基K'][2]
             收 = x['基K'][3]
             量 = x['V'][0]
             
-            #第一日跌7%，后面再考虑光脚
-            #涨停
-            if 收pre1 < 长阴度*max(收pre2,开pre1) \
-            and (收 >= round(涨停度*收pre1, 2) or 收 > 开盘长阳度*开):
-                Anlyoutmap[x['date']] = [rulen, '涨停包长阴']
+            #第一天跳空巨量中阴
+            #第一天7%长阳
+            #两天最低均不回前一天的高\低（收）
+            if 收pre1 < 中阴度*开pre1 and 低pre1 > 高pre2 and 量pre1 > 巨量度*量pre2\
+            and 收 > 长阳度*开 and 低 >= 低pre1:
+                Anlyoutmap[x['date']] = [rulen, '跳空中阴不回，第二天长阳（最好高开）']
                 Anlyoutmap[xpre1['date']] = ['rule0', '++']
                 cnt = cnt + 1
 

@@ -6,26 +6,22 @@ import collections
 Anlyoutmap = collections.OrderedDict()  
 rulen = 'rule13'
 
-'''涨停包长阴（上涨过程）'''
+'''长上影次日高开收阳（最好是大跌后走平）'''
 def rule_13(code, Anlyinmap):
     global Anlyoutmap
     
-    长阴度 = 0.93
-    #光脚度 = 1.005
-    涨停度 = 1.098
-    开盘长阳度 = 1.12
+    短体度 = 1.01
+    上影度 = 1.06
+    #高开度 = 1.01
     
     cnt = 0
     Anlyoutmap.clear()
     for (d,x) in Anlyinmap.items():
-        if d <= 2:
+        if d <= 1:
             continue
         else:
-            xpre2 = Anlyinmap[d-2]
             xpre1 = Anlyinmap[d-1]
 
-            收pre2 = xpre2['基K'][3]
-            
             开pre1 = xpre1['基K'][0]
             高pre1 = xpre1['基K'][1]
             低pre1 = xpre1['基K'][2]
@@ -34,14 +30,15 @@ def rule_13(code, Anlyinmap):
             
             开 = x['基K'][0]
             高 = x['基K'][1]
+            低 = x['基K'][2]
             收 = x['基K'][3]
             量 = x['V'][0]
             
-            #第一日跌7%，后面再考虑光脚
-            #涨停
-            if 收pre1 < 长阴度*max(收pre2,开pre1) \
-            and (收 >= round(涨停度*收pre1, 2) or 收 > 开盘长阳度*开):
-                Anlyoutmap[x['date']] = [rulen, '涨停包长阴']
+            #第一日短体长上影
+            #高开收阳，最低不破昨日收
+            if max(收pre1,开pre1) < 短体度*min(收pre1,开pre1,低pre1) and (高pre1 > 上影度*收pre1) \
+            and (开 > 收pre1) and (收 > 开) or (低 > 收pre1) :
+                Anlyoutmap[x['date']] = [rulen, '长上影次日高开收阳']
                 Anlyoutmap[xpre1['date']] = ['rule0', '++']
                 cnt = cnt + 1
 
