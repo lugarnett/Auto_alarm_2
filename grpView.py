@@ -180,6 +180,8 @@ def rules_group_find(tmpmap, d):
         flag = 1   
     if  'rule53' in tmpmap[d][1]['分析结果']:
         flag = 1   
+    if  'rule54' in tmpmap[d][1]['分析结果']:
+        flag = 1   
         
     ####组合        
     if  'rule80' in tmpmap[d][1]['分析结果']:

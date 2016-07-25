@@ -85,8 +85,11 @@ def rule_52(code, Anlyinmap):
             
             if f_succ == 1: 
                 Anlyoutmap[Anlyinmap[d]['date']] = [rulen, '大空中加油（涨停加上影加涨停）']
-                for i in range(涨停启动day, max(次高1day,次高2day)):
-                    Anlyoutmap[Anlyinmap[i]['date']] = ['rule0', '++']
+                #for i in range(涨停启动day, max(次高1day,次高2day)):
+                #    Anlyoutmap[Anlyinmap[i]['date']] = ['rule0', '++']
+                Anlyoutmap[Anlyinmap[涨停启动day]['date']] = ['rule0', '++']
+                Anlyoutmap[Anlyinmap[次高1day]['date']] = ['rule0', '++']
+                Anlyoutmap[Anlyinmap[次高2day]['date']] = ['rule0', '++']
                     
                 cnt = cnt + 1
             #endof 'if'

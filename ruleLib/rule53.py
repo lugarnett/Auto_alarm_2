@@ -7,8 +7,9 @@ Anlyoutmap = collections.OrderedDict()
 rulen = 'rule53'
 
 上影度 = 1.04 
+短体度 = 1.02
 
-'''大空中加油（双上影）'''
+'''大空中加油（短体双上影）'''
 def rule_53(code, Anlyinmap):
     global Anlyoutmap
     
@@ -61,7 +62,7 @@ def rule_53(code, Anlyinmap):
             if f_fail == 1:
                 continue
             
-            #3)三天里有两天是4%上影
+            #3)三天里有两天是短2%体+4%上影
             开1 = Anlyinmap[次高1day]['基K'][0]
             高1 = Anlyinmap[次高1day]['基K'][1]
             收1 = Anlyinmap[次高1day]['基K'][3]
@@ -72,11 +73,11 @@ def rule_53(code, Anlyinmap):
             高3 = Anlyinmap[次高3day]['基K'][1]
             收3 = Anlyinmap[次高3day]['基K'][3]
             cnt = 0
-            if 高1 > 上影度*max(开1,收1):
+            if 高1 > 上影度*max(开1,收1) and max(开1,收1) < 短体度*min(开1,收1):
                 cnt = cnt + 1
-            if 高2 > 上影度*max(开2,收2):
+            if 高2 > 上影度*max(开2,收2) and max(开2,收2) < 短体度*min(开2,收2):
                 cnt = cnt + 1
-            if 高3 > 上影度*max(开3,收3):
+            if 高3 > 上影度*max(开3,收3) and max(开3,收3) < 短体度*min(开3,收3):
                 cnt = cnt + 1
             if cnt < 2:
                 continue
@@ -92,9 +93,12 @@ def rule_53(code, Anlyinmap):
             
             if f_succ == 1: 
                 Anlyoutmap[Anlyinmap[d]['date']] = [rulen, '大空中加油（双上影）']
-                for i in range(min(次高1day,次高2day,次高3day), max(次高1day,次高2day,次高3day)):
-                    Anlyoutmap[Anlyinmap[i]['date']] = ['rule0', '++']
-                    
+                #for i in range(min(次高1day,次高2day,次高3day), max(次高1day,次高2day,次高3day)):
+                #    Anlyoutmap[Anlyinmap[i]['date']] = ['rule0', '++']
+                Anlyoutmap[Anlyinmap[次高1day]['date']] = ['rule0', '++']
+                Anlyoutmap[Anlyinmap[次高2day]['date']] = ['rule0', '++']
+                Anlyoutmap[Anlyinmap[次高3day]['date']] = ['rule0', '++']
+                
                 cnt = cnt + 1
             #endof 'if'
     #end of "for"

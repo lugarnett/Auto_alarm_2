@@ -24,9 +24,10 @@ from ruleLib.rule17 import rule_17
 from ruleLib.rule18 import rule_18
 
 from ruleLib.rule50 import rule_50
-#from ruleLib.rule51 import rule_51
+from ruleLib.rule51 import rule_51
 from ruleLib.rule52 import rule_52
 from ruleLib.rule53 import rule_53
+from ruleLib.rule54 import rule_54
 
 from ruleLib.rule80 import rule_80
 from ruleLib.rule81 import rule_81
@@ -192,10 +193,11 @@ def afa_ruleanlys(code):
 
     #专用策略：空中加油
     if 1:
-        #rule_50(code, Anlyinmap) #小空中加油（有三必有五）
-        #rule_51(code, Anlyinmap) #
+        rule_50(code, Anlyinmap) #小空中加油（5天3）
+        rule_51(code, Anlyinmap) #小空中加油（6天3）
         rule_52(code, Anlyinmap) #大空中加油（涨停加上影加涨停）
-        rule_53(code, Anlyinmap) #大空中加油（双上影）
+        rule_53(code, Anlyinmap) #大空中加油（短体双上影）
+        rule_54(code, Anlyinmap) #
     #end if
         
     #组合策略
