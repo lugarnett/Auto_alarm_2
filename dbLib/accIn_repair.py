@@ -91,7 +91,7 @@ def tbl_repair(code, mode):
     global ID_list
     
     if mode == 'each_tbl':
-        flag_list = ['ma5','fma5', 'ma10','fma10', 'ma20','fma20', 'ma30','fma30', 'ma60','fma60']
+        flag_list = ['ma5', 'ma10', 'ma20', 'ma30', 'ma60']
     elif mode == 'today':
         flag_list = ['ma5', 'ma10', 'ma20', 'ma30', 'ma60', 'v_ma5', 'v_ma10', 'v_ma20']
     else:

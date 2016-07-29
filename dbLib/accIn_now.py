@@ -45,13 +45,13 @@ def get_List_tbl():
 #endof 'mdl'
 
 '''2)删除所有tbl中当天日期的数据'''
-def foreach_delt_today():
-    global List_tbl, data, todaydate
+def foreach_delt_today(delet_date):
+    global List_tbl, data
     try:
         for code in List_tbl:
-            sql = "DELETE * FROM %s WHERE date = #%s#"%(code, todaydate)
+            sql = "DELETE * FROM %s WHERE date = #%s#"%(code, delet_date)
             data.db_del(sql) 
-            print("删除%s->%s数据"%(code, todaydate))
+            print("删除%s->%s数据"%(code, delet_date))
         #end for
     except Exception as e:
         print(e)
@@ -159,13 +159,13 @@ def today_tushare_insert(code, maxID):
 
 '''获取tushare当天最新数据'''
 def acc_make3():
-    global List_tbl
+    global List_tbl, todaydate
     
     #1)存在的表
     get_List_tbl()
 
     #2)删除所有tbl中当天日期的数据
-    #foreach_delt_today()
+    #foreach_delt_today(todaydate)
         
     #3)获取tushare当天数据
     flag = today_tushare_get()
@@ -189,5 +189,5 @@ if 0:
 else:
     #5)删除所有tbl中当天日期的数据
     get_List_tbl()
-    foreach_delt_today()
+    foreach_delt_today(todaydate)
 

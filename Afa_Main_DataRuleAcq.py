@@ -27,7 +27,7 @@ from ruleLib.rule50 import rule_50
 from ruleLib.rule51 import rule_51
 from ruleLib.rule52 import rule_52
 from ruleLib.rule53 import rule_53
-from ruleLib.rule54 import rule_54
+#from ruleLib.rule54 import rule_54
 
 from ruleLib.rule80 import rule_80
 from ruleLib.rule81 import rule_81
@@ -110,7 +110,7 @@ def acc_tbl_read(code):
             i = 1
             for item in dataRecordSet:
                 a = eval("("+item+")")    #eval解析JSON数据
-                
+                '''
                 ##############################################################
                 #暂时按老数据格式，存入Anlyinmap
                 #先按复权数据处理（若需处理无复权数据，可在此替换，或再次调用）
@@ -124,7 +124,18 @@ def acc_tbl_read(code):
                 '基K0':[float(a['开0']), float(a['高0']), float(a['低0']), float(a['收0'])], \
                 '均0':[float(a['ma5']), float(a['ma10']), float(a['ma20']), float(a['ma30']), float(a['ma60'])]}
                 ##############################################################
-
+                '''
+                ##############################################################
+                #暂时按老数据格式，存入Anlyinmap
+                #先按复权数据处理（若需处理无复权数据，可在此替换，或再次调用）
+                Anlyinmap[i] = {'date':a['date'][0:10], \
+                '基K':[float(a['开0']), float(a['高0']), float(a['低0']), float(a['收0'])], \
+                'V':[float(a['量']), float(a['金额']), float(a['p_change'])], \
+                'V_ma':[float(a['v_ma5']), float(a['v_ma10']), float(a['v_ma20'])], \
+                '换':float(a['换']), \
+                '均':[float(a['ma5']), float(a['ma10']), float(a['ma20']), float(a['ma30']), float(a['ma60'])]}
+                ##############################################################
+                
                 #读取其他分析输入数据（如大盘K、消息面），按日期key并入outmap
                 
                 i = i + 1
@@ -170,7 +181,7 @@ def afa_ruleget(code):
 '''2.3)进行数据分析'''
 def afa_ruleanlys(code):
     #基础策略
-    if 0:
+    if 1:
         rule_1(code, Anlyinmap)
         rule_2(code, Anlyinmap)
         rule_3(code, Anlyinmap)
@@ -192,12 +203,12 @@ def afa_ruleanlys(code):
     #end if
 
     #专用策略：空中加油
-    if 1:
+    if 0:
         rule_50(code, Anlyinmap) #小空中加油（5天3）
         rule_51(code, Anlyinmap) #小空中加油（6天3）
         rule_52(code, Anlyinmap) #大空中加油（涨停加上影加涨停）
         rule_53(code, Anlyinmap) #大空中加油（短体双上影）
-        rule_54(code, Anlyinmap) #
+        #rule_54(code, Anlyinmap) #
     #end if
         
     #组合策略
@@ -229,7 +240,7 @@ def afa_proc_analyse():
     if os.path.exists(gl.path_view_rst) <= 0:    #判断目标是否存在
         os.mkdir(gl.path_view_rst)
         
-    head = '\x00\x02'  #512
+    head = '\x00\x00'  #512
     with open(gl.path_view_rst + '导入code_' + getdate() + ".sel", 'a') as out:
         out.write(head)
           

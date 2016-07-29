@@ -10,7 +10,7 @@ rulen = 'rule13'
 def rule_13(code, Anlyinmap):
     global Anlyoutmap
     
-    短体度 = 1.01
+    加下影短体度 = 1.01
     上影度 = 1.06
     #高开度 = 1.01
     
@@ -36,8 +36,8 @@ def rule_13(code, Anlyinmap):
             
             #第一日短体长上影
             #高开收阳，最低不破昨日收
-            if max(收pre1,开pre1) < 短体度*min(收pre1,开pre1,低pre1) and (高pre1 > 上影度*收pre1) \
-            and (开 > 收pre1) and (收 > 开) or (低 > 收pre1) :
+            if (max(收pre1,开pre1) < 加下影短体度*min(收pre1,开pre1,低pre1)) and (高pre1 > 上影度*收pre1) \
+            and (开 > 收pre1) and (收 > 开) and (低 > 收pre1) :
                 Anlyoutmap[x['date']] = [rulen, '长上影次日高开收阳']
                 Anlyoutmap[xpre1['date']] = ['rule0', '++']
                 cnt = cnt + 1

@@ -71,9 +71,10 @@ def sub_view(submap, code):
     xoffset= xpos + offset
     
     #####fig, ax = plt.subplots()   
-    gl.Fig_Cnt = gl.Fig_Cnt 
-    fig = plt.figure(gl.Fig_Cnt)                      # Create a `figure' instance
-    ax = fig.add_subplot(111)   
+    fig = plt.figure(2)                      # Create a `figure' instance
+    ax = fig.add_subplot(313)  
+    ax2 = fig.add_subplot(311) 
+    ax3 = fig.add_subplot(312) 
     # 设置图的底边距
     fig.subplots_adjust(bottom = 0.25)
     #plt.subplots_adjust(right = 0.5)
@@ -87,6 +88,11 @@ def sub_view(submap, code):
     ax.plot(xoffset, 均20list, '-', alpha = 0.5, color ='lightskyblue')
     ax.plot(xoffset, 均30list, '-', alpha = 0.5, color ='c')
     ax.plot(xoffset, 均60list, '-', alpha = 0.5, color ='m')
+    
+    
+    #ax2.set_xticks(xpos)
+    #ax3.set_xticks(xpos)
+    ax2
     
     i = 0
     for (d, x) in submap.items():
@@ -137,8 +143,12 @@ def sub_view(submap, code):
 
     fig.clear()
     ax.clear()
+    ax2.clear()
+    ax3.clear()
     del fig
     del ax
+    del ax2
+    del ax3
     #plt.show() 
 #end of "def"
 
@@ -218,7 +228,7 @@ def sub_grpview_mng(code):
                 #print(left)
                 #print(right)
                 for j in range(left, right):
-                    submap[tmpmap[d+j][0]] = tmpmap[d+j][1]
+                    submap[tmpmap[d+j][0]] = tmpmap[d+j][1] #submap_index为data
                 #endof 'for'
                 
                 sub_view(submap, code)
