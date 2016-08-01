@@ -248,6 +248,8 @@ def afa_proc_analyse():
     #1)获取表名的list（不是codes列表，有可能数据不全）  
     get_List_tbl()
     
+    
+    ######List_tbl = ['000005']################################
     #2遍历list，读取每个tbl的数据，并分析
     sumn = len(List_tbl)
     n = 0

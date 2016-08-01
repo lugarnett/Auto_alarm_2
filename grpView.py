@@ -36,9 +36,13 @@ submap = collections.OrderedDict()
 均30list=[]
 均60list=[]
 
+最高list=[]
+最低list=[]
+        
 cnt_rule_pic = 0
 xstep = 0.5
 offset = (xstep - 0.1) / 2
+换trans = 20
 
 def sub_view(submap, code):
     global 日期list,总手list,金额list,换手list,\
@@ -55,6 +59,9 @@ def sub_view(submap, code):
     均30list.clear()
     均60list.clear()
     
+    最高list.clear()
+    最低list.clear()
+    
     for (d,x) in submap.items():
         日期list.append(d)
         总手list.append(x["V"][0])
@@ -65,34 +72,32 @@ def sub_view(submap, code):
         均20list.append(x["均"][2])
         均30list.append(x["均"][3])
         均60list.append(x["均"][4])
+        
+        最高list.append(x['基K'][1])
+        最低list.append(x['基K'][2])
     #end of "for"
         
     xpos = np.arange(0, len(日期list)*xstep, xstep)
     xoffset= xpos + offset
     
     #####fig, ax = plt.subplots()   
-    fig = plt.figure(2)                      # Create a `figure' instance
-    ax = fig.add_subplot(313)  
-    ax2 = fig.add_subplot(311) 
-    ax3 = fig.add_subplot(312) 
+    fig = plt.figure(3)                      # Create a `figure' instance
+    ax = fig.add_subplot(111)  
+    #ax2 = fig.add_subplot(311) 
+    #ax3 = fig.add_subplot(312) 
     # 设置图的底边距
-    fig.subplots_adjust(bottom = 0.25)
-    #plt.subplots_adjust(right = 0.5)
-    #plt.subplots_adjust(left = 0.05)
-    #plt.subplots_adjust(top = 10)
-    #plt.grid() #开启网格
+    fig.subplots_adjust(bottom = 0.15)
+    fig.subplots_adjust(top = 0.8)
+    #fig.subplots_adjust(right = 10)
+    #fig.subplots_adjust(left = 0.05)
+    #fig.grid() #开启网格
     ax.set_xticks(xpos)
-    ax.set_xticklabels(日期list, rotation=90, fontsize=8)
+    ax.set_xticklabels(日期list, rotation=90, fontsize=6)
     ax.plot(xoffset, 均5list,  '.-', alpha = 0.5, color ='y')
     ax.plot(xoffset, 均10list, '-', alpha = 0.5, color ='yellowgreen')
     ax.plot(xoffset, 均20list, '-', alpha = 0.5, color ='lightskyblue')
     ax.plot(xoffset, 均30list, '-', alpha = 0.5, color ='c')
     ax.plot(xoffset, 均60list, '-', alpha = 0.5, color ='m')
-    
-    
-    #ax2.set_xticks(xpos)
-    #ax3.set_xticks(xpos)
-    ax2
     
     i = 0
     for (d, x) in submap.items():
@@ -101,6 +106,11 @@ def sub_view(submap, code):
         最高 = x['基K'][1]
         最低 = x['基K'][2]
         收盘 = x['基K'][3]
+        换 = x['换'] 
+        量 = x['V']
+        V_ma5 = x['V_ma'][0]
+        V_ma10= x['V_ma'][1]
+        V_ma20 = x['V_ma'][2]
         
         if 收盘 > 开盘:
             ax.bar(xpos[i], 收盘-开盘, bottom = 开盘, width = .4, alpha = .5, facecolor ='r', edgecolor='r',linewidth=0.5)
@@ -112,6 +122,20 @@ def sub_view(submap, code):
             ax.bar(xpos[i], 0.005, bottom = 开盘, width = .4, alpha = .5, facecolor ='r', edgecolor='r',linewidth=0.5)
             ax.bar(xoffset[i], 最高-最低, bottom = 最低, width = .015, alpha = .5, facecolor ='r', edgecolor='r',linewidth=0.5) 
         #end of "if"
+
+        换btm = min(最低list) * 0.9
+        ax.bar(xpos[i], 20/换trans, bottom = 换btm, width = .4, alpha = .02, facecolor ='black', edgecolor='black',linewidth=0.5)
+        ax.bar(xpos[i], 10/换trans, bottom = 换btm, width = .4, alpha = .025, facecolor ='black', edgecolor='black',linewidth=0.5)
+        ax.bar(xpos[i], 5/换trans, bottom = 换btm, width = .4, alpha = .03, facecolor ='black', edgecolor='black',linewidth=0.5)
+        ax.bar(xpos[i], 2/换trans, bottom = 换btm, width = .4, alpha = .04, facecolor ='black', edgecolor='black',linewidth=0.5)
+        
+        换 = 换 / 换trans
+        if 收盘 > 开盘:
+            ax.bar(xpos[i], 换, bottom = 换btm, width = .4, alpha = .3, facecolor ='r', edgecolor='r',linewidth=0.5)
+        else:
+            ax.bar(xpos[i], 换, bottom = 换btm, width = .4, alpha = .3, facecolor ='green', edgecolor='green',linewidth=0.5)
+        
+            
 
         if  '分析结果' in x:
             结果cnt = 0
@@ -126,9 +150,9 @@ def sub_view(submap, code):
                 ruleID = d2[4:]
                 if not ruleID=='0':
                     #写文字
-                    ax.text(xpos[i], 开盘*1.193+结果cnt*0.015*开盘, d2+' '+x2, alpha = 0.7, color = 'r', fontsize = 8)
+                    ax.text(xpos[i], 开盘*1.193+结果cnt*0.015*开盘, d2+' '+x2, alpha = 0.7, color = 'r', fontsize = 6)
                     #ruleID
-                    ax.text(xpos[i], 开盘*1.187-结果cnt*0.015*开盘, '('+ruleID+')', color = 'g', fontsize = 8)
+                    ax.text(xpos[i], 开盘*1.187-结果cnt*0.015*开盘, '('+ruleID+')', color = 'g', fontsize = 6)
                     结果cnt = 结果cnt + 1
                 #endof 'if'
             #end of "for"
@@ -143,12 +167,12 @@ def sub_view(submap, code):
 
     fig.clear()
     ax.clear()
-    ax2.clear()
-    ax3.clear()
+    #ax2.clear()
+    #ax3.clear()
     del fig
     del ax
-    del ax2
-    del ax3
+    #del ax2
+    #del ax3
     #plt.show() 
 #end of "def"
 
