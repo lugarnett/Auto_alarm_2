@@ -249,7 +249,7 @@ def afa_proc_analyse():
     get_List_tbl()
     
     
-    ######List_tbl = ['000005']################################
+    List_tbl = ['000005']################################
     #2遍历list，读取每个tbl的数据，并分析
     sumn = len(List_tbl)
     n = 0

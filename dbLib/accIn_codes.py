@@ -105,8 +105,24 @@ def acc_make1():
                 pass
                 ##填充或修改其他值
             else:
+                沪深 = '深'
+                小 = ''
+                创 = ''
+                ST = ''
+                
+                if code[0:1] == '6':
+                    沪深 = '沪'
+                elif code[0:3] == '002':
+                    小 = '小'
+                elif code[0:1] == '3':
+                    创 = '创'
+                
                 名称 = CodesNet.values[n][1]
-                sql = "INSERT INTO Codes([code],[名称]) VALUES ('%s','%s')"%(code, 名称)
+                if 名称.find('ST') > 0:
+                    ST = 'ST'
+                
+                sql = "INSERT INTO Codes([code],[名称],[沪深],[小],[创],[ST]) \
+                    VALUES ('%s','%s','%s','%s','%s','%s')"%(code,名称,沪深,小,创,ST)
                 data.db_add(sql)
                 n_ins = n_ins + 1
             #end if

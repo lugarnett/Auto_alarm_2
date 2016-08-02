@@ -12,4 +12,4 @@ path_view_rst = "图片结果\\"
 Fig_Cnt = 1
 
 ##数据库中读取数据分析的天数，画图时K线时间天数
-Analyse_days = 100
+Analyse_days = 50

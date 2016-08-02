@@ -142,17 +142,17 @@ def sub_view(submap, code):
             #画矩形
             #squal_x = [xpos[i], xpos[i], xpos[i] + xstep*10]
             #squal_y = [开盘, 开盘*1.2, 开盘*1.2]
-            squal_x = [xpos[i], xpos[i]]
-            squal_y = [开盘, 开盘*1.2]
+            squal_x = [xoffset[i], xoffset[i]]
+            squal_y = [收盘, 收盘*1.12]
             ax.plot(squal_x, squal_y, '--', alpha = 0.7, color = 'm', linewidth=0.2)
             for (d2, x2) in x['分析结果'].items():
                 #print(日期, d2, x2)
                 ruleID = d2[4:]
                 if not ruleID=='0':
                     #写文字
-                    ax.text(xpos[i], 开盘*1.193+结果cnt*0.015*开盘, d2+' '+x2, alpha = 0.7, color = 'r', fontsize = 6)
+                    ax.text(xpos[i], 收盘*1.093+结果cnt*0.015*收盘, d2+' '+x2, alpha = 0.7, color = 'r', fontsize = 6)
                     #ruleID
-                    ax.text(xpos[i], 开盘*1.187-结果cnt*0.015*开盘, '('+ruleID+')', color = 'g', fontsize = 6)
+                    ax.text(xpos[i], 收盘*1.087-结果cnt*0.015*收盘, '('+ruleID+')', color = 'g', fontsize = 6)
                     结果cnt = 结果cnt + 1
                 #endof 'if'
             #end of "for"
