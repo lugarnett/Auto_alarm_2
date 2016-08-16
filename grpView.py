@@ -127,7 +127,7 @@ def sub_view(submap, code):
         ax.bar(xpos[i], 20/换trans, bottom = 换btm, width = .4, alpha = .02, facecolor ='black', edgecolor='black',linewidth=0.5)
         ax.bar(xpos[i], 10/换trans, bottom = 换btm, width = .4, alpha = .025, facecolor ='black', edgecolor='black',linewidth=0.5)
         ax.bar(xpos[i], 5/换trans, bottom = 换btm, width = .4, alpha = .03, facecolor ='black', edgecolor='black',linewidth=0.5)
-        ax.bar(xpos[i], 2/换trans, bottom = 换btm, width = .4, alpha = .04, facecolor ='black', edgecolor='black',linewidth=0.5)
+        ax.bar(xpos[i], 2/换trans, bottom = 换btm, width = .4, alpha = .05, facecolor ='black', edgecolor='black',linewidth=0.5)
         
         换 = 换 / 换trans
         if 收盘 > 开盘:
@@ -203,6 +203,8 @@ def rules_group_find(tmpmap, d):
     if  'rule17' in tmpmap[d][1]['分析结果']:
         flag = 1 
     if  'rule18' in tmpmap[d][1]['分析结果']:
+        flag = 1 
+    if  'rule19' in tmpmap[d][1]['分析结果']:
         flag = 1 
 
     ####专用策略：空中加油        

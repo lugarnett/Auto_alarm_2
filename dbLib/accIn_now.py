@@ -183,6 +183,7 @@ def acc_make3():
 
 #endof 'mdl'
 
+t0 = time.time()
 print("\n当前运行模块 -> acc_make3...\n")
 if 0:
     acc_make3()
@@ -190,4 +191,5 @@ else:
     #5)删除所有tbl中当天日期的数据
     get_List_tbl()
     foreach_delt_today(todaydate)
-
+t1 = time.time()
+print("耗时约%d分"%((t1-t0)/60))

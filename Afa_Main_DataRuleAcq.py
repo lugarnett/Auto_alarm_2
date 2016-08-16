@@ -22,6 +22,7 @@ from ruleLib.rule15 import rule_15
 from ruleLib.rule16 import rule_16
 from ruleLib.rule17 import rule_17
 from ruleLib.rule18 import rule_18
+from ruleLib.rule19 import rule_19
 
 from ruleLib.rule50 import rule_50
 from ruleLib.rule51 import rule_51
@@ -182,7 +183,7 @@ def afa_ruleget(code):
 def afa_ruleanlys(code):
     #基础策略
     if 1:
-        rule_1(code, Anlyinmap)
+        '''rule_1(code, Anlyinmap)
         rule_2(code, Anlyinmap)
         rule_3(code, Anlyinmap)
         #rule_4(code, Anlyinmap)
@@ -199,7 +200,8 @@ def afa_ruleanlys(code):
         rule_15(code, Anlyinmap)
         rule_16(code, Anlyinmap)
         rule_17(code, Anlyinmap)
-        rule_18(code, Anlyinmap)
+        rule_18(code, Anlyinmap)'''
+        rule_19(code, Anlyinmap)
     #end if
 
     #专用策略：空中加油
@@ -249,7 +251,7 @@ def afa_proc_analyse():
     get_List_tbl()
     
     
-    List_tbl = ['000005']################################
+    ############    List_tbl = ['600068']################################
     #2遍历list，读取每个tbl的数据，并分析
     sumn = len(List_tbl)
     n = 0
