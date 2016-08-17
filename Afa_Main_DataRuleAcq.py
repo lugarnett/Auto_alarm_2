@@ -272,4 +272,8 @@ def afa_proc_analyse():
 #endof 'mdl'
 
 #main
+t0 = time.time()
 afa_proc_analyse()
+t1 = time.time()
+print("ºÄÊ±Ô¼%.2f·Ö"%((t1-t0)/60, ))
+

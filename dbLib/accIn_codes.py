@@ -3,6 +3,7 @@ import os
 import sys
 #sys.path.append("\\")
 #import gl
+import time
 import tushare as ts
 import collections
 import json
@@ -106,9 +107,9 @@ def acc_make1():
                 ##填充或修改其他值
             else:
                 沪深 = '深'
-                小 = ''
-                创 = ''
-                ST = ''
+                小 = '-'
+                创 = '-'
+                ST = '-'
                 
                 if code[0:1] == '6':
                     沪深 = '沪'
@@ -135,8 +136,9 @@ def acc_make1():
 #endof 'mdl'
 
 print("\n当前运行模块 -> acc_make1...\n")
+t0 = time.time()
 acc_make1()
-
-
+t1 = time.time()
+print("耗时约%.2f分"%((t1-t0)/60, ))
 
 

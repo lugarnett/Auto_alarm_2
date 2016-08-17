@@ -192,4 +192,4 @@ else:
     get_List_tbl()
     foreach_delt_today(todaydate)
 t1 = time.time()
-print("耗时约%d分"%((t1-t0)/60))
+print("耗时约%.2f分"%((t1-t0)/60))
