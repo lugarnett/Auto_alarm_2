@@ -1,6 +1,6 @@
 # -*- coding: gbk -*-
 import gl
-from subView import mdl_subview
+#from subView import mdl_subview
 from grpView import mdl_grpview
 
 import os

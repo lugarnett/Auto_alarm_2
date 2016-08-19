@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
+#import sys
 #sys.path.append("\\")
 #import gl
 import tushare as ts
 import datetime
 import time
 import collections
-import json
-import win32com.client
+#import json
+#import win32com.client
 from accLib import Access_Model
 from accIn_repair import tbl_repair
 
@@ -183,13 +183,24 @@ def acc_make3():
 
 #endof 'mdl'
 
-t0 = time.time()
-print("\n当前运行模块 -> acc_make3...\n")
-if 0:
-    acc_make3()
-else:
-    #5)删除所有tbl中当天日期的数据
+'''删除各表中的当日数据'''
+def accDel_today():
     get_List_tbl()
     foreach_delt_today(todaydate)
-t1 = time.time()
-print("耗时约%.2f分"%((t1-t0)/60))
+#end def
+    
+'''入口函数：获取全部当日数据，用于分析'''
+def accIn_today():
+    #0)删除所有tbl中当天日期的数据    
+    accDel_today()
+    
+    t0 = time.time()
+    print("\n当前运行模块 -> acc_make3...\n")
+    acc_make3()
+    t1 = time.time()
+    print("耗时约%.2f分"%((t1-t0)/60))
+#end def
+    
+
+    
+    

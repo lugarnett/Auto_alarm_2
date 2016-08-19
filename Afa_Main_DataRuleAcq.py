@@ -36,10 +36,11 @@ from ruleLib.rule82 import rule_82
 
 #from findLib.find1 import find_1
 
+from dbLib.accIn_now import accIn_today,accDel_today
+#from dbLib.accIn_now import accIn_today
+
 from dbLib.accLib import Access_Model
-#import numpy as np
-#import matplotlib.pyplot as plt
-#import matplotlib as mpl
+
 import collections
 import os
 import datetime
@@ -205,7 +206,7 @@ def afa_ruleanlys(code):
     #end if
 
     #专用策略：空中加油
-    if 0:
+    if 1:
         rule_50(code, Anlyinmap) #小空中加油（5天3）
         rule_51(code, Anlyinmap) #小空中加油（6天3）
         rule_52(code, Anlyinmap) #大空中加油（涨停加上影加涨停）
@@ -214,7 +215,7 @@ def afa_ruleanlys(code):
     #end if
         
     #组合策略
-    if 0:
+    if 1:
         rule_80(code, Anlyinmap) #10日线走平（涨停平台整理）(36天)
     #end if
         
@@ -232,8 +233,7 @@ def afa_ruleanlys(code):
     #end if
 #end of "def"
 
-
-#main遍历
+'''分析流程入口函数：获取表名列表，并遍历分析'''
 def afa_proc_analyse():
     global List_tbl, Drawinmap
 
@@ -241,15 +241,14 @@ def afa_proc_analyse():
         os.mkdir(gl.path_rule_rst)
     if os.path.exists(gl.path_view_rst) <= 0:    #判断目标是否存在
         os.mkdir(gl.path_view_rst)
-        
+    
+    '''输出文件：清空，并写入初始值'''
     head = '\x00\x00'  #512
-    with open(gl.path_view_rst + '导入code_' + getdate() + ".sel", 'a') as out:
+    with open(gl.path_view_rst + '导入code_' + getdate() + ".sel", 'w') as out:
         out.write(head)
-          
         
     #1)获取表名的list（不是codes列表，有可能数据不全）  
     get_List_tbl()
-    
     
     ############    List_tbl = ['600068']################################
     #2遍历list，读取每个tbl的数据，并分析
@@ -271,9 +270,20 @@ def afa_proc_analyse():
     #end for
 #endof 'mdl'
 
-#main
+#main: 获取当日数据，分析， 清空当日数据
+print("\n当前运行模块 -> accIn_today...\n")
+accIn_today()
+
+print("\n当前运行模块 -> afa_proc_analyse...\n")
 t0 = time.time()
 afa_proc_analyse()
 t1 = time.time()
 print("耗时约%.2f分"%((t1-t0)/60, ))
+
+print("\n当前运行模块 -> accDel_today...\n")
+accDel_today()
+
+
+
+
 
