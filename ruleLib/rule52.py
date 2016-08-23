@@ -4,24 +4,36 @@ import collections
 #import os
 
 Anlyoutmap = collections.OrderedDict()  
+Anlymdymap = collections.OrderedDict()
 rulen = 'rule52'
+Anly_days = gl.Anly_days_52
 
 上影度 = 1.06 
 
 '''大空中加油（涨停加上影加涨停）'''
 def rule_52(code, Anlyinmap):
-    global Anlyoutmap
-    
+    global Anlyoutmap,Anlymdymap,rulen,Anly_days
+
+    max_n = max(Anlyinmap.keys())
+    days = Anly_days + gl.Anly_days_add
+    #天数不够
+    if max_n+1 < days: 
+        return
+    #end if
+    for i in range(days):
+        Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
+    #end for
+        
     cnt = 0
     Anlyoutmap.clear()
-    for (d,x) in Anlyinmap.items():
+    for (d,x) in Anlymdymap.items():
         if d <= 14:
             continue
         else:
             
             #1)最近一天涨停突破
-            收pre1 = Anlyinmap[d-1]['基K'][3]
-            收 = Anlyinmap[d]['基K'][3]
+            收pre1 = Anlymdymap[d-1]['基K'][3]
+            收 = Anlymdymap[d]['基K'][3]
             if 收 < round(1.1*收pre1, 2):
                 continue
             else:
@@ -34,7 +46,7 @@ def rule_52(code, Anlyinmap):
             次高1day = 0
             次高2day = 0
             for i in range(1, 14):
-                tmp高 = Anlyinmap[d-i]['基K'][1]
+                tmp高 = Anlymdymap[d-i]['基K'][1]
                 if tmp高 > 最高值:
                     f_fail = 1
                     break
@@ -53,18 +65,18 @@ def rule_52(code, Anlyinmap):
                 continue
             
             #3)两天里有一天是上影
-            开1 = Anlyinmap[次高1day]['基K'][0]
-            高1 = Anlyinmap[次高1day]['基K'][1]
-            收1 = Anlyinmap[次高1day]['基K'][3]
-            开2 = Anlyinmap[次高2day]['基K'][0]
-            高2 = Anlyinmap[次高2day]['基K'][1]
-            收2 = Anlyinmap[次高2day]['基K'][3]
+            开1 = Anlymdymap[次高1day]['基K'][0]
+            高1 = Anlymdymap[次高1day]['基K'][1]
+            收1 = Anlymdymap[次高1day]['基K'][3]
+            开2 = Anlymdymap[次高2day]['基K'][0]
+            高2 = Anlymdymap[次高2day]['基K'][1]
+            收2 = Anlymdymap[次高2day]['基K'][3]
             if not (高1 > 上影度*max(开1,收1) or 高2 > 上影度*max(开2,收2)):
                 continue
             
             #4)两天里高点均>ma5(?????????????????????????????????????)
-            均51 = Anlyinmap[次高1day]['均'][0]
-            均52 = Anlyinmap[次高2day]['均'][0]
+            均51 = Anlymdymap[次高1day]['均'][0]
+            均52 = Anlymdymap[次高2day]['均'][0]
             if not (高1 > 均51 and 高2 > 均52):
                 continue
             
@@ -73,8 +85,8 @@ def rule_52(code, Anlyinmap):
             次高2day收 = 收2
             f_succ = 0
             for i in range(d-14, min(次高1day,次高2day)):
-                tmp开 = Anlyinmap[i]['基K'][0]
-                tmp收 = Anlyinmap[i]['基K'][3]
+                tmp开 = Anlymdymap[i]['基K'][0]
+                tmp收 = Anlymdymap[i]['基K'][3]
                 if tmp收 >= round(1.1*tmp开, 2) and tmp收 < 次高1day收 and tmp收 < 次高2day收:
                     f_succ = 1
                     涨停启动day = i
@@ -84,12 +96,12 @@ def rule_52(code, Anlyinmap):
             
             
             if f_succ == 1: 
-                Anlyoutmap[Anlyinmap[d]['date']] = [rulen, '大空中加油（涨停加上影加涨停）']
+                Anlyoutmap[Anlymdymap[d]['date']] = [rulen, '大空中加油（涨停加上影加涨停）']
                 #for i in range(涨停启动day, max(次高1day,次高2day)):
-                #    Anlyoutmap[Anlyinmap[i]['date']] = ['rule0', '++']
-                Anlyoutmap[Anlyinmap[涨停启动day]['date']] = ['rule0', '++']
-                Anlyoutmap[Anlyinmap[次高1day]['date']] = ['rule0', '++']
-                Anlyoutmap[Anlyinmap[次高2day]['date']] = ['rule0', '++']
+                #    Anlyoutmap[Anlymdymap[i]['date']] = ['rule0', '++']
+                Anlyoutmap[Anlymdymap[涨停启动day]['date']] = ['rule0', '++']
+                Anlyoutmap[Anlymdymap[次高1day]['date']] = ['rule0', '++']
+                Anlyoutmap[Anlymdymap[次高2day]['date']] = ['rule0', '++']
                     
                 cnt = cnt + 1
             #endof 'if'

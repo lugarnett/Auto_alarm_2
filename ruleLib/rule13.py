@@ -4,23 +4,35 @@ import collections
 #import os
 
 Anlyoutmap = collections.OrderedDict()  
+Anlymdymap = collections.OrderedDict()
 rulen = 'rule13'
+Anly_days = gl.Anly_days_13
 
 '''长上影次日高开收阳（最好是大跌后走平）'''
 def rule_13(code, Anlyinmap):
-    global Anlyoutmap
-    
+    global Anlyoutmap,Anlymdymap,rulen,Anly_days
+
+    max_n = max(Anlyinmap.keys())
+    days = Anly_days + gl.Anly_days_add
+    #天数不够
+    if max_n+1 < days: 
+        return
+    #end if
+    for i in range(days):
+        Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
+    #end for
+            
     加下影短体度 = 1.01
     上影度 = 1.06
     #高开度 = 1.01
     
     cnt = 0
     Anlyoutmap.clear()
-    for (d,x) in Anlyinmap.items():
-        if d <= 1:
+    for (d,x) in Anlymdymap.items():
+        if d <= 0:
             continue
         else:
-            xpre1 = Anlyinmap[d-1]
+            xpre1 = Anlymdymap[d-1]
 
             开pre1 = xpre1['基K'][0]
             高pre1 = xpre1['基K'][1]

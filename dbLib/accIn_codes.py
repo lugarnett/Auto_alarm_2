@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
+#import sys
 #sys.path.append("\\")
 #import gl
 import time
 import tushare as ts
-import collections
-import json
-import win32com.client
+#import collections
+#import json
+#import win32com.client
 
-from accLib import Access_Model
+import accLib
 
 #模块内全局变量
 CodesNet = None
 List_acc = []
 dataUrl = os.getcwd()+"\\data.mdb"
-data = Access_Model(dataUrl)
+data = accLib.Access_Model(dataUrl)
 
 '''1)codes建表 '''
 def codes_tbl_make():

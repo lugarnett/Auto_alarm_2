@@ -3,10 +3,22 @@ import gl
 import collections
 
 Anlyoutmap = collections.OrderedDict()  
+Anlymdymap = collections.OrderedDict()  
+Anly_days = gl.Anly_days_7
 
 '''量价红三兵'''
 def rule_7(code, Anlyinmap):
 
+    max_n = max(Anlyinmap.keys())
+    days = Anly_days + gl.Anly_days_add
+    #天数不够
+    if max_n+1 < days: 
+        return
+    #end if
+    for i in range(days):
+        Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
+    #end for
+        
     开 = 0
     收 = 0
     量 = 0
@@ -15,13 +27,13 @@ def rule_7(code, Anlyinmap):
     量增 = 1.4
     cnt2 = 0
     Anlyoutmap.clear()
-    for (d,x) in Anlyinmap.items():
-        #d从1开始
-        if d <= 2:
+    for (d,x) in Anlymdymap.items():
+        #d从0开始
+        if d <= 1:
             continue
         else:
-            xpre2 = Anlyinmap[d-2]
-            xpre1 = Anlyinmap[d-1]
+            xpre2 = Anlymdymap[d-2]
+            xpre1 = Anlymdymap[d-1]
  
             开pre2 = xpre2['基K'][0]
             收pre2 = xpre2['基K'][3]

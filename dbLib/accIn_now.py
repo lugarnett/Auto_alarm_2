@@ -9,8 +9,8 @@ import time
 import collections
 #import json
 #import win32com.client
-from accLib import Access_Model
-from accIn_repair import tbl_repair
+from . import accLib
+from . import accIn_repair
 
 #模块内全局变量
 df = collections.OrderedDict()
@@ -18,8 +18,8 @@ List_tbl = []
 todaydate = datetime.datetime.now().strftime("%Y-%m-%d")
 #todaydate = '2016-07-15'
 
-dataUrl = os.getcwd()+"\\data.mdb"
-data = Access_Model(dataUrl)
+dataUrl = os.getcwd()+"\\dbLib\\data.mdb"
+data = accLib.Access_Model(dataUrl)
 
 
 '''1)获取List_tbl'''
@@ -51,7 +51,7 @@ def foreach_delt_today(delet_date):
         for code in List_tbl:
             sql = "DELETE * FROM %s WHERE date = #%s#"%(code, delet_date)
             data.db_del(sql) 
-            print("删除%s->%s数据"%(code, delet_date))
+            #print("删除%s->%s数据"%(code, delet_date))
         #end for
     except Exception as e:
         print(e)
@@ -115,11 +115,16 @@ def today_tushare_insert(code, maxID):
         换0 = float(df[df['code']==code]['turnoverratio']) 
         金额0 = float(df[df['code']==code]['amount'])
                 
-        per = float(df[df['code']==code]['per'])
-        pb = float(df[df['code']==code]['pb'])
-        mktcap = float(df[df['code']==code]['mktcap'])
-        nmc = float(df[df['code']==code]['nmc'])
-                
+        #per = float(df[df['code']==code]['per'])
+        #pb = float(df[df['code']==code]['pb'])
+        #mktcap = float(df[df['code']==code]['mktcap'])
+        #nmc = float(df[df['code']==code]['nmc'])
+        
+        '''为0异常数据判断'''
+        if 开0 < 1.0E-7 or 高0 < 1.0E-7 or 低0 < 1.0E-7 or 现0 < 1.0E-7:
+            print("为0异常数据，返回。。。。。。。。。。")
+            return
+        
         '''按当天时间，插入到tbl（此处注意，数据不一定对应当天时间！！！！！）''' 
         '''acc操作'''
         sql = "INSERT INTO [%s] ( \
@@ -148,7 +153,8 @@ def today_tushare_insert(code, maxID):
         量0, 换0, 金额0, 0, 0)        
                 
         if(data.db_add(sql)):
-            print("%s当日数据已存入"%code)
+            pass            
+            #print("%s当日数据已存入"%code)
         else:
             print("%s当日数据已存入失败。。。。。。。"%code)
         #end if
@@ -178,7 +184,7 @@ def acc_make3():
     for code in List_tbl:
         maxID = get_tbl_maxid(code) #4.1)
         today_tushare_insert(code, maxID) #4.2)
-        tbl_repair(code, 'today') #4.2)
+        accIn_repair.tbl_repair(code, 'today') #4.2)
     #end for
 
 #endof 'mdl'
@@ -187,6 +193,14 @@ def acc_make3():
 def accDel_today():
     get_List_tbl()
     foreach_delt_today(todaydate)
+    print("\n各表当日数据删除已完成！\n")
+#end def
+
+'''删除各表中的某日数据'''
+def accDel_days(date):
+    get_List_tbl()
+    foreach_delt_today(date)
+    print("\n%s日数据删除已完成！\n"%date)
 #end def
     
 '''入口函数：获取全部当日数据，用于分析'''
@@ -198,7 +212,7 @@ def accIn_today():
     print("\n当前运行模块 -> acc_make3...\n")
     acc_make3()
     t1 = time.time()
-    print("耗时约%.2f分"%((t1-t0)/60))
+    print("\n获取当日数据已完成，耗时约%.2f分\n"%((t1-t0)/60))
 #end def
     
 

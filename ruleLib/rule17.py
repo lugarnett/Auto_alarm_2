@@ -4,23 +4,35 @@ import collections
 #import os
 
 Anlyoutmap = collections.OrderedDict()  
+Anlymdymap = collections.OrderedDict()
 rulen = 'rule17'
+Anly_days = gl.Anly_days_17
 
 '''上下影洗盘(2%：+—3.5%)'''
 def rule_17(code, Anlyinmap):
-    global Anlyoutmap
-    
+    global Anlyoutmap,Anlymdymap,rulen,Anly_days
+
+    max_n = max(Anlyinmap.keys())
+    days = Anly_days + gl.Anly_days_add
+    #天数不够
+    if max_n+1 < days: 
+        return
+    #end if
+    for i in range(days):
+        Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
+    #end for
+            
     上影度 = 1 + 0.03
     下影度 = 1 - 0.03
     短体度 = 1.02
     
     cnt = 0
     Anlyoutmap.clear()
-    for (d,x) in Anlyinmap.items():
-        if d <= 2:
+    for (d,x) in Anlymdymap.items():
+        if d <= 0:
             continue
         else:
-            xpre1 = Anlyinmap[d-1]
+            xpre1 = Anlymdymap[d-1]
             
             开pre1 = xpre1['基K'][0]
             高pre1 = xpre1['基K'][1]

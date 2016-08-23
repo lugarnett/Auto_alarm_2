@@ -1,18 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
-import tushare as ts
-import datetime
-import time
-import collections
-import json
-import win32com.client
-from accLib import Access_Model
+from . import accLib
 
 
 #模块内全局变量
-dataUrl = os.getcwd()+"\\data.mdb"
-data = Access_Model(dataUrl)
+dataUrl = os.getcwd()+"\\dbLib\\data.mdb"
+data = accLib.Access_Model(dataUrl)
 ID_list = []
 
 

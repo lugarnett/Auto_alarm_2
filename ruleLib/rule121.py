@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 import gl
 import collections
-#import os
 
 Anlyoutmap = collections.OrderedDict()  
 Anlymdymap = collections.OrderedDict()
-rulen = 'rule16'
-Anly_days = gl.Anly_days_16
+rulen = 'rule121'
+Anly_days = gl.Anly_days_121
 
-'''瘦长十字星（涨停后），最好是涨停启动后（价格和涨停价一致）！！'''
-def rule_16(code, Anlyinmap):
+'''n天内有涨停'''
+def rule_121(code, Anlyinmap):
     global Anlyoutmap,Anlymdymap,rulen,Anly_days
 
     max_n = max(Anlyinmap.keys())
-    days = Anly_days + gl.Anly_days_add
+    days = Anly_days
     #天数不够
     if max_n+1 < days: 
         return
@@ -21,37 +20,24 @@ def rule_16(code, Anlyinmap):
     for i in range(days):
         Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
     #end for
-            
-    上影度 = 1.03
-    下影度 = 0.97
-    短体度 = 1.005
-    
+           
+    涨停度 = 1.1
     cnt = 0
     Anlyoutmap.clear()
+    
     for (d,x) in Anlymdymap.items():
         if d <= 0:
             continue
         else:
             xpre1 = Anlymdymap[d-1]
-            
-            开pre1 = xpre1['基K'][0]
-            高pre1 = xpre1['基K'][1]
-            低pre1 = xpre1['基K'][2]
-            收pre1 = xpre1['基K'][3]
-            量pre1 = xpre1['V'][0]
-            
-            开 = x['基K'][0]
-            高 = x['基K'][1]
-            低 = x['基K'][2]
-            收 = x['基K'][3]
-            量 = x['V'][0]
-            
-            if max(开,收) < 短体度*min(开,收) \
-            and 高 > 上影度*max(开,收) and 低 < 下影度*min(开,收):
-                Anlyoutmap[x['date']] = [rulen, '瘦长十字星（涨停后？？）']
-                Anlyoutmap[xpre1['date']] = ['rule0', '++']
-                cnt = cnt + 1
 
+            收pre1 = xpre1['基K'][3]
+            收 = x['基K'][3]
+            
+            #涨停
+            if 收 >= round(涨停度*收pre1, 2):
+                Anlyoutmap[x['date']] = [rulen, '涨停标志']
+                cnt = cnt + 1
             #endof 'if'
     #end of "for"
 

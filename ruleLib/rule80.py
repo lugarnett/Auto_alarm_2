@@ -3,64 +3,75 @@ import gl
 import collections
 #import os
 Anlyoutmap = collections.OrderedDict()  
-
+Anlymdymap = collections.OrderedDict()
 rulen = 'rule80'
+Anly_days = gl.Anly_days_80
 
 '''10日线走平'''
 '''往前倒推：-1~-19,共20个振幅平
             -22~-25有均线级差
             -27~-34有涨停'''
 def rule_80(code, Anlyinmap):
-    global rulen
-    
+    global Anlyoutmap,Anlymdymap,rulen,Anly_days
+
+    max_n = max(Anlyinmap.keys())
+    days = Anly_days + gl.Anly_days_add
+    #天数不够
+    if max_n+1 < days: 
+        return
+    #end if
+    for i in range(days):
+        Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
+    #end for
+        
     振幅 = 0.02
     cnt = 0
     Anlyoutmap.clear()
         
     #遍历
-    for (d,x) in Anlyinmap.items():
+    for (d,x) in Anlymdymap.items():
         flag1 = 0
         flag2 = 0
         flag3 = 0
         
-        if d <= 35:
+        if d <= 34:
             continue
         else:
-            xpre1 = Anlyinmap[d-1]
-            xpre2 = Anlyinmap[d-2]
-            xpre3 = Anlyinmap[d-3]
-            xpre4 = Anlyinmap[d-4]
-            xpre5 = Anlyinmap[d-5]
-            xpre6 = Anlyinmap[d-6]
-            xpre7 = Anlyinmap[d-7]
-            xpre8 = Anlyinmap[d-8]
-            xpre9 = Anlyinmap[d-9]
-            xpre10 = Anlyinmap[d-10]
-            xpre11 = Anlyinmap[d-11]
-            xpre12 = Anlyinmap[d-12]
-            xpre13 = Anlyinmap[d-13]
-            xpre14 = Anlyinmap[d-14]
-            xpre15 = Anlyinmap[d-15]
-            xpre16 = Anlyinmap[d-16]
-            xpre17 = Anlyinmap[d-17]
-            xpre18 = Anlyinmap[d-18]
-            xpre19 = Anlyinmap[d-19]
-            xpre20 = Anlyinmap[d-20]
-            xpre21 = Anlyinmap[d-21]
-            xpre22 = Anlyinmap[d-22]
-            xpre23 = Anlyinmap[d-23]
-            xpre24 = Anlyinmap[d-24]
-            xpre25 = Anlyinmap[d-25]
-            xpre26 = Anlyinmap[d-26]
-            xpre27 = Anlyinmap[d-27]
-            xpre28 = Anlyinmap[d-28]
-            xpre29 = Anlyinmap[d-29]
-            xpre30 = Anlyinmap[d-30]
-            xpre31 = Anlyinmap[d-31]
-            xpre32 = Anlyinmap[d-32]
-            xpre33 = Anlyinmap[d-33]
-            xpre34 = Anlyinmap[d-34]
-            xpre35 = Anlyinmap[d-35]
+            xpre1 = Anlymdymap[d-1]
+            xpre2 = Anlymdymap[d-2]
+            xpre3 = Anlymdymap[d-3]
+            xpre4 = Anlymdymap[d-4]
+            xpre5 = Anlymdymap[d-5]
+            xpre6 = Anlymdymap[d-6]
+            xpre7 = Anlymdymap[d-7]
+            xpre8 = Anlymdymap[d-8]
+            xpre9 = Anlymdymap[d-9]
+            xpre10 = Anlymdymap[d-10]
+            xpre11 = Anlymdymap[d-11]
+            xpre12 = Anlymdymap[d-12]
+            xpre13 = Anlymdymap[d-13]
+            xpre14 = Anlymdymap[d-14]
+            xpre15 = Anlymdymap[d-15]
+            xpre16 = Anlymdymap[d-16]
+            xpre17 = Anlymdymap[d-17]
+            xpre18 = Anlymdymap[d-18]
+            xpre19 = Anlymdymap[d-19]
+            xpre20 = Anlymdymap[d-20]
+            xpre21 = Anlymdymap[d-21]
+            xpre22 = Anlymdymap[d-22]
+            xpre23 = Anlymdymap[d-23]
+            xpre24 = Anlymdymap[d-24]
+            xpre25 = Anlymdymap[d-25]
+            xpre26 = Anlymdymap[d-26]
+            xpre27 = Anlymdymap[d-27]
+            xpre28 = Anlymdymap[d-28]
+            xpre29 = Anlymdymap[d-29]
+            xpre30 = Anlymdymap[d-30]
+            xpre31 = Anlymdymap[d-31]
+            xpre32 = Anlymdymap[d-32]
+            xpre33 = Anlymdymap[d-33]
+            xpre34 = Anlymdymap[d-34]
+            xpre35 = Anlymdymap[d-35]
 
             x1 = xpre1['均'][1]
             x2 = xpre2['均'][1]

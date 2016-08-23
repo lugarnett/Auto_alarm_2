@@ -12,11 +12,6 @@ import collections
 mpl.rcParams['font.sans-serif'] = ['SimHei']
 mpl.rcParams['axes.unicode_minus'] = False
 
-
-path_data_avg = "均值整理数据\\"
-path_rule_rst = "规则分析结果\\"
-path_view_rst = "图片结果\\"
-
 def gettime():
     return time.strftime("%Y%m%d_%H:%M",time.localtime(time.time()))
 def getdate(): 
@@ -160,10 +155,10 @@ def sub_view(submap, code):
         i = i + 1
     #endof 'for'
             
-    if os.path.exists(path_view_rst+code) <= 0:    #判断目标是否存在
-        os.mkdir(path_view_rst+code)
+    #if os.path.exists(gl.path_view_rst+code) <= 0:    #判断目标是否存在
+    #    os.mkdir(gl.path_view_rst+code)
     cnt_rule_pic = cnt_rule_pic + 1
-    fig.savefig(path_view_rst+code+'\\' +code+'_告警_%d_'%cnt_rule_pic+日期+'.png', dpi = 200)
+    fig.savefig(gl.path_view_rst+code+'_告警_%d_'%cnt_rule_pic+日期+'.png', dpi = 200)
 
     fig.clear()
     ax.clear()
@@ -182,11 +177,12 @@ def rules_group_find(tmpmap, d):
     
     flag = 0
     cnt = len(tmpmap[d][1]['分析结果'])
-    if cnt>=2:
-        flag = 1
+    #if cnt>=2:
+    #    flag = 1
+    #####################################################
     
     ####基本
-    if  'rule5' in tmpmap[d][1]['分析结果']:
+    '''if  'rule5' in tmpmap[d][1]['分析结果']:
         flag = 1 
     if  'rule9' in tmpmap[d][1]['分析结果']:
         flag = 1 
@@ -205,7 +201,7 @@ def rules_group_find(tmpmap, d):
     if  'rule18' in tmpmap[d][1]['分析结果']:
         flag = 1 
     if  'rule19' in tmpmap[d][1]['分析结果']:
-        flag = 1 
+        flag = 1 '''
 
     ####专用策略：空中加油        
     if  'rule50' in tmpmap[d][1]['分析结果']:
@@ -226,7 +222,11 @@ def rules_group_find(tmpmap, d):
         flag = 1   
     if  'rule82' in tmpmap[d][1]['分析结果']:
         flag = 1   
-    
+
+    ####必须
+    if  'rule121' in tmpmap[d][1]['分析结果']:
+        flag = 1 
+        
     return flag, cnt    
 #endof 'def'
 

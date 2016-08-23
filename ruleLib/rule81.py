@@ -3,8 +3,10 @@ import gl
 import collections
 #import os
 Anlyoutmap = collections.OrderedDict()  
-
+Anlymdymap = collections.OrderedDict()
 rulen = 'rule81'
+Anly_days = gl.Anly_days_81
+
 总跨度 = 30
 前段 = 10
 前段 = 20
@@ -22,7 +24,7 @@ rulen = 'rule81'
        （20-25天考虑级差斜率K线）
 #小鸭头：（范围为20天）最高点前5天有涨停，取5天均量，再10天内有缩量
 '''
-def find_rule_81(d, Anlyinmap):
+def find_rule_81(d, Anlymdymap):
     global Anlyoutmap
     global 缩量比例, 缩量day
 
@@ -41,8 +43,8 @@ def find_rule_81(d, Anlyinmap):
     '''(1)前10天中找最高点：-29~-20''' 
     最高值 = 0
     for i in range(起始day, 起始day+10):
-        if Anlyinmap[i]['基K'][1] > 最高值:
-            最高值 =  Anlyinmap[i]['基K'][1]
+        if Anlymdymap[i]['基K'][1] > 最高值:
+            最高值 =  Anlymdymap[i]['基K'][1]
             最高day = i
         #endof 'if'
     #endof 'for'
@@ -52,8 +54,8 @@ def find_rule_81(d, Anlyinmap):
     '''(2)起始day~最高day有涨停（第一个涨停，左边开始找）''' 
     for i in range(起始day,最高day+1):
         f_zt = 0
-        if Anlyinmap[i]['基K'][3] >= round(1.1 * Anlyinmap[i-1]['基K'][3], 2):
-            涨停值 =  Anlyinmap[i]['基K'][3]
+        if Anlymdymap[i]['基K'][3] >= round(1.1 * Anlymdymap[i-1]['基K'][3], 2):
+            涨停值 =  Anlymdymap[i]['基K'][3]
             涨停day = i
             f_zt = 1
             break
@@ -73,8 +75,8 @@ def find_rule_81(d, Anlyinmap):
     j = 0
     for i in range(涨停day+1, min(涨停day+6,最高day+1)):
         #一字涨停量小，剔除
-        #if not (Anlyinmap[i]['基K'][0] == Anlyinmap[i]['基K'][1]): #开！=高
-        sum_v = sum_v + Anlyinmap[i]['V'][0]
+        #if not (Anlymdymap[i]['基K'][0] == Anlymdymap[i]['基K'][1]): #开！=高
+        sum_v = sum_v + Anlymdymap[i]['V'][0]
         j = j + 1
         #endof 'if'
     #endof 'for'
@@ -84,15 +86,15 @@ def find_rule_81(d, Anlyinmap):
     '''(5)最高day+1 ~ 最高day+21(结束day+1)：20天内找缩量均值(2天平均)（非涨跌停）'''
     f_sl = 0
     for i in range(最高day+1,min(结束day,最高day+20)):
-        缩量均值 = 0.5 * (Anlyinmap[i]['V'][0] + Anlyinmap[i+1]['V'][0])
+        缩量均值 = 0.5 * (Anlymdymap[i]['V'][0] + Anlymdymap[i+1]['V'][0])
         if 缩量均值 > 放量均值*1.5: #？？？？？？？？？？？？？？？？？？？？？？？？？
             f_sl = 0
             break
         elif 缩量均值 < 放量均值*缩量比例:
-            if Anlyinmap[i]['基K'][3] < round(1.1*Anlyinmap[i-1]['基K'][3],2) and \
-            Anlyinmap[i]['基K'][3] > round(0.9*Anlyinmap[i-1]['基K'][3],2) and \
-            Anlyinmap[i+1]['基K'][3] < round(1.1*Anlyinmap[i]['基K'][3],2) and \
-            Anlyinmap[i+1]['基K'][3] > round(0.9*Anlyinmap[i]['基K'][3],2) :
+            if Anlymdymap[i]['基K'][3] < round(1.1*Anlymdymap[i-1]['基K'][3],2) and \
+            Anlymdymap[i]['基K'][3] > round(0.9*Anlymdymap[i-1]['基K'][3],2) and \
+            Anlymdymap[i+1]['基K'][3] < round(1.1*Anlymdymap[i]['基K'][3],2) and \
+            Anlymdymap[i+1]['基K'][3] > round(0.9*Anlymdymap[i]['基K'][3],2) :
                 f_sl = 1
                 缩量day = i+1
             #endof 'if'
@@ -105,7 +107,7 @@ def find_rule_81(d, Anlyinmap):
     '''(6)涨停day+1~缩量day+1：close(low)\high值在箱体中'''#(low)
     f_return = 0  
     for i in range(涨停day+1,缩量day+1):
-        if Anlyinmap[i]['基K'][3] < 涨停值*0.99 or Anlyinmap[i]['基K'][1] > 最高值:
+        if Anlymdymap[i]['基K'][3] < 涨停值*0.99 or Anlymdymap[i]['基K'][1] > 最高值:
             f_return = 1
             break
     #endof 'if'
@@ -120,21 +122,31 @@ def find_rule_81(d, Anlyinmap):
     
 
 def rule_81(code, Anlyinmap):
-    global rulen, Anlyoutmap, 缩量day
-    
+    global Anlyoutmap,Anlymdymap,rulen,Anly_days, 缩量day
+
+    max_n = max(Anlyinmap.keys())
+    days = Anly_days + gl.Anly_days_add
+    #天数不够
+    if max_n+1 < days: 
+        return
+    #end if
+    for i in range(days):
+        Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
+    #end for
+        
     cnt = 0
     Anlyoutmap.clear()
         
     #遍历
-    for (d,x) in Anlyinmap.items():
+    for (d,x) in Anlymdymap.items():
         if d <= 30:
             continue
         else:
-            if 1 == find_rule_81(d, Anlyinmap):
+            if 1 == find_rule_81(d, Anlymdymap):
                 '''输出'''
-                Anlyoutmap[Anlyinmap[缩量day]['date']] = [rulen, '旧法大鸭头']
+                Anlyoutmap[Anlymdymap[缩量day]['date']] = [rulen, '旧法大鸭头']
                 for i in range(1,3):
-                    Anlyoutmap[Anlyinmap[缩量day-i]['date']] = ['rule0', '++']
+                    Anlyoutmap[Anlymdymap[缩量day-i]['date']] = ['rule0', '++']
                 cnt = cnt + 1
             #endof 'if'
          #endof 'if'

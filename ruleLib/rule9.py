@@ -3,25 +3,36 @@ import gl
 import collections
 
 Anlyoutmap = collections.OrderedDict()  
-
+Anlymdymap = collections.OrderedDict()  
 rulen = 'rule9'
+Anly_days = gl.Anly_days_9
 
 '''连天价跌时无量（最好是十字星）'''
 def rule_9(code, Anlyinmap):
-    global rulen
+    global Anlyoutmap,Anlymdymap,rulen,Anly_days
     
+    max_n = max(Anlyinmap.keys())
+    days = Anly_days + gl.Anly_days_add
+    #天数不够
+    if max_n+1 < days: 
+        return
+    #end if
+    for i in range(days):
+        Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
+    #end for
+        
     振幅 = 1.08
     缩量度 = 0.3
     cnt = 0
     Anlyoutmap.clear()
 
     #遍历
-    for (d,x) in Anlyinmap.items():
-        if d <= 2:
+    for (d,x) in Anlymdymap.items():
+        if d <= 1:
             continue
         else:
-            xpre2 = Anlyinmap[d-2]
-            xpre1 = Anlyinmap[d-1]
+            xpre2 = Anlymdymap[d-2]
+            xpre1 = Anlymdymap[d-1]
  
             开pre2 = xpre2['基K'][0]
             收pre2 = xpre2['基K'][3]

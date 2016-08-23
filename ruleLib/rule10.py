@@ -3,19 +3,32 @@ import gl
 import collections
 
 Anlyoutmap = collections.OrderedDict()  
+Anlymdymap = collections.OrderedDict()  
 rulen = 'rule10'
+Anly_days = gl.Anly_days_10
 
 '''跳空1%涨停'''
 def rule_10(code, Anlyinmap):
+    global Anlyoutmap,Anlymdymap,rulen,Anly_days
 
+    max_n = max(Anlyinmap.keys())
+    days = Anly_days + gl.Anly_days_add
+    #天数不够
+    if max_n+1 < days: 
+        return
+    #end if
+    for i in range(days):
+        Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
+    #end for
+        
     跳空度 = 0.01
     涨停度 = 1.099
     收 = 1000
     开 = 1000
     cnt = 0
     Anlyoutmap.clear()
-    for (d,x) in Anlyinmap.items():
-        if d <= 1:
+    for (d,x) in Anlymdymap.items():
+        if d <= -1:
             continue
         else:
             收pre = 收

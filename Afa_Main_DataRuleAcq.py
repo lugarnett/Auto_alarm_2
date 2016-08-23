@@ -34,12 +34,14 @@ from ruleLib.rule80 import rule_80
 from ruleLib.rule81 import rule_81
 from ruleLib.rule82 import rule_82
 
+from ruleLib.rule121 import rule_121
+
 #from findLib.find1 import find_1
 
-from dbLib.accIn_now import accIn_today,accDel_today
+import dbLib.accIn_now
 #from dbLib.accIn_now import accIn_today
 
-from dbLib.accLib import Access_Model
+import dbLib.accLib
 
 import collections
 import os
@@ -51,7 +53,7 @@ rules = []
 
 List_tbl = []
 dataUrl = os.getcwd()+"\\dbLib\\data.mdb"
-data = Access_Model(dataUrl)
+data = dbLib.accLib.Access_Model(dataUrl)
 
 def gettime():
     return time.strftime("%Y%m%d_%H:%M",time.localtime(time.time()))
@@ -100,16 +102,17 @@ def acc_tbl_read(code):
         
         '''根据分析数据条数，算出起止date'''
         enddate = datetime.datetime.now()
-        startdate = enddate + datetime.timedelta(days = - gl.Analyse_days)  #减n天
+        startdate = enddate + datetime.timedelta(days = - gl.Analyse_days_date)  #减n天
         startdate = startdate.strftime("%Y-%m-%d")
         enddate = enddate.strftime("%Y-%m-%d")
-        #print(startdate)
+        #print(startdate)##########
+        #print(enddate)##########
         
         if row > 0:
             sql = "Select * FROM %s WHERE date BETWEEN #%s# and #%s# ORDER BY date"%(code,startdate,enddate) 
             dataRecordSet = data.db_query(sql)
             #Anlyinmap的key为i++序号
-            i = 1
+            i = 0
             for item in dataRecordSet:
                 a = eval("("+item+")")    #eval解析JSON数据
                 '''
@@ -142,7 +145,7 @@ def acc_tbl_read(code):
                 
                 i = i + 1
                 ##分析天数够时，停止读取数据
-                if i >= gl.Analyse_days:
+                if i >= gl.Analyse_days_date:
                     break
                 #end if
             #end for
@@ -182,26 +185,30 @@ def afa_ruleget(code):
 
 '''2.3)进行数据分析'''
 def afa_ruleanlys(code):
+    
+    #必须
+    rule_121(code, Anlyinmap) 
+    
     #基础策略
     if 1:
-        '''rule_1(code, Anlyinmap)
+        rule_1(code, Anlyinmap)
         rule_2(code, Anlyinmap)
         rule_3(code, Anlyinmap)
-        #rule_4(code, Anlyinmap)
+        rule_4(code, Anlyinmap)####
         rule_5(code, Anlyinmap)
-        #rule_6(code, Anlyinmap)
+        rule_6(code, Anlyinmap)####
         rule_7(code, Anlyinmap)
         rule_8(code, Anlyinmap)
         rule_9(code, Anlyinmap)
         rule_10(code, Anlyinmap)
-        #rule_11(code, Anlyinmap)
+        rule_11(code, Anlyinmap)###3
         rule_12(code, Anlyinmap)
         rule_13(code, Anlyinmap)
         rule_14(code, Anlyinmap)
         rule_15(code, Anlyinmap)
         rule_16(code, Anlyinmap)
         rule_17(code, Anlyinmap)
-        rule_18(code, Anlyinmap)'''
+        rule_18(code, Anlyinmap)
         rule_19(code, Anlyinmap)
     #end if
 
@@ -220,12 +227,12 @@ def afa_ruleanlys(code):
     #end if
         
     #旧法大鸭头
-    if 0:
+    if 1:
         rule_81(code, Anlyinmap) #旧法大鸭头(31天)
     #end if
     
     #通用鸭头(时间窗口>=6天)
-    if 0:
+    if 1:
         rule_82(code, Anlyinmap, 30)
         rule_82(code, Anlyinmap, 20)
         rule_82(code, Anlyinmap, 10)
@@ -250,7 +257,7 @@ def afa_proc_analyse():
     #1)获取表名的list（不是codes列表，有可能数据不全）  
     get_List_tbl()
     
-    ############    List_tbl = ['600068']################################
+    ############ List_tbl = ['000005']################################
     #2遍历list，读取每个tbl的数据，并分析
     sumn = len(List_tbl)
     n = 0
@@ -270,20 +277,30 @@ def afa_proc_analyse():
     #end for
 #endof 'mdl'
 
+'''
 #main: 获取当日数据，分析， 清空当日数据
 print("\n当前运行模块 -> accIn_today...\n")
-accIn_today()
+#dbLib.accIn_now.accIn_today()
+#time.sleep(10)
+'''
 
 print("\n当前运行模块 -> afa_proc_analyse...\n")
 t0 = time.time()
 afa_proc_analyse()
 t1 = time.time()
-print("耗时约%.2f分"%((t1-t0)/60, ))
+print("\nrules分析已完成，耗时约%.2f分\n"%((t1-t0)/60, ))
+time.sleep(10)
 
+'''
 print("\n当前运行模块 -> accDel_today...\n")
-accDel_today()
-
-
+dbLib.accIn_now.accDel_today()
+'''
+'''
+dbLib.accIn_now.accDel_days('2016-08-18')
+dbLib.accIn_now.accDel_days('2016-08-19')
+dbLib.accIn_now.accDel_days('2016-08-20')
+dbLib.accIn_now.accDel_days('2016-08-21')
+'''
 
 
 

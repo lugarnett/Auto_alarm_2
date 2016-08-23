@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import gl
 import collections
-#import os
+
 Anlyoutmap = collections.OrderedDict()  
+Anlymdymap = collections.OrderedDict()
 
 #时间窗口跨度 = 20
 rulen = 'rule82'
+#Anly_days = 时间窗口
 
 '''
 # 通用型鸭头(时间窗口>=6天)
@@ -27,7 +29,7 @@ rulen = 'rule82'
 缩量均值 = 0
 缩量比例 = 0.6
     
-def find_rule_82(d, Anlyinmap, 时间窗口跨度):
+def find_rule_82(d, Anlymdymap, 时间窗口跨度):
     global Anlyoutmap
     global 起始day,涨停day,最高day,缩量day,结束day,最高值,涨停值,放量均值,缩量均值,缩量比例
 
@@ -36,8 +38,8 @@ def find_rule_82(d, Anlyinmap, 时间窗口跨度):
     '''(1)20天找最高点：-19~0''' 
     最高值 = 0
     for i in range(起始day, 结束day+1):
-        if Anlyinmap[i]['基K'][1] > 最高值:
-            最高值 =  Anlyinmap[i]['基K'][1]
+        if Anlymdymap[i]['基K'][1] > 最高值:
+            最高值 =  Anlymdymap[i]['基K'][1]
             最高day = i
         #endof 'if'
     #endof 'for'
@@ -53,8 +55,8 @@ def find_rule_82(d, Anlyinmap, 时间窗口跨度):
     '''(2)最高day-7(起始day)~最高day有涨停（第一个涨停，左边开始找）（涨停day!=最高day）''' 
     for i in range(max(起始day, 最高day-7),最高day):
         f_zt = 0
-        if Anlyinmap[i]['基K'][3] >= round(1.1 * Anlyinmap[i-1]['基K'][3], 2):
-            涨停值 =  Anlyinmap[i]['基K'][3]
+        if Anlymdymap[i]['基K'][3] >= round(1.1 * Anlymdymap[i-1]['基K'][3], 2):
+            涨停值 =  Anlymdymap[i]['基K'][3]
             涨停day = i
             f_zt = 1
             break
@@ -62,10 +64,10 @@ def find_rule_82(d, Anlyinmap, 时间窗口跨度):
     #endof 'for'
     if f_zt == 0:   return 0    #无涨停
     '''4线多头排列'''
-    均5 = Anlyinmap[i]['均'][0]
-    均10 = Anlyinmap[i]['均'][1]
-    均20 = Anlyinmap[i]['均'][2]
-    均30 = Anlyinmap[i]['均'][3]
+    均5 = Anlymdymap[i]['均'][0]
+    均10 = Anlymdymap[i]['均'][1]
+    均20 = Anlymdymap[i]['均'][2]
+    均30 = Anlymdymap[i]['均'][3]
     if 均5 < 均10 or 均10 < 均20 or 均20 < 均30:  return
     #print('2:')
     
@@ -78,8 +80,8 @@ def find_rule_82(d, Anlyinmap, 时间窗口跨度):
     j = 0
     for i in range(涨停day+1, min(涨停day+5,最高day)+1):
         #一字涨停量小，剔除
-        #if not (Anlyinmap[i]['基K'][0] == Anlyinmap[i]['基K'][1]): #开！=高
-        sum_v = sum_v + Anlyinmap[i]['V'][0]
+        #if not (Anlymdymap[i]['基K'][0] == Anlymdymap[i]['基K'][1]): #开！=高
+        sum_v = sum_v + Anlymdymap[i]['V'][0]
         j = j + 1
         #endof 'if'
     #endof 'for'
@@ -91,15 +93,15 @@ def find_rule_82(d, Anlyinmap, 时间窗口跨度):
     '''(5.2)最高day+1 ~ 结束day+1：找缩量均值(2天平均)（非涨跌停）'''
     f_sl = 0
     for i in range(最高day+3, 结束day):#取2天的数，故天数少1天
-        缩量均值 = 0.5 * (Anlyinmap[i]['V'][0] + Anlyinmap[i+1]['V'][0])
+        缩量均值 = 0.5 * (Anlymdymap[i]['V'][0] + Anlymdymap[i+1]['V'][0])
         if 缩量均值 > 放量均值*1.5: #超最大量1.5倍，失败？？？？？？？？？？？？？？？？？？？？？？？？？
             f_sl = 0
             break
         elif 缩量均值 < 放量均值*缩量比例:
-            if Anlyinmap[i]['基K'][3] < round(1.1*Anlyinmap[i-1]['基K'][3],2) and \
-            Anlyinmap[i]['基K'][3] > round(0.9*Anlyinmap[i-1]['基K'][3],2) and \
-            Anlyinmap[i+1]['基K'][3] < round(1.1*Anlyinmap[i]['基K'][3],2) and \
-            Anlyinmap[i+1]['基K'][3] > round(0.9*Anlyinmap[i]['基K'][3],2) :
+            if Anlymdymap[i]['基K'][3] < round(1.1*Anlymdymap[i-1]['基K'][3],2) and \
+            Anlymdymap[i]['基K'][3] > round(0.9*Anlymdymap[i-1]['基K'][3],2) and \
+            Anlymdymap[i+1]['基K'][3] < round(1.1*Anlymdymap[i]['基K'][3],2) and \
+            Anlymdymap[i+1]['基K'][3] > round(0.9*Anlymdymap[i]['基K'][3],2) :
                 f_sl = 1
                 缩量day = i+1
             #endof 'if'
@@ -112,7 +114,7 @@ def find_rule_82(d, Anlyinmap, 时间窗口跨度):
     '''(6)涨停day+1~缩量day+1：low(close)\high值在箱体中'''#(low)
     f_return = 0  
     for i in range(涨停day+1,缩量day+1):
-        if Anlyinmap[i]['基K'][2] < 涨停值*0.98 or Anlyinmap[i]['基K'][1] > 最高值:
+        if Anlymdymap[i]['基K'][2] < 涨停值*0.98 or Anlymdymap[i]['基K'][1] > 最高值:
             f_return = 1
             break
         #endof 'if'
@@ -128,31 +130,43 @@ def find_rule_82(d, Anlyinmap, 时间窗口跨度):
 
 '''时间窗口 >= 6'''
 def rule_82(code, Anlyinmap, 时间窗口):
-    global rulen, Anlyoutmap
-    global 起始day,涨停day,最高day,缩量day,结束day,最高值,涨停值,放量均值,缩量均值,缩量比例
-    
+    global 起始day,涨停day,最高day,缩量day,结束day,最高值,涨停值,放量均值,缩量均值,缩量比例    
+    global Anlyoutmap,Anlymdymap,rulen
+    Anly_days = 时间窗口
+
+    max_n = max(Anlyinmap.keys())
+    days = Anly_days + gl.Anly_days_add
+    #天数不够
+    if max_n+1 < days: 
+        return
+    #end if
+    for i in range(days):
+        Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
+    #end for
+            
     cnt = 0
     Anlyoutmap.clear()
         
     #遍历
-    for (d,x) in Anlyinmap.items():
-        if d <= 时间窗口:
+    for (d,x) in Anlymdymap.items():
+        if d <= 时间窗口 - 1:
             continue
         else:
-            if 1 == find_rule_82(d, Anlyinmap, 时间窗口):
+            '''实际是21天进入计算模块（第一天用于算涨停）'''
+            if 1 == find_rule_82(d, Anlymdymap, 时间窗口):
                 
                 '''输出'''
-                Anlyoutmap[Anlyinmap[涨停day]['date']] = ['rule0', '++']
+                Anlyoutmap[Anlymdymap[涨停day]['date']] = ['rule0', '++']
                 
                 if 时间窗口 > 20:
-                    Anlyoutmap[Anlyinmap[缩量day]['date']] = [rulen+'%d'%时间窗口, '大斜口鸭头']
+                    Anlyoutmap[Anlymdymap[缩量day]['date']] = [rulen+'%d'%时间窗口, '大斜口鸭头']
                 elif 时间窗口 > 10:
-                    Anlyoutmap[Anlyinmap[缩量day]['date']] = [rulen+'%d'%时间窗口, '中斜口鸭头']
+                    Anlyoutmap[Anlymdymap[缩量day]['date']] = [rulen+'%d'%时间窗口, '中斜口鸭头']
                 else:
-                    Anlyoutmap[Anlyinmap[缩量day]['date']] = [rulen+'%d'%时间窗口, '小斜口鸭头']
+                    Anlyoutmap[Anlymdymap[缩量day]['date']] = [rulen+'%d'%时间窗口, '小斜口鸭头']
                     
                 for i in range(1,2):
-                    Anlyoutmap[Anlyinmap[缩量day-i]['date']] = ['rule0', '++']
+                    Anlyoutmap[Anlymdymap[缩量day-i]['date']] = ['rule0', '++']
                     
                 cnt = cnt + 1
             #endof 'if'

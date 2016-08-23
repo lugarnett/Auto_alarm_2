@@ -4,12 +4,24 @@ import collections
 #import os
 
 Anlyoutmap = collections.OrderedDict()  
+Anlymdymap = collections.OrderedDict()
 rulen = 'rule15'
+Anly_days = gl.Anly_days_15
 
 '''跳空巨量中阴不回，第二天长阳（最好高开）'''
 def rule_15(code, Anlyinmap):
-    global Anlyoutmap
-    
+    global Anlyoutmap,Anlymdymap,rulen,Anly_days
+
+    max_n = max(Anlyinmap.keys())
+    days = Anly_days + gl.Anly_days_add
+    #天数不够
+    if max_n+1 < days: 
+        return
+    #end if
+    for i in range(days):
+        Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
+    #end for
+            
     巨量度 = 1.3
     中阴度 = 0.97
     长阳度 = 1.07
@@ -17,12 +29,12 @@ def rule_15(code, Anlyinmap):
     
     cnt = 0
     Anlyoutmap.clear()
-    for (d,x) in Anlyinmap.items():
-        if d <= 2:
+    for (d,x) in Anlymdymap.items():
+        if d <= 1:
             continue
         else:
-            xpre2 = Anlyinmap[d-2]
-            xpre1 = Anlyinmap[d-1]
+            xpre2 = Anlymdymap[d-2]
+            xpre1 = Anlymdymap[d-1]
 
             高pre2 = xpre2['基K'][1]
             量pre2 = xpre2['V'][0]

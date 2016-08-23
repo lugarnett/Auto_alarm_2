@@ -2,10 +2,23 @@
 import gl
 import collections
 
-Anlyoutmap = collections.OrderedDict()  
+Anlyoutmap = collections.OrderedDict()
+Anlymdymap = collections.OrderedDict()    
+Anly_days = gl.Anly_days_2
 
 '''低开长阳（板寸）'''
 def rule_2(code, Anlyinmap):
+    
+    max_n = max(Anlyinmap.keys())
+    days = Anly_days + gl.Anly_days_add
+    #天数不够
+    if max_n+1 < days: 
+        return
+    #end if
+    for i in range(days):
+        Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
+    #end for
+        
     收pre = 0
     开 = 0
     收 = 0
@@ -15,8 +28,8 @@ def rule_2(code, Anlyinmap):
     板寸度 = 1.005
     cnt2 = 0
     Anlyoutmap.clear()
-    for (d,x) in Anlyinmap.items():
-        if d <= 1:
+    for (d,x) in Anlymdymap.items():
+        if d <= -1:
             continue
         else:
             收pre = min(开, 收)

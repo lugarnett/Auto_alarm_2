@@ -3,9 +3,23 @@ import gl
 import collections
 
 Anlyoutmap = collections.OrderedDict()  
+Anlymdymap = collections.OrderedDict()  
+Anly_days = gl.Anly_days_4
 
 '''Q下影40长阳40'''
 def rule_4(code, Anlyinmap):
+    global Anlyoutmap,Anlymdymap,Anly_days
+    
+    max_n = max(Anlyinmap.keys())
+    days = Anly_days + gl.Anly_days_add
+    #天数不够
+    if max_n+1 < days: 
+        return
+    #end if
+    for i in range(days):
+        Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
+    #end for
+        
     收pre = 0
     开 = 0
     收 = 0
@@ -14,13 +28,13 @@ def rule_4(code, Anlyinmap):
     长阳度 = 0.04
     cnt = 0
     Anlyoutmap.clear()
-    for (d,x) in Anlyinmap.items():
-        if d <= 1:
+    for (d,x) in Anlymdymap.items():
+        if d <= -1:
             continue
         else:
             收pre = 收
             开 = x['基K'][0]
-            高 = x['基K'][1]
+            #高 = x['基K'][1]
             低 = x['基K'][2]
             收 = x['基K'][3]
             if (收-min(收pre,开)) >= 开*长阳度 and 收 > 开:

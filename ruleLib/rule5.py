@@ -3,23 +3,32 @@ import gl
 import collections
 
 Anlyoutmap = collections.OrderedDict()  
+Anlymdymap = collections.OrderedDict()  
+Anly_days = gl.Anly_days_5
 
 '''E长下影5'''
 def rule_5(code, Anlyinmap):
-    收pre = 0
-    开 = 0
-    收 = 0
+    global Anlyoutmap,Anlymdymap,Anly_days
+    
+    max_n = max(Anlyinmap.keys())
+    days = Anly_days + gl.Anly_days_add
+    #天数不够
+    if max_n+1 < days: 
+        return
+    #end if
+    for i in range(days):
+        Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
+    #end for
     
     下影度 = 0.05
     cnt = 0
     Anlyoutmap.clear()
-    for (d,x) in Anlyinmap.items():
-        if d <= 1:
+    for (d,x) in Anlymdymap.items():
+        if d <= -1:
             continue
         else:
-            收pre = min(开, 收)
             开 = x['基K'][0]
-            高 = x['基K'][1]
+            #高 = x['基K'][1]
             低 = x['基K'][2]
             收 = x['基K'][3]
             if  (min(开,收) - 低) > 开*下影度:

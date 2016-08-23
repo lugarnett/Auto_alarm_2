@@ -4,24 +4,36 @@ import collections
 #import os
 
 Anlyoutmap = collections.OrderedDict()  
+Anlymdymap = collections.OrderedDict()
 rulen = 'rule51'
+Anly_days = gl.Anly_days_51
 
 '''小空中加油（六天不连续三涨停）'''
 def rule_51(code, Anlyinmap):
-    global Anlyoutmap
-    
+    global Anlyoutmap,Anlymdymap,rulen,Anly_days
+
+    max_n = max(Anlyinmap.keys())
+    days = Anly_days + gl.Anly_days_add
+    #天数不够
+    if max_n+1 < days: 
+        return
+    #end if
+    for i in range(days):
+        Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
+    #end for
+        
     cnt = 0
     Anlyoutmap.clear()
-    for (d,x) in Anlyinmap.items():
-        if d <= 6:
+    for (d,x) in Anlymdymap.items():
+        if d <= 5:
             continue
         else:
-            xpre6 = Anlyinmap[d-6]
-            xpre5 = Anlyinmap[d-5]
-            xpre4 = Anlyinmap[d-4]
-            xpre3 = Anlyinmap[d-3]
-            xpre2 = Anlyinmap[d-2]
-            xpre1 = Anlyinmap[d-1]
+            xpre6 = Anlymdymap[d-6]
+            xpre5 = Anlymdymap[d-5]
+            xpre4 = Anlymdymap[d-4]
+            xpre3 = Anlymdymap[d-3]
+            xpre2 = Anlymdymap[d-2]
+            xpre1 = Anlymdymap[d-1]
  
             收pre6 = xpre6['基K'][3]
             收pre5 = xpre5['基K'][3]
@@ -33,16 +45,16 @@ def rule_51(code, Anlyinmap):
             收 = x['基K'][3]
             
             if (收 < 1.098*收pre1 \
-            and 收pre1 >= round(1.1*收pre2, 2) \
-            and 收pre2 >= round(1.1*收pre3, 2) \
+            and 收pre1 >= round(1.098*收pre2, 2) \
+            and 收pre2 >= round(1.098*收pre3, 2) \
             and 收pre3 < 1.098*收pre4 \
-            and 收pre4 >= round(1.1*收pre5, 2) \
+            and 收pre4 >= round(1.098*收pre5, 2) \
             and 收pre5 < 1.098*收pre6) \
             or (收 < 1.098*收pre1 \
-            and 收pre1 >= round(1.1*收pre2, 2) \
+            and 收pre1 >= round(1.098*收pre2, 2) \
             and 收pre2 < 1.098*收pre3 \
-            and 收pre3 >= round(1.1*收pre4, 2) \
-            and 收pre4 >= round(1.1*收pre5, 2) \
+            and 收pre3 >= round(1.098*收pre4, 2) \
+            and 收pre4 >= round(1.098*收pre5, 2) \
             and 收pre5 < 1.098*收pre6): 
                 
                 Anlyoutmap[xpre4['date']] = ['rule0', '++']

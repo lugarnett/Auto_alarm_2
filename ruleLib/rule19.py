@@ -2,19 +2,32 @@
 import gl
 import collections
 
-Anlyoutmap = collections.OrderedDict()  
+Anlyoutmap = collections.OrderedDict() 
+Anlymdymap = collections.OrderedDict()  
 rulen = 'rule19'
+Anly_days = gl.Anly_days_19
 
 '''日内短体上下影2.5%洗盘(1.5%：+—2.5%)'''
 def rule_19(code, Anlyinmap):
-    
+    global Anlyoutmap,Anlymdymap,rulen,Anly_days
+
+    max_n = max(Anlyinmap.keys())
+    days = Anly_days + gl.Anly_days_add
+    #天数不够
+    if max_n+1 < days: 
+        return
+    #end if
+    for i in range(days):
+        Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
+    #end for
+        
     短体度 = 0.015
     上下影度0 = 1.025
-    
+
     cnt = 0
     Anlyoutmap.clear()
-    for (d,x) in Anlyinmap.items():
-        if d <= 0:
+    for (d,x) in Anlymdymap.items():
+        if d <= -1:
             continue
         else:
             开 = x['基K'][0]

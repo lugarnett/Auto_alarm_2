@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
+#import sys
 #sys.path.append("\\")
 #import gl
 import tushare as ts
 import datetime
 import time
-import collections
-import json
-import win32com.client
-from accLib import Access_Model
-from accIn_repair import tbl_repair
+#import collections
+#import json
+#import win32com.client
+from . import accLib
+from . import accIn_repair
 
 
 #默认的tushare取数起始日期
@@ -22,8 +22,8 @@ maxID = 0
 CodesNet = None
 List_code = []
 List_tbl = []
-dataUrl = os.getcwd()+"\\data.mdb"
-data = Access_Model(dataUrl)
+dataUrl = os.getcwd()+"\\dbLib\\data.mdb"
+data = accLib.Access_Model(dataUrl)
 
 
 '''1)获取List_code'''
@@ -380,6 +380,7 @@ def acc_make2():
     #2)存在的表
     get_List_tbl()
 
+    ############ List_code = ['600149']################################
     #3)比较，并读取数据，然后建表存储或追加存储
     n = 0
     n_new = 0
@@ -394,14 +395,9 @@ def acc_make2():
         ret = tbl_fill(code)
         #查找均值为0的，计算并存入
         if ret == 1:
-            tbl_repair(code, 'each_tbl')
+            accIn_repair.tbl_repair(code, 'each_tbl')
     #end for 
     print("表fill完成，共'%d'，新增'%d'"%(sumn, n_new))
 #endof 'mdl'
 
-t0 = time.time()
-print("\n当前运行模块 -> acc_make2...\n")
-acc_make2()
-t1 = time.time()
-print("耗时约%.2f分"%((t1-t0)/60))
 

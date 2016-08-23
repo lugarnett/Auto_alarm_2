@@ -1,17 +1,28 @@
 # -*- coding: utf-8 -*-
 import gl
-
 import collections
-import os
 
 '''S穿任意4线'''
 Anlyoutmap = collections.OrderedDict()  
-
+Anlymdymap = collections.OrderedDict()  
+Anly_days = gl.Anly_days_6
 
 def rule_6(code, Anlyinmap):
+    global Anlyoutmap,Anlymdymap,Anly_days
+    
+    max_n = max(Anlyinmap.keys())
+    days = Anly_days + gl.Anly_days_add
+    #天数不够
+    if max_n+1 < days: 
+        return
+    #end if
+    for i in range(days):
+        Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
+    #end for
+        
     cnt1 = 0
     Anlyoutmap.clear()
-    for (d,x) in Anlyinmap.items():
+    for (d,x) in Anlymdymap.items():
         开 = x['基K'][0]
         高 = x['基K'][1]
         低 = x['基K'][2]
