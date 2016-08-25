@@ -2,7 +2,6 @@
 import gl
 
 import time
-import os
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -176,57 +175,80 @@ def sub_view(submap, code):
 def rules_group_find(tmpmap, d):
     
     flag = 0
+    #####################################################分类整理
+    #####################################################形态3个一般 flag=1
     cnt = len(tmpmap[d][1]['分析结果'])
-    #if cnt>=2:
-    #    flag = 1
-    #####################################################
-    
-    ####基本
-    '''if  'rule5' in tmpmap[d][1]['分析结果']:
-        flag = 1 
-    if  'rule9' in tmpmap[d][1]['分析结果']:
-        flag = 1 
-    if  'rule12' in tmpmap[d][1]['分析结果']:
-        flag = 1 
-    if  'rule13' in tmpmap[d][1]['分析结果']:
-        flag = 1 
-    if  'rule14' in tmpmap[d][1]['分析结果']:
-        flag = 1 
-    if  'rule15' in tmpmap[d][1]['分析结果']:
-        flag = 1     
-    if  'rule16' in tmpmap[d][1]['分析结果']:
-        flag = 1 
-    if  'rule17' in tmpmap[d][1]['分析结果']:
-        flag = 1 
-    if  'rule18' in tmpmap[d][1]['分析结果']:
-        flag = 1 
-    if  'rule19' in tmpmap[d][1]['分析结果']:
-        flag = 1 '''
-
+    if cnt>=3:
+        flag = 1
+    #####################################################大形态重要 flag=8
     ####专用策略：空中加油        
     if  'rule50' in tmpmap[d][1]['分析结果']:
-        flag = 1    
+        flag = 8   
     if  'rule51' in tmpmap[d][1]['分析结果']:
-        flag = 1   
+        flag = 8       
     if  'rule52' in tmpmap[d][1]['分析结果']:
-        flag = 1   
+        flag = 8     
     if  'rule53' in tmpmap[d][1]['分析结果']:
-        flag = 1   
+        flag = 8   
     if  'rule54' in tmpmap[d][1]['分析结果']:
-        flag = 1   
-        
-    ####组合        
+        flag = 8   
+    
+    ####组合策略        
     if  'rule80' in tmpmap[d][1]['分析结果']:
-        flag = 1    
+        flag = 8    
     if  'rule81' in tmpmap[d][1]['分析结果']:
-        flag = 1   
+        flag = 8   
     if  'rule82' in tmpmap[d][1]['分析结果']:
-        flag = 1   
+        flag = 8   
 
-    ####必须
-    if  'rule121' in tmpmap[d][1]['分析结果']:
-        flag = 1 
+    #####################################################大形态一般 flag=7
+    
+    #####################################################基本形态重要 flag=6
+    
+    #####################################################基本形态一般 flag=5
+    ####基本（单个）
+    if  'rule2' in tmpmap[d][1]['分析结果']:
+        flag = 5
+    if  'rule3' in tmpmap[d][1]['分析结果']:
+        flag = 5 
+    if  'rule5' in tmpmap[d][1]['分析结果']:
+        flag = 5
+    if  'rule7' in tmpmap[d][1]['分析结果']:
+        flag = 5
+    if  'rule8' in tmpmap[d][1]['分析结果']:
+        flag = 5
+    if  'rule12' in tmpmap[d][1]['分析结果']:
+        flag = 5
+    if  'rule13' in tmpmap[d][1]['分析结果']:
+        flag = 5
+    if  'rule14' in tmpmap[d][1]['分析结果']:
+        flag = 5
+    if  'rule15' in tmpmap[d][1]['分析结果']:
+        flag = 5
+    if  'rule17' in tmpmap[d][1]['分析结果']:
+        flag = 5
         
+    ####基本 + 当日涨停（重要条件）
+    if  'rule121' in tmpmap[d][1]['分析结果']:
+        if  'rule1' in tmpmap[d][1]['分析结果']:
+            flag = 5
+        if  'rule4' in tmpmap[d][1]['分析结果']:
+            flag = 5
+        if  'rule6' in tmpmap[d][1]['分析结果']:
+            flag = 5
+        if  'rule9' in tmpmap[d][1]['分析结果']:
+            flag = 5
+        if  'rule11' in tmpmap[d][1]['分析结果']:
+            flag = 5
+        if  'rule16' in tmpmap[d][1]['分析结果']:
+            flag = 5    
+        if  'rule18' in tmpmap[d][1]['分析结果']:
+            flag = 5
+        if  'rule19' in tmpmap[d][1]['分析结果']:
+            flag = 5
+        #end if
+    #end if
+    #####################################################        
     return flag, cnt    
 #endof 'def'
 
@@ -237,14 +259,14 @@ def sub_grpview_mng(code):
     lenk = len(tmpmap)
     左K = -50
     右K = 50
-    mark = 0    
+    flag重要级别 = 0    
     cnt_rule_pic = 0
     pos = 0
     for (d, x) in tmpmap.items():
         if '分析结果' in x[1]:
             #日期 = x[0]
             flag, cnt = rules_group_find(tmpmap, d)      #规则组合设计
-            if flag == 1:
+            if flag >= 1:
                 left = -pos
                 if left < 左K:
                     left = 左K
@@ -260,12 +282,30 @@ def sub_grpview_mng(code):
                 sub_view(submap, code)
                
                 submap.clear()
-                mark = 1
+                
+                if flag > flag重要级别:
+                    flag重要级别 = flag
             #endof 'if'    
         #endof 'if'
         pos = pos + 1
     #end of "for"
-    if mark == 1:
+        
+    if flag重要级别 >= 1:
+        #保存当日选股数，最后存入acc
+        gl.当天选股数 = gl.当天选股数 + 1
+
+        #选股列表，用于发送email
+        if flag重要级别 == 8:
+            gl.信息dict['大形态重要'].append(code)
+        elif flag重要级别 == 7:
+            gl.信息dict['大形态一般'].append(code)
+        elif flag重要级别 == 6:
+            gl.信息dict['基本形态重要'].append(code)
+        elif flag重要级别 == 5:
+            gl.信息dict['基本形态一般'].append(code)
+        elif flag重要级别 == 1:
+            gl.信息dict['形态3个一般'].append(code)
+        
         #'a':文件追加写入
         if code[0:1] == '6':
             flag = '\x07\x11'

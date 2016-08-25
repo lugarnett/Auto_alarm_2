@@ -17,6 +17,25 @@ List_acc = []
 dataUrl = os.getcwd()+"\\data.mdb"
 data = accLib.Access_Model(dataUrl)
 
+'''100)whlAnly建表 '''
+def creat_whlAnlyTbl():
+    global data
+
+    try: 
+        sql = "Create TABLE [whlAnly] ([date] DATE, [当天涨停数] INT,[当天选股数] INT, \
+                            [ZT_1天涨5数] INT,[ZT_1天涨5比例] FLOAT, \
+                            [ZT_2天涨5数] INT,[ZT_2天涨5比例] FLOAT,\
+                            [ZT_1天买进2天涨5数] INT,[ZT_1天买进2天涨5比例] FLOAT, \
+                            [ZT_1天买进3天涨5数] INT,[ZT_1天买进3天涨5比例] FLOAT, \
+                            [XG_1天涨5数] INT,[XG_1天涨5比例] FLOAT, \
+                            [XG_2天涨5数] INT,[XG_2天涨5比例] FLOAT \
+                            )"
+        data.db_tbl(sql)
+    except Exception as e:
+        print(e)
+        return
+#endof 'mdl'
+        
 '''1)codes建表 '''
 def codes_tbl_make():
     global data
@@ -25,7 +44,7 @@ def codes_tbl_make():
                             [沪深] TEXT,[小] TEXT,[创] TEXT,[ST] TEXT, \
                             [市值] FLOAT,[流通市值] FLOAT,[其他] TEXT)"
         data.db_tbl(sql)
-    except Exception as e:
+    except:
         #print(e)
         return
 #endof 'mdl'
@@ -135,10 +154,11 @@ def acc_make1():
 
 #endof 'mdl'
 
-print("\n当前运行模块 -> acc_make1...\n")
-t0 = time.time()
-acc_make1()
-t1 = time.time()
-print("耗时约%.2f分"%((t1-t0)/60, ))
-
-
+if 0:
+    print("\n当前运行模块 -> acc_make1...\n")
+    t0 = time.time()
+    acc_make1()
+    t1 = time.time()
+    print("耗时约%.2f分"%((t1-t0)/60, ))
+else:
+    creat_whlAnlyTbl()

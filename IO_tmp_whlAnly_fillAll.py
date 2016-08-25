@@ -2,50 +2,14 @@
 '''采用acc数据，完成快速分析'''
 import gl
 import time
-import collections
-import os
-import datetime
-from Afa_mainView import afa_mainview
-
-from ruleLib.rule1 import rule_1
-from ruleLib.rule2 import rule_2
-from ruleLib.rule3 import rule_3
-from ruleLib.rule4 import rule_4
-from ruleLib.rule5 import rule_5
-from ruleLib.rule6 import rule_6
-from ruleLib.rule7 import rule_7
-from ruleLib.rule8 import rule_8
-from ruleLib.rule9 import rule_9
-from ruleLib.rule10 import rule_10
-from ruleLib.rule11 import rule_11
-from ruleLib.rule12 import rule_12
-from ruleLib.rule13 import rule_13
-from ruleLib.rule14 import rule_14
-from ruleLib.rule15 import rule_15
-from ruleLib.rule16 import rule_16
-from ruleLib.rule17 import rule_17
-from ruleLib.rule18 import rule_18
-from ruleLib.rule19 import rule_19
-
-from ruleLib.rule50 import rule_50
-from ruleLib.rule51 import rule_51
-from ruleLib.rule52 import rule_52
-from ruleLib.rule53 import rule_53
-#from ruleLib.rule54 import rule_54
-
-from ruleLib.rule80 import rule_80
-from ruleLib.rule81 import rule_81
-from ruleLib.rule82 import rule_82
-
-from ruleLib.rule121 import rule_121
-
-#from findLib.find1 import find_1
 
 import dbLib.accIn_now
 import dbLib.accLib
 import dbLib.whlAnly_getRdy
-import Afa_snd_Email
 
+import collections
+import os
+import datetime
 
 Anlyinmap = collections.OrderedDict()  
 Drawinmap = collections.OrderedDict()  
@@ -55,11 +19,9 @@ List_tbl = []
 dataUrl = os.getcwd()+"\\dbLib\\data.mdb"
 data = dbLib.accLib.Access_Model(dataUrl)
 
-def gettime():
-    return time.strftime("%Y%m%d_%H:%M",time.localtime(time.time()))
-def getdate(): 
-    return time.strftime('%Y%m%d',time.localtime(time.time()))
-
+enddate = datetime.datetime.now()
+startdate = datetime.datetime.now()
+    
 '''1)获取List_tbl'''
 def get_List_tbl():
     global List_tbl
@@ -84,7 +46,7 @@ def get_List_tbl():
         
 '''2.1)读取acc_tbl的交易数据'''
 def acc_tbl_read(code):
-    global Anlyinmap, Drawinmap
+    global Anlyinmap, Drawinmap,startdate,enddate
     
     #Outmap.clear()
     Anlyinmap.clear()
@@ -101,15 +63,11 @@ def acc_tbl_read(code):
         #end for
         
         '''根据分析数据条数，算出起止date'''
-        enddate = datetime.datetime.now()
-        startdate = enddate + datetime.timedelta(days = - gl.Analyse_days_date)  #减n天
-        startdate = startdate.strftime("%Y-%m-%d")
-        enddate = enddate.strftime("%Y-%m-%d")
-        #print(startdate)##########
-        #print(enddate)##########
+        str_startdate = startdate.strftime("%Y-%m-%d")
+        str_enddate = enddate.strftime("%Y-%m-%d")
         
         if row > 0:
-            sql = "Select * FROM %s WHERE date BETWEEN #%s# and #%s# ORDER BY date"%(code,startdate,enddate) 
+            sql = "Select * FROM %s WHERE date BETWEEN #%s# and #%s# ORDER BY date"%(code,str_startdate,str_enddate) 
             dataRecordSet = data.db_query(sql)
             #Anlyinmap的key为i++序号
             i = 0
@@ -185,86 +143,14 @@ def afa_ruleget(code):
 
 '''2.3)进行数据分析'''
 def afa_ruleanlys(code):
-    
+
     ####whlAnly_getRdy.py分析
     dbLib.whlAnly_getRdy.whlAnly_1(code, Anlyinmap)
-    #return
-    #################################################
-    
-    #涨停（重要条件）
-    rule_121(code, Anlyinmap) 
-    
-    #基础策略
-    if 1:
-        rule_1(code, Anlyinmap)
-        rule_2(code, Anlyinmap)
-        rule_3(code, Anlyinmap)
-        rule_4(code, Anlyinmap)####
-        rule_5(code, Anlyinmap)
-        rule_6(code, Anlyinmap)####
-        rule_7(code, Anlyinmap)
-        rule_8(code, Anlyinmap)
-        rule_9(code, Anlyinmap)
-        rule_10(code, Anlyinmap)
-        rule_11(code, Anlyinmap)###3
-        rule_12(code, Anlyinmap)
-        rule_13(code, Anlyinmap)
-        rule_14(code, Anlyinmap)
-        rule_15(code, Anlyinmap)
-        rule_16(code, Anlyinmap)
-        rule_17(code, Anlyinmap)
-        rule_18(code, Anlyinmap)
-        rule_19(code, Anlyinmap)
-    #end if
-
-    #专用策略：空中加油
-    if 1:
-        rule_50(code, Anlyinmap) #小空中加油（5天3）
-        rule_51(code, Anlyinmap) #小空中加油（6天3）
-        rule_52(code, Anlyinmap) #大空中加油（涨停加上影加涨停）
-        rule_53(code, Anlyinmap) #大空中加油（短体双上影）
-        #rule_54(code, Anlyinmap) #
-    #end if
-        
-    #组合策略
-    if 1:
-        rule_80(code, Anlyinmap) #10日线走平（涨停平台整理）(36天)
-    #end if
-        
-    #旧法大鸭头
-    if 1:
-        rule_81(code, Anlyinmap) #旧法大鸭头(31天)
-    #end if
-    
-    #通用鸭头(时间窗口>=6天)
-    if 1:
-        rule_82(code, Anlyinmap, 30)
-        rule_82(code, Anlyinmap, 20)
-        rule_82(code, Anlyinmap, 10)
-        rule_82(code, Anlyinmap, 6)
-    #end if
 #end of "def"
 
 '''分析流程入口函数：获取表名列表，并遍历分析'''
 def afa_proc_analyse():
     global List_tbl, Drawinmap
-
-    if os.path.exists('规则分析结果') <= 0:
-        os.mkdir('规则分析结果')
-    if os.path.exists('图片结果') <= 0:
-        os.mkdir('图片结果')
-    if os.path.exists(gl.path_email_rst) <= 0:    #判断目标是否存在
-        os.mkdir(gl.path_email_rst)
-
-    if os.path.exists(gl.path_rule_rst) <= 0:    #判断目标是否存在
-        os.mkdir(gl.path_rule_rst)
-    if os.path.exists(gl.path_view_rst) <= 0:    #判断目标是否存在
-        os.mkdir(gl.path_view_rst)
-    
-    '''输出文件：清空，并写入初始值'''
-    head = '\x00\x00'  #512
-    with open(gl.path_view_rst + '导入code_' + getdate() + ".sel", 'w') as out:
-        out.write(head)
         
     #1)获取表名的list（不是codes列表，有可能数据不全）  
     get_List_tbl()
@@ -280,45 +166,60 @@ def afa_proc_analyse():
         #2.1)读取tbl数据，放入Anlyinmap      
         flag = acc_tbl_read(code)
         if flag == 1:
-            afa_ruleget(code)
+            #afa_ruleget(code)
             afa_ruleanlys(code)
-            afa_mainview(Drawinmap)
+            #afa_mainview(Drawinmap)
             print("3:rules分析完毕！")
         else:
             print("3:rules分析无数据。。。")    
     #end for
             
     #3将whlAnly分析数据写入acc
-    dbLib.whlAnly_getRdy.update_whlAnlyTbl()       
-    
-    #4将信息dict发送email
-    Afa_snd_Email.snd_save_email()    
+    dbLib.whlAnly_getRdy.update_whlAnlyTbl()        
 #endof 'mdl'
 
-'''
-#main: 获取当日数据，分析， 清空当日数据
-print("\n当前运行模块 -> accIn_today...\n")
-#dbLib.accIn_now.accIn_today()
-#time.sleep(10)
-'''
+def init():
+    ####初始化
+    gl.当天涨停数 = 0
+    gl.当天选股数= 0
+    gl.ZT_1天涨5数 = 0
+    gl.ZT_1天涨5数N = 0
+    gl.ZT_1天涨5比例 = 0.0
+    gl.ZT_2天涨5数 = 0
+    gl.ZT_2天涨5数N = 0
+    gl.ZT_2天涨5比例 = 0.0
+    gl.ZT_1天买进2天涨5数 = 0
+    gl.ZT_1天买进2天涨5数N = 0
+    gl.ZT_1天买进2天涨5比例 = 0.0
+    gl.ZT_1天买进3天涨5数 = 0
+    gl.ZT_1天买进3天涨5数N = 0
+    gl.ZT_1天买进3天涨5比例 = 0.0
+    gl.XG_1天涨5数 = 0
+    gl.XG_1天涨5数N = 0
+    gl.XG_1天涨5比例 = 0.0
+    gl.XG_2天涨5数 = 0
+    gl.XG_2天涨5数N = 0
+    gl.XG_2天涨5比例 = 0.0
+    ####用于日期筛选
+    gl.Date0 = ''
+    gl.Cnt_0 = 1
+#end def
+def IO_tmp_whlAnly_fillAll():
+    global startdate,enddate
+        
+    for i in range(10):
+        init()
+        enddate = enddate + datetime.timedelta(days = -1)  #减1天
+        startdate = enddate + datetime.timedelta(days = - gl.Analyse_days_date)  #减n天
+        
+        print("\n当前运行模块 -> IO_tmp_whlAnly_fillAll...\n")
+        t0 = time.time()
+        afa_proc_analyse()
+        t1 = time.time()
+        print("\n小模块%d已完成，耗时约%.2f分\n"%(i, (t1-t0)/60))
+        time.sleep(10)
+    #end for
+#end def
 
-print("\n当前运行模块 -> afa_proc_analyse...\n")
-t0 = time.time()
-afa_proc_analyse()
-t1 = time.time()
-print("\nrules分析已完成，耗时约%.2f分\n"%((t1-t0)/60, ))
-time.sleep(10)
-
-'''
-print("\n当前运行模块 -> accDel_today...\n")
-dbLib.accIn_now.accDel_today()
-'''
-'''
-dbLib.accIn_now.accDel_days('2016-08-18')
-dbLib.accIn_now.accDel_days('2016-08-19')
-dbLib.accIn_now.accDel_days('2016-08-20')
-dbLib.accIn_now.accDel_days('2016-08-21')
-'''
-
-
+IO_tmp_whlAnly_fillAll()
 
