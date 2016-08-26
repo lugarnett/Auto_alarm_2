@@ -47,6 +47,11 @@ Anly_days_51 = 7
 Anly_days_52 = 16
 Anly_days_53 = 21
 
+Anly_days_62 = 7
+Anly_days_63 = 7
+Anly_days_64 = 7
+Anly_days_65 = 4
+
 Anly_days_80 = 36
 Anly_days_81 = 32
 #Anly_days_82 = 6-30

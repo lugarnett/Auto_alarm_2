@@ -33,6 +33,11 @@ from ruleLib.rule52 import rule_52
 from ruleLib.rule53 import rule_53
 #from ruleLib.rule54 import rule_54
 
+from ruleLib.rule62 import rule_62
+from ruleLib.rule63 import rule_63
+from ruleLib.rule64 import rule_64
+from ruleLib.rule65 import rule_65
+
 from ruleLib.rule80 import rule_80
 from ruleLib.rule81 import rule_81
 from ruleLib.rule82 import rule_82
@@ -225,8 +230,16 @@ def afa_ruleanlys(code):
         rule_53(code, Anlyinmap) #大空中加油（短体双上影）
         #rule_54(code, Anlyinmap) #
     #end if
-        
-    #组合策略
+    
+    #形态策略
+    if 1:
+        rule_62(code, Anlyinmap) #7天K线平
+        rule_63(code, Anlyinmap) #7天5日线平
+        rule_64(code, Anlyinmap) #7天10日线平
+        rule_65(code, Anlyinmap) #4天K线平5日线平
+    #end if
+    
+    #大形态策略
     if 1:
         rule_80(code, Anlyinmap) #10日线走平（涨停平台整理）(36天)
     #end if
