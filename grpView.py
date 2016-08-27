@@ -194,6 +194,9 @@ def rules_group_find(tmpmap, d):
         flag = 8   
     
     ####组合策略        
+    if  'rule70' in tmpmap[d][1]['分析结果']:
+        flag = 8    
+        
     if  'rule80' in tmpmap[d][1]['分析结果']:
         flag = 8    
     if  'rule81' in tmpmap[d][1]['分析结果']:
@@ -202,6 +205,10 @@ def rules_group_find(tmpmap, d):
         flag = 8   
 
     #####################################################大形态一般 flag=7
+    if  'rule60' in tmpmap[d][1]['分析结果']:
+        flag = 7    
+    if  'rule61' in tmpmap[d][1]['分析结果']:
+        flag = 7   
     if  'rule62' in tmpmap[d][1]['分析结果']:
         flag = 7    
     if  'rule63' in tmpmap[d][1]['分析结果']:
