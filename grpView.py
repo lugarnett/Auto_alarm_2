@@ -207,26 +207,22 @@ def rules_group_find(tmpmap, d):
     #####################################################大形态一般 flag=7
     if  'rule60' in tmpmap[d][1]['分析结果']:
         flag = 7    
-    if  'rule61' in tmpmap[d][1]['分析结果']:
-        flag = 7   
-    if  'rule62' in tmpmap[d][1]['分析结果']:
-        flag = 7    
-    if  'rule63' in tmpmap[d][1]['分析结果']:
-        flag = 7   
-    if  'rule64' in tmpmap[d][1]['分析结果']:
-        flag = 7 
-    if  'rule65' in tmpmap[d][1]['分析结果']:
-        flag = 7 
+    #if  'rule61' in tmpmap[d][1]['分析结果']:
+    #    flag = 7   
+    #if  'rule62' in tmpmap[d][1]['分析结果']:
+    #    flag = 7    
+    #if  'rule63' in tmpmap[d][1]['分析结果']:
+    #    flag = 7   
+    #if  'rule64' in tmpmap[d][1]['分析结果']:
+    #    flag = 7 
+    #if  'rule65' in tmpmap[d][1]['分析结果']:
+    #    flag = 7 
     #####################################################基本形态重要 flag=6
     
     #####################################################基本形态一般 flag=5
     ####基本（单个）
-    if  'rule2' in tmpmap[d][1]['分析结果']:
-        flag = 5
     if  'rule3' in tmpmap[d][1]['分析结果']:
         flag = 5 
-    if  'rule5' in tmpmap[d][1]['分析结果']:
-        flag = 5
     if  'rule7' in tmpmap[d][1]['分析结果']:
         flag = 5
     if  'rule8' in tmpmap[d][1]['分析结果']:
@@ -246,19 +242,15 @@ def rules_group_find(tmpmap, d):
     if  'rule121' in tmpmap[d][1]['分析结果']:
         if  'rule1' in tmpmap[d][1]['分析结果']:
             flag = 5
+        if  'rule2' in tmpmap[d][1]['分析结果']:
+            flag = 5
         if  'rule4' in tmpmap[d][1]['分析结果']:
             flag = 5
-        if  'rule6' in tmpmap[d][1]['分析结果']:
+        if  'rule5' in tmpmap[d][1]['分析结果']:
             flag = 5
         if  'rule9' in tmpmap[d][1]['分析结果']:
             flag = 5
         if  'rule11' in tmpmap[d][1]['分析结果']:
-            flag = 5
-        if  'rule16' in tmpmap[d][1]['分析结果']:
-            flag = 5    
-        if  'rule18' in tmpmap[d][1]['分析结果']:
-            flag = 5
-        if  'rule19' in tmpmap[d][1]['分析结果']:
             flag = 5
         #end if
     #end if

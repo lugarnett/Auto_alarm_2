@@ -7,7 +7,7 @@ Anlymdymap = collections.OrderedDict()
 Anly_days = gl.Anly_days_63
 rulen = 'rule63'
 
-'''7天5日线平（偏离<1.5%）'''
+'''10天5日线平（偏离<1%）'''
 def rule_63(code, Anlyinmap):
 
     max_n = max(Anlyinmap.keys())
@@ -20,14 +20,17 @@ def rule_63(code, Anlyinmap):
         Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
     #end for
     
-    偏离 = 1.015
+    偏离 = 1.01
     cnt = 0
     Anlyoutmap.clear()
     for (d,x) in Anlymdymap.items():
         #d从0开始
-        if d <= 5:
+        if d <= 8:
             continue
         else:
+            xpre9 = Anlymdymap[d-9]
+            xpre8 = Anlymdymap[d-8]
+            xpre7 = Anlymdymap[d-7]
             xpre6 = Anlymdymap[d-6]
             xpre5 = Anlymdymap[d-5]
             xpre4 = Anlymdymap[d-4]
@@ -36,6 +39,9 @@ def rule_63(code, Anlyinmap):
             xpre1 = Anlymdymap[d-1]
 
             #均5
+            均pre9 = xpre9['均'][0]
+            均pre8 = xpre8['均'][0]
+            均pre7 = xpre7['均'][0]
             均pre6 = xpre6['均'][0]
             均pre5 = xpre5['均'][0]
             均pre4 = xpre4['均'][0]
@@ -44,14 +50,17 @@ def rule_63(code, Anlyinmap):
             均pre1 = xpre1['均'][0]
             均 = x['均'][0]
             
-            if max(均pre6,均) < 偏离*min(均pre6,均) and \
+            if max(均pre9,均) < 偏离*min(均pre9,均) and \
+            max(均pre8,均) < 偏离*min(均pre8,均) and \
+            max(均pre7,均) < 偏离*min(均pre7,均) and \
+            max(均pre6,均) < 偏离*min(均pre6,均) and \
             max(均pre5,均) < 偏离*min(均pre5,均) and \
             max(均pre4,均) < 偏离*min(均pre4,均) and \
             max(均pre3,均) < 偏离*min(均pre3,均) and \
             max(均pre2,均) < 偏离*min(均pre2,均) and \
             max(均pre1,均) < 偏离*min(均pre1,均) :
                  
-                Anlyoutmap[x['date']] = [rulen, '7天5日线平（偏离<1.5%）']
+                Anlyoutmap[x['date']] = [rulen, '10天5日线平']
                 cnt = cnt + 1
             #endof 'if'
     #end of "for"

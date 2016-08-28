@@ -146,7 +146,7 @@ def whlAnly_1(code, Anlyinmap):
             
             #ZT_2天涨5数:
             if 收pre2 >= round(涨停度*收pre3, 2) and 开pre2 < 收pre2:
-                if 高 > 上涨度*收pre2 or 高pre1 > 上涨度*收pre2:
+                if (高 > 上涨度*收pre2) or (高pre1 > 上涨度*收pre2):
                     gl.ZT_2天涨5数 = gl.ZT_2天涨5数 + 1
                 else:
                     gl.ZT_2天涨5数N = gl.ZT_2天涨5数N + 1
@@ -160,7 +160,7 @@ def whlAnly_1(code, Anlyinmap):
             
             #ZT_1天买进3天涨5数:
             if 收pre3 >= round(涨停度*收pre4, 2) and 开pre3 < 收pre3:
-                if 高pre1 > 上涨度*开pre2 or 高 > 上涨度*开pre2:
+                if (高pre1 > 上涨度*开pre2) or (高 > 上涨度*开pre2):
                     gl.ZT_1天买进3天涨5数 = gl.ZT_1天买进3天涨5数 + 1
                 else:
                     gl.ZT_1天买进3天涨5数N = gl.ZT_1天买进3天涨5数N + 1   

@@ -49,9 +49,9 @@ def snd_email():
 #end def
 
 def save_email():
-    global 邮件内容, subject
-    
-    with open(gl.path_email_rst + subject + '.txt', 'w') as out:
+    global 邮件内容
+    filename = time.strftime("%Y%m%d",time.localtime(time.time()))
+    with open(gl.path_email_rst + filename + '.txt', 'w') as out:
         out.write(邮件内容)
     #end of "with"
 #end def
@@ -60,6 +60,7 @@ def snd_save_email():
     snd_email()
     save_email()
 #end def
-    
-    
+
+
+
     

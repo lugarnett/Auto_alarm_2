@@ -236,13 +236,12 @@ def afa_ruleanlys(code):
     #end if
     
     #形态策略
-    if 1:
         rule_60(code, Anlyinmap) #7连阳穿5线
         rule_61(code, Anlyinmap) #连续7连阴
-        rule_62(code, Anlyinmap) #7天K线平
-        rule_63(code, Anlyinmap) #7天5日线平
-        rule_64(code, Anlyinmap) #7天10日线平
-        rule_65(code, Anlyinmap) #4天K线平5日线平
+        rule_62(code, Anlyinmap) #10天K线平
+        #rule_63(code, Anlyinmap) #10天5日线平
+        #rule_64(code, Anlyinmap) #10天10日线平
+        #rule_65(code, Anlyinmap) #4天K线平5日线平
     #end if
     
     #大形态策略
@@ -315,12 +314,12 @@ def afa_proc_analyse():
     Afa_snd_Email.snd_save_email()    
 #endof 'mdl'
 
-'''
+
 #main: 获取当日数据，分析， 清空当日数据
 print("\n当前运行模块 -> accIn_today...\n")
-#dbLib.accIn_now.accIn_today()
-#time.sleep(10)
-'''
+dbLib.accIn_now.accIn_today()
+time.sleep(10)
+
 
 print("\n当前运行模块 -> afa_proc_analyse...\n")
 t0 = time.time()
@@ -329,10 +328,9 @@ t1 = time.time()
 print("\nrules分析已完成，耗时约%.2f分\n"%((t1-t0)/60, ))
 time.sleep(10)
 
-'''
 print("\n当前运行模块 -> accDel_today...\n")
 dbLib.accIn_now.accDel_today()
-'''
+
 '''
 dbLib.accIn_now.accDel_days('2016-08-18')
 dbLib.accIn_now.accDel_days('2016-08-19')

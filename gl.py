@@ -20,7 +20,7 @@ Fig_Cnt = 1
 '''ruleAnly的天数设置'''
 ##数据库中读取数据分析的天数，画图时K线时间天数（要保证>=各rule的天数）
 Analyse_days_date = 60
-Anly_days_add = 3    #增加n天的分析
+Anly_days_add = 1    #增加n天的分析
 #rules的最小分析天数
 Anly_days_1 = 2
 Anly_days_2 = 2
@@ -49,12 +49,12 @@ Anly_days_53 = 21
 
 Anly_days_60 = 7
 Anly_days_61 = 7
-Anly_days_62 = 7
-Anly_days_63 = 7
-Anly_days_64 = 7
+Anly_days_62 = 10
+Anly_days_63 = 10
+Anly_days_64 = 10
 Anly_days_65 = 4
 
-Anly_days_70 = 21
+Anly_days_70 = 25
 
 Anly_days_80 = 36
 Anly_days_81 = 32

@@ -51,7 +51,7 @@ def foreach_delt_today(delet_date):
         for code in List_tbl:
             sql = "DELETE * FROM %s WHERE date = #%s#"%(code, delet_date)
             data.db_del(sql) 
-            #print("删除%s->%s数据"%(code, delet_date))
+            print("删除%s->%s数据"%(code, delet_date))
         #end for
     except Exception as e:
         print(e)
@@ -153,8 +153,8 @@ def today_tushare_insert(code, maxID):
         量0, 换0, 金额0, 0, 0)        
                 
         if(data.db_add(sql)):
-            pass            
-            #print("%s当日数据已存入"%code)
+            #pass            
+            print("%s当日数据已存入"%code)
         else:
             print("%s当日数据已存入失败。。。。。。。"%code)
         #end if
@@ -198,6 +198,7 @@ def accDel_today():
 
 '''删除各表中的某日数据'''
 def accDel_days(date):
+    print("\n开始删%s数据。。\n"%date)
     get_List_tbl()
     foreach_delt_today(date)
     print("\n%s日数据删除已完成！\n"%date)
@@ -206,6 +207,7 @@ def accDel_days(date):
 '''入口函数：获取全部当日数据，用于分析'''
 def accIn_today():
     #0)删除所有tbl中当天日期的数据    
+    print("\n开始删当日数据。。\n")
     accDel_today()
     
     t0 = time.time()

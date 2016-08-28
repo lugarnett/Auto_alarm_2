@@ -7,7 +7,7 @@ Anlymdymap = collections.OrderedDict()
 Anly_days = gl.Anly_days_70
 rulen = 'rule70'
 
-'''缓拉吸筹(20天),20天内阴线<=4，涨停<=3（有跳空低开,正量多）'''
+'''缓拉吸筹(24天),24天内阴线<=3，涨停<=2（有跳空低开,正量多）'''
 def rule_70(code, Anlyinmap):
 
     max_n = max(Anlyinmap.keys())
@@ -24,14 +24,14 @@ def rule_70(code, Anlyinmap):
     Anlyoutmap.clear()
     for (d,x) in Anlymdymap.items():
         #d从0开始
-        if d <= 19:
+        if d <= 23:
             continue
         else:
             cnt_Neg = 0
             cnt_ZT = 0
 			
             flag = 1
-            for i in range(20):
+            for i in range(24):
                 xi = Anlymdymap[d-i]
                 xipre = Anlymdymap[d-i-1]
         				
@@ -39,20 +39,20 @@ def rule_70(code, Anlyinmap):
                 收i = xi['基K'][3]
                 收ipre = xipre['基K'][3]
 
-                #阴线<=4
+                #阴线<=3
                 if 收i <= 开i:
                     cnt_Neg = cnt_Neg + 1
                 #end if
-                if cnt_Neg > 4:
+                if cnt_Neg > 3:
                     flag = 0
                     break
                 #end if
                 
-                #涨停<=3
+                #涨停<=2
                 if 收i >= round(1.1*收ipre, 2):
                     cnt_ZT = cnt_ZT + 1
                 #end if
-                if cnt_ZT > 3:
+                if cnt_ZT > 2:
                     flag = 0
                     break
                 #end if

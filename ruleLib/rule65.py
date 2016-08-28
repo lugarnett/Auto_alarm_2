@@ -7,7 +7,7 @@ Anlymdymap = collections.OrderedDict()
 Anly_days = gl.Anly_days_65
 rulen = 'rule65'
 
-'''4天K线平5日线平（K振幅<2%，均偏离<0.5%）'''
+'''4天K线平5日线平（K振幅<1.5%，均偏离<0.5%）'''
 def rule_65(code, Anlyinmap):
 
     max_n = max(Anlyinmap.keys())
@@ -20,7 +20,7 @@ def rule_65(code, Anlyinmap):
         Anlymdymap[i] = Anlyinmap[max_n+1 - days + i]
     #end for
     
-    振幅 = 1.02
+    振幅 = 1.015
     偏离 = 1.005
     cnt = 0
     Anlyoutmap.clear()

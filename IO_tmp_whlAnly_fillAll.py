@@ -107,7 +107,7 @@ def acc_tbl_read(code):
                     break
                 #end if
             #end for
-            print("%s表获取成功！"%code)
+            #print("%s表获取成功！"%code)
             #print(Anlyinmap)
             
             #数据存入Drawinmap
@@ -169,7 +169,7 @@ def afa_proc_analyse():
             #afa_ruleget(code)
             afa_ruleanlys(code)
             #afa_mainview(Drawinmap)
-            print("3:rules分析完毕！")
+            #print("3:rules分析完毕！")
         else:
             print("3:rules分析无数据。。。")    
     #end for
@@ -206,13 +206,14 @@ def init():
 #end def
 def IO_tmp_whlAnly_fillAll():
     global startdate,enddate
-        
-    for i in range(10):
+    
+    '''上溯700天，处理两年的whlAnly！！！'''
+    for i in range(700):
         init()
         enddate = enddate + datetime.timedelta(days = -1)  #减1天
         startdate = enddate + datetime.timedelta(days = - gl.Analyse_days_date)  #减n天
         
-        print("\n当前运行模块 -> IO_tmp_whlAnly_fillAll...\n")
+        print("\n当前运行模块 -> IO_tmp_whlAnly_fillAll（-%d）...\n"%i)
         t0 = time.time()
         afa_proc_analyse()
         t1 = time.time()
